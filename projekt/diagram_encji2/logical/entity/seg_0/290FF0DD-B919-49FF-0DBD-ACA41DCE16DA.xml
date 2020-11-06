@@ -1,0 +1,59 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="290FF0DD-B919-49FF-0DBD-ACA41DCE16DA" name="Autor">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-10-20 10:09:34 UTC</createdTime>
+<ownerDesignName>diagram_encji2</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="Imie" id="13EC8C8D-E4D0-1539-F2A0-DE6F397C04B0">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-10-20 10:09:40 UTC</createdTime>
+<ownerDesignName>diagram_encji2</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>20</dataTypeSize>
+<ownDataTypeParameters>20,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Nazwisko" id="6A8B1EC7-FC06-4CF7-1E2D-25892A50E584">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-10-20 10:09:45 UTC</createdTime>
+<ownerDesignName>diagram_encji2</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>30</dataTypeSize>
+<ownDataTypeParameters>30,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Kraj_pochodzenia" id="1A898533-C843-7837-6952-C8E65A3ED78B">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-10-20 10:09:49 UTC</createdTime>
+<ownerDesignName>diagram_encji2</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>30</dataTypeSize>
+<ownDataTypeParameters>30,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+</Entity>

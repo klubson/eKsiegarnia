@@ -1,0 +1,14 @@
+Aplikacja "eKsięgarnia" dedykowana jest do obsługi bazy danych sieci sklepów sprzedających książki 
+i gry planszowe. Do stworzonej bazy będzie można uzyskać dostęp z dwóch niezależnych poziomów:
+- "klient", gdzie można będzie 
+zrobić internetowe zakupy (oczywiście wraz z wyborem metody płatności) poprzedzone założeniem konta 
+w serwisie internetowym księgarni (lub zalogowaniem na swoje konto);
+- "pracownik", który w zależności od zajmowanego stanowiska również ma różne możliwości w aplikacji:
+	* "magazynier" może zmieniać stany produktów w magazynie oraz ich ceny;
+	* "kierownik" może oprócz powyższego zatrudniać i zwalniać pracowników oraz modyfikować ich pensje;
+	dodatkowo "kierownik" może modyfikować dane dotyczące produktów, autorów, wydawnictw oraz nadawać 
+	klientom rabaty na kolejne zakupy.
+
+Autorzy: 
+Kacper Leski 
+Mateusz Kluba 141246

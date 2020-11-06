@@ -1,0 +1,99 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="923EE71F-01AF-B0F0-1D00-E927AA488877" name="Element koszyka">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-11-06 10:48:53 UTC</createdTime>
+<ownerDesignName>diagram_encji1</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="L.p." id="BF2400E7-D5B1-1207-67ED-433507347816">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-11-06 10:49:04 UTC</createdTime>
+<ownerDesignName>diagram_encji1</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Liczba" id="2E061AB9-9410-D52D-EB00-A48A5E60BFC8">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-11-06 10:49:13 UTC</createdTime>
+<ownerDesignName>diagram_encji1</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Wartosc_artykulu" id="AAA8D232-2D0F-82EB-3268-14F72EE234FB">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-11-06 10:49:44 UTC</createdTime>
+<ownerDesignName>diagram_encji1</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT021</logicalDatatype>
+<dataTypePrecision>2</dataTypePrecision>
+<ownDataTypeParameters>,2,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Nr_koszyka" id="84C14818-47BB-97FC-2564-4850875363AE">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-11-06 10:51:50 UTC</createdTime>
+<generatorID>DEAA193F-5B19-E755-217F-A2C8D91FE6CD</generatorID>
+<ownerDesignName>diagram_encji1</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<referedAttribute>95AC66C0-7BD6-7BE5-1ED8-8872F7D4C2A9</referedAttribute>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Nazwa" id="185448D9-9844-AA58-3ABC-C842E146D18D">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-11-06 11:16:36 UTC</createdTime>
+<generatorID>3F62184B-C6FE-3F80-445C-58FAE75935A3</generatorID>
+<ownerDesignName>diagram_encji1</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<referedAttribute>B4DBA6EF-18CC-7D7C-CDDC-C160F12851CE</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>30</dataTypeSize>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="87095595-C1C8-13AD-5C13-333B8CBCA7C2" name="Element koszyka PK">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-11-06 10:49:43 UTC</createdTime>
+<ownerDesignName>diagram_encji1</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>BF2400E7-D5B1-1207-67ED-433507347816</attributeRef>
+<attributeRef>84C14818-47BB-97FC-2564-4850875363AE</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

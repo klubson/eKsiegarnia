@@ -1,0 +1,59 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="AEBB499A-9627-91C6-8DCE-CBFCCD1091A0" name="Seria">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-11-06 11:29:32 UTC</createdTime>
+<ownerDesignName>diagram_encji2</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="Tytul" id="0FB86B55-FA6B-43C5-F987-D8EE48FD0EBF">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-11-06 11:29:39 UTC</createdTime>
+<ownerDesignName>diagram_encji2</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50</dataTypeSize>
+<ownDataTypeParameters>50,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="liczba_tomow" id="B1E6E5DD-08E5-EA05-D3B5-9DDCC7AF6E12">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-11-06 11:29:48 UTC</createdTime>
+<ownerDesignName>diagram_encji2</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="E78B609D-00E6-BF8C-3D48-9EC5039BBC9F" name="Seria PK">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-11-06 11:29:43 UTC</createdTime>
+<ownerDesignName>diagram_encji2</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>0FB86B55-FA6B-43C5-F987-D8EE48FD0EBF</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

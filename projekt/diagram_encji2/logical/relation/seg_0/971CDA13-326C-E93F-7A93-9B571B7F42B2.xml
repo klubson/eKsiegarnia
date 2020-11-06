@@ -1,0 +1,19 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Relation class="oracle.dbtools.crest.model.design.logical.Relation" name="Koszyk klienta" directorySegmentName="seg_0" id="971CDA13-326C-E93F-7A93-9B571B7F42B2">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-10-20 10:19:40 UTC</createdTime>
+<ownerDesignName>diagram_encji2</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<sourcePk>05B787C2-A4B0-A23E-B810-68F853BF717F</sourcePk>
+<identifying>false</identifying>
+<optionalSource>true</optionalSource>
+<optionalTarget>false</optionalTarget>
+<sourceCardinality>1</sourceCardinality>
+<sourceEntity>D2CCFA62-9050-71A5-FFDC-B397E542304C</sourceEntity>
+<targetCardinalityString>*</targetCardinalityString>
+<targetEntity>32C72D5A-F7B5-243B-CEB5-87D07B582BE8</targetEntity>
+<transferable>true</transferable>
+<deleteRule>NO ACTION</deleteRule>
+</Relation>

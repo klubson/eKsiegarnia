@@ -1,0 +1,19 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Relation class="oracle.dbtools.crest.model.design.logical.Relation" name="Wydawnictwo produktu" directorySegmentName="seg_0" id="727BF7DD-F514-02C0-DFF7-959B6CCF498E">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-10-22 09:56:09 UTC</createdTime>
+<ownerDesignName>diagram_encji1</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<sourcePk>E9A7616E-E5BE-4C33-D448-8B05D2067820</sourcePk>
+<identifying>false</identifying>
+<optionalSource>false</optionalSource>
+<optionalTarget>true</optionalTarget>
+<sourceCardinality>*</sourceCardinality>
+<sourceEntity>72E6E4D0-CDB5-9B17-F2F3-D864D30D5386</sourceEntity>
+<targetCardinalityString>1</targetCardinalityString>
+<targetEntity>9BE94E97-F222-61A0-EDB7-37EBDF5559A4</targetEntity>
+<transferable>true</transferable>
+<deleteRule>NO ACTION</deleteRule>
+</Relation>
