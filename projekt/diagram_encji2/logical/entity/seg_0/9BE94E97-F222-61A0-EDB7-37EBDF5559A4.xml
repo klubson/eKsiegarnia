@@ -43,4 +43,18 @@
 <ownDataTypeParameters>30,,</ownDataTypeParameters>
 </Attribute>
 </attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="803ADF30-A714-DB66-32C3-C4029A300D07" name="Wydawnictwo PK">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-11-12 14:46:38 UTC</createdTime>
+<ownerDesignName>diagram_encji2</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>05EC492C-A786-89BE-2C2E-F8303F656E95</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
 </Entity>

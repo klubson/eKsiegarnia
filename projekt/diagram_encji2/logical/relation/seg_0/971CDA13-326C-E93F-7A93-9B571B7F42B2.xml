@@ -8,6 +8,8 @@
 </engineerTo>
 <sourcePk>05B787C2-A4B0-A23E-B810-68F853BF717F</sourcePk>
 <identifying>false</identifying>
+<nameOnSource>posiada</nameOnSource>
+<nameOnTarget>należy_do</nameOnTarget>
 <optionalSource>true</optionalSource>
 <optionalTarget>false</optionalTarget>
 <sourceCardinality>1</sourceCardinality>

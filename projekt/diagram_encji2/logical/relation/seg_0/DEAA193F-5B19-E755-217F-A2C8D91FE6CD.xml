@@ -8,6 +8,8 @@
 </engineerTo>
 <sourcePk>A4DFE72B-FABF-D393-3AFC-3109B9BC96B1</sourcePk>
 <identifying>true</identifying>
+<nameOnSource>składa_się_z </nameOnSource>
+<nameOnTarget>należy_do</nameOnTarget>
 <optionalSource>true</optionalSource>
 <optionalTarget>false</optionalTarget>
 <sourceCardinality>1</sourceCardinality>

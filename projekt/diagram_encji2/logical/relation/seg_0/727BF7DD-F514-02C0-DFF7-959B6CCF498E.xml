@@ -7,7 +7,10 @@
 <item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
 </engineerTo>
 <sourcePk>E9A7616E-E5BE-4C33-D448-8B05D2067820</sourcePk>
+<targetPk>803ADF30-A714-DB66-32C3-C4029A300D07</targetPk>
 <identifying>false</identifying>
+<nameOnSource>wydany_przez</nameOnSource>
+<nameOnTarget>wydaje</nameOnTarget>
 <optionalSource>false</optionalSource>
 <optionalTarget>true</optionalTarget>
 <sourceCardinality>*</sourceCardinality>

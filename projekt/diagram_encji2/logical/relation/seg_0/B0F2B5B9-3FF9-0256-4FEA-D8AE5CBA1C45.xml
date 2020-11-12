@@ -8,6 +8,8 @@
 </engineerTo>
 <sourcePk>E78B609D-00E6-BF8C-3D48-9EC5039BBC9F</sourcePk>
 <identifying>false</identifying>
+<nameOnSource>zawiera</nameOnSource>
+<nameOnTarget>należy_do</nameOnTarget>
 <optionalSource>false</optionalSource>
 <optionalTarget>true</optionalTarget>
 <sourceCardinality>1</sourceCardinality>

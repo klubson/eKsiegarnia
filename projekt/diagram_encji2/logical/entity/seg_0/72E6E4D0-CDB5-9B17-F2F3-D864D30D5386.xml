@@ -66,6 +66,21 @@
 <logicalDatatype>LOGDT011</logicalDatatype>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
+<Attribute name="Nazwa1" id="B3F80695-686F-D532-6DB8-D02515BB722D">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-11-12 14:46:40 UTC</createdTime>
+<generatorID>727BF7DD-F514-02C0-DFF7-959B6CCF498E</generatorID>
+<ownerDesignName>diagram_encji2</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<referedAttribute>05EC492C-A786-89BE-2C2E-F8303F656E95</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>30</dataTypeSize>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
 </attributes>
 <identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
 <identifier id="E9A7616E-E5BE-4C33-D448-8B05D2067820" name="Produkt PK">

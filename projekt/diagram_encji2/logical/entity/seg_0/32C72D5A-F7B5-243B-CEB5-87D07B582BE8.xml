@@ -24,10 +24,11 @@
 <item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
 </engineerTo>
 <referedAttribute>DBE8B387-02F5-AF2F-3D5B-7F78AA3138C5</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
 <use>1</use>
 <logicalDatatype>LOGDT024</logicalDatatype>
 <dataTypeSize>30</dataTypeSize>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
+<ownDataTypeParameters>30,,</ownDataTypeParameters>
 </Attribute>
 <Attribute name="Nr_koszyka" id="95AC66C0-7BD6-7BE5-1ED8-8872F7D4C2A9">
 <createdBy>Mateusz</createdBy>
