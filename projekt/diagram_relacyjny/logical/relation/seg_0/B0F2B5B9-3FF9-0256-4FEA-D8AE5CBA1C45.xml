@@ -1,0 +1,21 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Relation class="oracle.dbtools.crest.model.design.logical.Relation" name="Seria książki" directorySegmentName="seg_0" id="B0F2B5B9-3FF9-0256-4FEA-D8AE5CBA1C45">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-11-06 11:30:48 UTC</createdTime>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<sourcePk>E78B609D-00E6-BF8C-3D48-9EC5039BBC9F</sourcePk>
+<identifying>false</identifying>
+<nameOnSource>zawiera</nameOnSource>
+<nameOnTarget>należy_do</nameOnTarget>
+<optionalSource>false</optionalSource>
+<optionalTarget>true</optionalTarget>
+<sourceCardinality>1</sourceCardinality>
+<sourceEntity>AEBB499A-9627-91C6-8DCE-CBFCCD1091A0</sourceEntity>
+<targetCardinalityString>*</targetCardinalityString>
+<targetEntity>F6B70B72-F690-B607-81A6-43EFC2566515</targetEntity>
+<transferable>true</transferable>
+<deleteRule>NO ACTION</deleteRule>
+</Relation>

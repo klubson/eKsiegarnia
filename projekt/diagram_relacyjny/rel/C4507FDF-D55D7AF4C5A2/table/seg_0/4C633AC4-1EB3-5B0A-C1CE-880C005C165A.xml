@@ -1,0 +1,120 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="4C633AC4-1EB3-5B0A-C1CE-880C005C165A" name="Książka">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>F6B70B72-F690-B607-81A6-43EFC2566515</generatorID>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<ordsAlias>ksiazka</ordsAlias>
+<abbreviation>k</abbreviation>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="Nazwa" id="7F4AAE84-4DAD-519D-C29B-C48D62EAD444">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>B4DBA6EF-18CC-7D7C-CDDC-C160F12851CE</generatorID>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>30</dataTypeSize>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="DF8F56FF-D463-B8F8-BAA5-323E4A035432" referredColumn="26DBDDE3-FBE7-FD74-1454-7D8F6A96446D"/>
+</associations>
+</Column>
+<Column name="k_Typ_okladki" id="5273B48C-CAE8-5E50-1652-926C02BDA02F">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>6E181526-2F4D-CA22-1335-664B88761007</generatorID>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>10</dataTypeSize>
+<ownDataTypeParameters>10,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="k_Liczba_stron" id="DDCF4DF4-CF75-FA15-B73F-6A1B4D589E75">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>5CFDA021-C069-5CFF-8995-8DD99DCDDB9E</generatorID>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="k_Format" id="EC413B66-111B-398F-6DE2-BA169073E152">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>EEB38F97-A22F-CEB2-D8EA-13D68ACA9796</generatorID>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>4</dataTypeSize>
+<ownDataTypeParameters>4,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="Seria_Tytul" id="FB5D127F-E294-61CB-07EA-C76781CAD03D">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>22AF4F57-27CC-6AD5-8F2B-906C23786C45</generatorID>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50</dataTypeSize>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="299CF50F-5F98-AB7D-ACED-07BD504F9194" referredColumn="E3F78311-DC7E-274F-D7DD-A0FF931C526A"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="90233277-8713-4DCF-1000-A34A9BB4F557" name="Książka_PK">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>E9A7616E-E5BE-4C33-D448-8B05D2067820</generatorID>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="7F4AAE84-4DAD-519D-C29B-C48D62EAD444"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="37A2560B-A967-00A5-CC2A-489E01C41887" name="Książka_Produkt_FK">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>AA222565-B617-7AE9-853A-EB4EC540601E</generatorID>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="7F4AAE84-4DAD-519D-C29B-C48D62EAD444"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="40D031B1-01CC-FD8F-28FF-15C2D31991DE" name="Książka_Seria_FK">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>B0F2B5B9-3FF9-0256-4FEA-D8AE5CBA1C45</generatorID>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="FB5D127F-E294-61CB-07EA-C76781CAD03D"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

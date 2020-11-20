@@ -1,0 +1,112 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="300A1EE8-7E7D-4D18-7375-CD932177F8B0" name="Pracownik">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>4E8237FC-97DD-B174-C51A-D4DBC443277E</generatorID>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<abbreviation>p</abbreviation>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="Login" id="F047C79E-E6E4-D9E3-0EBE-5AD258AE3B78">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>DBE8B387-02F5-AF2F-3D5B-7F78AA3138C5</generatorID>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>30</dataTypeSize>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="6163F3B5-BC5B-47BA-C189-DA9852F376D5" referredColumn="66433FB7-E8D2-8851-BEB9-47FD9D6C9AD6"/>
+</associations>
+</Column>
+<Column name="p_Data_zatrudnienia" id="A3423CF2-633B-1690-7C90-937A77164A12">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>43FA0B95-32A8-6C1D-A2A5-DAE559E35854</generatorID>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT007</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="p_Pensja_brutto" id="8FB0AEDD-2624-3CF2-B0E2-4BC8C158E600">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>392A5702-E5F0-271B-7C8A-A6D7660747D8</generatorID>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT021</logicalDatatype>
+<dataTypePrecision>2</dataTypePrecision>
+<ownDataTypeParameters>,2,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="p_Stanowisko" id="E538DD37-E92E-1981-14ED-E1FAFAA43B24">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>D5AB1BAF-83C3-A6A4-95D4-FA70F6F0160B</generatorID>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>20</dataTypeSize>
+<listOfValues>
+<valueDef value="kierownik" description=""/>
+<valueDef value="magazynier" description=""/>
+</listOfValues>
+<defaultValue>magazynier</defaultValue>
+<ownDataTypeParameters>20,,</ownDataTypeParameters>
+<defaultOntNull>true</defaultOntNull>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="p_Typ_umowy" id="0EA1CCBB-064D-216B-6DFB-11ECDFF5B479">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>C48A868D-F02E-EC9B-962A-B74D38FF6971</generatorID>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>30</dataTypeSize>
+<listOfValues>
+<valueDef value="praca" description=""/>
+<valueDef value="zlecenie" description=""/>
+</listOfValues>
+<defaultValue>praca</defaultValue>
+<ownDataTypeParameters>30,,</ownDataTypeParameters>
+<defaultOntNull>true</defaultOntNull>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="F3064EA3-9AD3-F368-B454-9F6D9CA03FF4" name="Pracownik_PK">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>05B787C2-A4B0-A23E-B810-68F853BF717F</generatorID>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="F047C79E-E6E4-D9E3-0EBE-5AD258AE3B78"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="C9034814-D70A-C01C-7B87-498799A9F43D" name="Pracownik_Użytkownik_FK">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>5AA74979-3C56-6465-931C-2512A2066F3E</generatorID>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="F047C79E-E6E4-D9E3-0EBE-5AD258AE3B78"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

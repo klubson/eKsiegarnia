@@ -1,0 +1,17 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="56C537C7-87DD-E8B4-9FF7-BB7ABC53E5ED" containerWithKeyObject="4E2160FD-A11C-3216-5A3A-E8F9BFDA1EE1" localFKIndex="5E49A86C-CFCE-3F4C-9439-73B2D9F8A222" name="Element_Koszyk_zakupowy_FK">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>DEAA193F-5B19-E755-217F-A2C8D91FE6CD</generatorID>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<referredTableLongName>Koszyk_zakupowy</referredTableLongName>
+<deleteRule>CASCADE</deleteRule>
+<referredTableID>EB025091-84F3-81BC-B59F-76DCF04A116E</referredTableID>
+<keyObject>3DB7A4CB-FA75-6628-B572-574703844E29</keyObject>
+<referredKeyID>3DB7A4CB-FA75-6628-B572-574703844E29</referredKeyID>
+<mandatory>true</mandatory>
+<refColNames>Nr_koszyka</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

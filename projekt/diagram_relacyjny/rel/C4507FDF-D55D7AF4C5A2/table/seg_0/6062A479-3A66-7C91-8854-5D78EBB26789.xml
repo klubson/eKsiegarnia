@@ -1,0 +1,144 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="6062A479-3A66-7C91-8854-5D78EBB26789" name="Produkt">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>72E6E4D0-CDB5-9B17-F2F3-D864D30D5386</generatorID>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="Nazwa" id="26DBDDE3-FBE7-FD74-1454-7D8F6A96446D">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>B4DBA6EF-18CC-7D7C-CDDC-C160F12851CE</generatorID>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>30</dataTypeSize>
+<ownDataTypeParameters>30,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="Cena" id="2ED6A627-7F04-2C73-B279-478D71359222">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>F466F248-DA9F-9D23-701C-8A60F1C2A307</generatorID>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT021</logicalDatatype>
+<dataTypePrecision>2</dataTypePrecision>
+<ownDataTypeParameters>,2,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="Rok_wydania" id="B075DDC6-4E07-D36F-EF34-7CDE74AD5D68">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>9E2B467F-D090-E7B7-1FB3-342CFBEC2D51</generatorID>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT007</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="Stan_magazyn" id="CB4F113D-27EA-39CC-E67D-BFA219F7CA56">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>0C53C2B6-BED8-7F18-F49B-B6770E86287C</generatorID>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="Wydawnictwo_Nazwa" id="66C157A2-B966-AA5B-BA82-D279895FC595">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>B3F80695-686F-D532-6DB8-D02515BB722D</generatorID>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>30</dataTypeSize>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="7F3A916C-95A7-DB1C-EA88-1EB26BCF594E" referredColumn="8E610324-0ED9-D3FC-D3D3-94C29E29FAC2"/>
+</associations>
+</Column>
+<Column name="co" id="5D153B13-0539-00CB-F2E0-31A2D78B6DB9">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:49:10 UTC</createdTime>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<constraintName>CH_INH_Produkt</constraintName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>1</dataTypeSize>
+<listOfValues>
+<valueDef value="g" description="entity Gra planszowa"/>
+<valueDef value="k" description="entity Książka"/>
+</listOfValues>
+<ownDataTypeParameters>1,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<isDiscriminatorColumn>true</isDiscriminatorColumn>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="C7B3311B-FA2E-82D2-E18B-721613F32CBC" name="Produkt_PK">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>E9A7616E-E5BE-4C33-D448-8B05D2067820</generatorID>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="26DBDDE3-FBE7-FD74-1454-7D8F6A96446D"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="9A330723-6807-1B73-C421-D33CC750F96C" name="Produkt__IDX">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 13:00:07 UTC</createdTime>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="26DBDDE3-FBE7-FD74-1454-7D8F6A96446D"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="507B33B5-0782-B4F2-5150-A7DF5A4CA68B" name="Produkt__IDX_cena">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 13:00:46 UTC</createdTime>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="2ED6A627-7F04-2C73-B279-478D71359222"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="DB2BC589-7278-6231-A23D-A246D4AD2369" name="Produkt__IDX_wydawnictwo">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 13:02:46 UTC</createdTime>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="66C157A2-B966-AA5B-BA82-D279895FC595"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="223A350A-F610-C92C-0B06-08FF7457A45C" name="Produkt_Wydawnictwo_FK">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:49:10 UTC</createdTime>
+<generatorID>727BF7DD-F514-02C0-DFF7-959B6CCF498E</generatorID>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="66C157A2-B966-AA5B-BA82-D279895FC595"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

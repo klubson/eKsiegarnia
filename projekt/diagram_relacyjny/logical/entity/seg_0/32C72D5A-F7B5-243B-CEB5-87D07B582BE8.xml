@@ -1,0 +1,114 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="32C72D5A-F7B5-243B-CEB5-87D07B582BE8" name="Koszyk zakupowy">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-10-20 09:55:54 UTC</createdTime>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="Login" id="5A1BA110-6A50-D5F8-47BA-C70A3E059095">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-11-06 11:00:54 UTC</createdTime>
+<generatorID>971CDA13-326C-E93F-7A93-9B571B7F42B2</generatorID>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<referedAttribute>DBE8B387-02F5-AF2F-3D5B-7F78AA3138C5</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>30</dataTypeSize>
+<ownDataTypeParameters>30,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Nr_koszyka" id="95AC66C0-7BD6-7BE5-1ED8-8872F7D4C2A9">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-10-20 09:56:02 UTC</createdTime>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Wartosc_zakupow" id="3239FD0F-6A3F-51D7-2BFD-A87BE684CE07">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-10-20 09:56:09 UTC</createdTime>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT021</logicalDatatype>
+<dataTypePrecision>2</dataTypePrecision>
+<ownDataTypeParameters>,2,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Sposob_platnosci" id="F118E802-0864-4234-BF1C-C4A401F861B8">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-10-20 09:58:32 UTC</createdTime>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>20</dataTypeSize>
+<ownDataTypeParameters>20,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Koszt_wysylki" id="37104FD2-FA0E-670A-5AF4-F9A9438FA4A7">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-11-06 11:12:24 UTC</createdTime>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT021</logicalDatatype>
+<dataTypePrecision>2</dataTypePrecision>
+<ownDataTypeParameters>,2,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Calkowita_wartosc_zamowienia" id="877BDBB3-4209-E3EF-47E3-0FB7AFC54E89">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-11-06 11:13:14 UTC</createdTime>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT021</logicalDatatype>
+<dataTypePrecision>2</dataTypePrecision>
+<ownDataTypeParameters>,2,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="A4DFE72B-FABF-D393-3AFC-3109B9BC96B1" name="Koszyk zakupowy PK">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-10-20 09:56:07 UTC</createdTime>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<shouldEngineer>false</shouldEngineer>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="false"/>
+</engineerTo>
+<pk>true</pk>
+<newElementsIDs>95AC66C0-7BD6-7BE5-1ED8-8872F7D4C2A9</newElementsIDs>
+<usedAttributes>
+<attributeRef>95AC66C0-7BD6-7BE5-1ED8-8872F7D4C2A9</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>
