@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 public class Log_panel extends JFrame {
 
@@ -50,7 +51,11 @@ public class Log_panel extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 exit();
                 Start_window win2 = new Start_window();
-                win2.create();
+                try {
+                    win2.create();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
             }
         });
         sign_in = new JButton("Zaloguj");

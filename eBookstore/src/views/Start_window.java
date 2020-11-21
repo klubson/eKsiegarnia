@@ -4,18 +4,28 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class Start_window extends JFrame {
     private JFrame window;
     private JButton log, reg, exit;
     private JPanel up, center, down;
     private Image image;
+    private String log_pass = "inf141246", url = "jdbc:oracle:thin:@dblab.cs.put.poznan.pl:1521:dblab11g";
+    public Connection conn = null;
 
-    public void create(){
+    public void create() throws SQLException {
         window = new JFrame("eBookstore");
         settings();
         add_components();
+        connect();
         window.setVisible(true);
+    }
+
+    private void connect() throws SQLException {
+        conn = DriverManager.getConnection(url, log_pass, log_pass);
     }
 
     private void settings(){
@@ -30,7 +40,11 @@ public class Start_window extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Log_panel log = new Log_panel();
-                exit();
+                try {
+                    exit();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
                 log.create();
             }
         });
@@ -40,7 +54,11 @@ public class Start_window extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Reg_panel reg = new Reg_panel();
-                exit();
+                try {
+                    exit();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
                 reg.create();
             }
         });
@@ -49,7 +67,11 @@ public class Start_window extends JFrame {
         exit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                exit();
+                try {
+                    exit();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
             }
         });
         exit.setPreferredSize(new Dimension(140, 60));
@@ -75,7 +97,8 @@ public class Start_window extends JFrame {
         window.add(down, BorderLayout.SOUTH);
 
     }
-    private void exit(){
+    private void exit() throws SQLException {
+        conn.close();
         window.setVisible(false);
         window.dispose();
     }

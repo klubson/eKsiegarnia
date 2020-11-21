@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Field;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class Reg_panel extends JFrame {
     private JFrame window;
@@ -14,6 +17,12 @@ public class Reg_panel extends JFrame {
     private JButton back, sign_up;
     private JPanel center, down, login_pane, pass_pane, pass_pane2, name_pane, surname_pane, phone_pane, e_mail_pane, address_pane;
     private int dim_wdt = 250, dim_ht = 20;
+    private String message = "W następujących polach wykryto błędy: ";
+    private ArrayList<String> too_long_fields = new ArrayList<String>();
+    private ArrayList<String> too_long_pass_fields = new ArrayList<String>();
+
+    private boolean phone_correctness = true;
+
 
     public void create(){
         window = new JFrame("Rejestracja");
@@ -29,14 +38,14 @@ public class Reg_panel extends JFrame {
         window.setLayout(new BorderLayout());
     }
     private void labels(){
-        login = new JLabel("Wybierz swój login: ");
-        pass = new JLabel("Wybierz swoje hasło: ");
-        pass_again = new JLabel("Powtórz hasło: ");
-        name = new JLabel("Imię: ");
-        surname = new JLabel("Nazwisko: ");
+        login = new JLabel("Wybierz swój login (max 30 znaków): ");
+        pass = new JLabel("Wybierz swoje hasło (max 20 znaków): ");
+        pass_again = new JLabel("Powtórz hasło (max 20 znaków): ");
+        name = new JLabel("Imię (max 20 znaków): ");
+        surname = new JLabel("Nazwisko (max 30 znaków): ");
         phone = new JLabel("Numer telefonu: ");
-        e_mail = new JLabel("Adres e-mail: ");
-        address = new JLabel("Adres zamieszkania: ");
+        e_mail = new JLabel("Adres e-mail (max 30 znaków): ");
+        address = new JLabel("Adres zamieszkania (max 50 znaków): ");
     }
     private void components(){
         back = new JButton("Powrót");
@@ -45,14 +54,54 @@ public class Reg_panel extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 exit();
                 Start_window win2 = new Start_window();
-                win2.create();
-        }
+                try {
+                    win2.create();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
     });
         sign_up = new JButton("Zarejestruj się");
         sign_up.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                fieldCheck(login2, 30);
+                passFieldCheck(pass2, 20);
+                passFieldCheck(pass_again2, 20);
+                fieldCheck(name2, 20);
+                fieldCheck(surname2, 20);
+                boolean number = phoneCheck(phone2);
+                fieldCheck(e_mail2, 30);
+                fieldCheck(address2, 50);
+                boolean correct_passwords = samePass();
 
+                if(!number) {
+                    JOptionPane.showMessageDialog(window, "Numer telefonu musi składać się z cyfr!",
+                            "Nieprawidłowy numer telefonu!", JOptionPane.ERROR_MESSAGE);
+                    phone2.setText("");
+                }
+                if(!correct_passwords){
+                    JOptionPane.showMessageDialog(window, "Hasła nie są identyczne!",
+                            "Błąd hasła!", JOptionPane.ERROR_MESSAGE);
+                    pass2.setText("");
+                    pass_again2.setText("");
+                }
+                if(too_long_fields.size() != 0 || too_long_pass_fields.size() != 0){
+                    JOptionPane.showMessageDialog(window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
+                    for (int i = 0; i < too_long_fields.size(); i++) {
+                        JTextField tmp = Awt1.getComponentByName(window, too_long_fields.get(i));
+                        tmp.setText("");
+                    }
+                    for (int i = 0; i < too_long_pass_fields.size(); i++) {
+                        JPasswordField tmp = Awt1.getComponentByName(window, too_long_pass_fields.get(i));
+                        tmp.setText("");
+                    }
+                    message = "W następujących polach wykryto błędy: ";
+                }
+
+                if (number && correct_passwords && too_long_fields.size() == 0 && too_long_pass_fields.size() == 0){
+                    JOptionPane.showMessageDialog(window, "Rejestracja przebiegła pomyślnie!");
+                }
             }
         });
         pass_box = new JCheckBox("Pokaż hasło");
@@ -77,6 +126,7 @@ public class Reg_panel extends JFrame {
         });
 
         login2 = new JTextField();
+        login2.setName("LOGIN");
         login2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -85,6 +135,7 @@ public class Reg_panel extends JFrame {
         });
         login2.setPreferredSize(new Dimension(dim_wdt, dim_ht));
         pass2 = new JPasswordField();
+        pass2.setName("HASŁO");
         pass2.setEchoChar('\u25CF');
         pass2.addActionListener(new ActionListener() {
             @Override
@@ -93,6 +144,7 @@ public class Reg_panel extends JFrame {
         });
         pass2.setPreferredSize(new Dimension(dim_wdt, dim_ht));
         pass_again2 = new JPasswordField();
+        pass_again2.setName("POWTÓRZ HASŁO");
         pass_again2.setEchoChar('\u25CF');
         pass_again2.addActionListener(new ActionListener() {
             @Override
@@ -101,6 +153,7 @@ public class Reg_panel extends JFrame {
         });
         pass_again2.setPreferredSize(new Dimension(dim_wdt, dim_ht));
         name2 = new JTextField();
+        name2.setName("IMIĘ");
         name2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -109,6 +162,7 @@ public class Reg_panel extends JFrame {
         });
         name2.setPreferredSize(new Dimension(dim_wdt, dim_ht));
         surname2 = new JTextField();
+        surname2.setName("NAZWISKO");
         surname2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -117,6 +171,7 @@ public class Reg_panel extends JFrame {
         });
         surname2.setPreferredSize(new Dimension(dim_wdt, dim_ht));
         phone2 = new JTextField();
+        phone2.setName("NUMER TELEFONU");
         phone2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -125,6 +180,7 @@ public class Reg_panel extends JFrame {
         });
         phone2.setPreferredSize(new Dimension(dim_wdt, dim_ht));
         e_mail2 = new JTextField();
+        e_mail2.setName("ADRES E-MAIL");
         e_mail2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -133,6 +189,7 @@ public class Reg_panel extends JFrame {
         });
         e_mail2.setPreferredSize(new Dimension(dim_wdt, dim_ht));
         address2 = new JTextField();
+        address2.setName("ADRES ZAMIESZKANIA");
         address2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -193,5 +250,66 @@ public class Reg_panel extends JFrame {
     private void exit(){
         window.setVisible(false);
         window.dispose();
+    }
+    private void fieldCheck(JTextField field, int size){
+        if(field.getText().length() == 0 || field.getText().length() > size){
+            message += "\n" + field.getName();
+            too_long_fields.add(field.getName());
+        }
+    }
+    private void passFieldCheck(JPasswordField field, int size){
+        if(field.getPassword().length == 0 || field.getPassword().length > size){
+            message += "\n" + field.getName();
+            too_long_pass_fields.add(field.getName());
+        }
+    }
+    private boolean samePass(){
+        if (pass2 == pass_again2) return true;
+        else return false;
+    }
+    private boolean phoneCheck(JTextField field) {
+        if(field.getText().length() != 9) return false;
+        for (int i = 0; i < field.getText().length(); i++) {
+            if (!Character.isDigit(field.getText().charAt(i))) {
+                phone_correctness = false;
+            }
+        }
+        return phone_correctness;
+    }
+}
+
+class Awt1 {
+
+    /**
+     * attempts to retrieve a component from a JFrame or JDialog using the name
+     * of the private variable that NetBeans (or other IDE) created to refer to
+     * it in code.
+     * @param <T> Generics allow easier casting from the calling side.
+     * @param window JFrame or JDialog containing component
+     * @param name name of the private field variable, case sensitive
+     * @return null if no match, otherwise a component.
+     */
+    @SuppressWarnings("unchecked")
+    static public <T extends Component> T getComponentByName(Window window, String name) {
+        // loop through all of the class fields on that form
+        for (Field field : window.getClass().getDeclaredFields()) {
+            try {
+                // let us look at private fields, please
+                field.setAccessible(true);
+                // compare the variable name to the name passed in
+                if (name.equals(field.getName())) {
+                    // get a potential match (assuming correct &lt;T&gt;ype)
+                    final Object potentialMatch = field.get(window);
+                    // cast and return the component
+                    return (T) potentialMatch;
+                }
+            } catch (SecurityException | IllegalArgumentException
+                    | IllegalAccessException ex) {
+
+                // ignore exceptions
+            }
+        }
+        // no match found
+        return null;
     }
 }
