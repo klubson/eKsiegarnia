@@ -1,11 +1,15 @@
 package views;
 import views.Start_window;
+import models.dataBaseConnection;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
+import java.util.Arrays;
 
 public class Log_panel extends JFrame {
 
@@ -17,6 +21,7 @@ public class Log_panel extends JFrame {
     private JButton back, sign_in;
     private JPanel center, down, login, passwd;
     private int dim_wdt = 250, dim_ht = 20;
+    private dataBaseConnection dataBase = new dataBaseConnection();
 
 
 
@@ -63,7 +68,40 @@ public class Log_panel extends JFrame {
         sign_in.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                try {
+                    dataBase.setStmt();
+                    ResultSet rs = dataBase.getStmt().executeQuery(
+                            "SELECT Login FROM Uzytkownik WHERE Login = " + "'" + log2.getText() + "'"
+                    );
+                    if(rs.next()){
+                        rs.close();
+                        dataBase.getStmt().close();
+                        dataBase.setCstmt("{? = call checkPwd(?,?)}");
+                        dataBase.getCstmt().setString(2, log2.getText());
+                        dataBase.getCstmt().setString(3, Arrays.toString(pass2.getPassword()));
+                        dataBase.getCstmt().registerOutParameter(1, Types.BOOLEAN);
+                        dataBase.getCstmt().execute();
+                        boolean pass_good = dataBase.getCstmt().getBoolean(1);
+                        if(!pass_good){
+                            JOptionPane.showMessageDialog(window, "Niepoprawne hasło!",
+                                    "Błąd logowania!", JOptionPane.ERROR_MESSAGE);
+                        }
+                        else{
+                            rs.close();
+                            dataBase.getStmt().close();
+                            dataBase.getCstmt().close();
+                            //przejście do Panelu klienta
+                        }
+                    }
 
+                    else{
+                        JOptionPane.showMessageDialog(window, "Brak użytkownika o podanym loginie!",
+                                "Błąd logowania!", JOptionPane.ERROR_MESSAGE);
+                    }
+
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
             }
         });
         log = new JLabel("Login: ");

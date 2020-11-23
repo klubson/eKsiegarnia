@@ -1,31 +1,26 @@
 package views;
 import models.Image;
+import models.dataBaseConnection;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
+
 
 public class Start_window extends JFrame {
     private JFrame window;
     private JButton log, reg, exit;
     private JPanel up, center, down;
     private Image image;
-    private String log_pass = "inf141246", url = "jdbc:oracle:thin:@dblab.cs.put.poznan.pl:1521:dblab11g";
-    public Connection conn = null;
+    private dataBaseConnection dataBase = new dataBaseConnection();
 
     public void create() throws SQLException {
         window = new JFrame("eBookstore");
         settings();
         add_components();
-        connect();
+        dataBase.connect();
         window.setVisible(true);
-    }
-
-    private void connect() throws SQLException {
-        conn = DriverManager.getConnection(url, log_pass, log_pass);
     }
 
     private void settings(){
@@ -68,6 +63,7 @@ public class Start_window extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    dataBase.getConn().close();
                     exit();
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
@@ -98,7 +94,6 @@ public class Start_window extends JFrame {
 
     }
     private void exit() throws SQLException {
-        conn.close();
         window.setVisible(false);
         window.dispose();
     }

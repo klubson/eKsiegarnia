@@ -1,12 +1,15 @@
 package views;
+import models.dataBaseConnection;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Field;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Reg_panel extends JFrame {
     private JFrame window;
@@ -20,8 +23,8 @@ public class Reg_panel extends JFrame {
     private String message = "W następujących polach wykryto błędy: ";
     private ArrayList<String> too_long_fields = new ArrayList<String>();
     private ArrayList<String> too_long_pass_fields = new ArrayList<String>();
-
-    private boolean phone_correctness = true;
+    private boolean phone_correctness;
+    private dataBaseConnection dataBase = new dataBaseConnection();
 
 
     public void create(){
@@ -53,8 +56,8 @@ public class Reg_panel extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 exit();
-                Start_window win2 = new Start_window();
                 try {
+                    Start_window win2 = new Start_window();
                     win2.create();
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
@@ -88,6 +91,7 @@ public class Reg_panel extends JFrame {
                 }
                 if(too_long_fields.size() != 0 || too_long_pass_fields.size() != 0){
                     JOptionPane.showMessageDialog(window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
+                    message = "W następujących polach wykryto błędy: ";
                     for (int i = 0; i < too_long_fields.size(); i++) {
                         JTextField tmp = Awt1.getComponentByName(window, too_long_fields.get(i));
                         tmp.setText("");
@@ -96,11 +100,50 @@ public class Reg_panel extends JFrame {
                         JPasswordField tmp = Awt1.getComponentByName(window, too_long_pass_fields.get(i));
                         tmp.setText("");
                     }
-                    message = "W następujących polach wykryto błędy: ";
+
                 }
 
                 if (number && correct_passwords && too_long_fields.size() == 0 && too_long_pass_fields.size() == 0){
-                    JOptionPane.showMessageDialog(window, "Rejestracja przebiegła pomyślnie!");
+
+                    try {
+                        dataBase.setStmt();
+                        dataBase.getConn().setAutoCommit(false);
+                        ResultSet rs = dataBase.getStmt().executeQuery(
+                                "SELECT Login FROM Klient WHERE Login = " + "'" +login2.getText() + "'" +
+                                       " AND k_Adres_e_mail = " + "'" + e_mail2.getText() + "'"
+                        );
+                        if (rs.next()){
+                            rs.close();
+                            JOptionPane.showMessageDialog(window, "Użytkownik o podanym loginie i/lub adresie " +
+                                    "e-mail już istnieje!", "Błąd rejestracji!", JOptionPane.ERROR_MESSAGE);
+                            dataBase.getStmt().close();
+                        }
+                        else {
+                            rs.close();
+                            dataBase.setCstmt("{call nowyKlient(?,?,?,?,?,?,?}");
+                            dataBase.getCstmt().setString(1, login2.getText());
+                            dataBase.getCstmt().setString(2, Arrays.toString(pass2.getPassword()));
+                            dataBase.getCstmt().setString(3, name2.getText());
+                            dataBase.getCstmt().setString(4, surname2.getText());
+                            dataBase.getCstmt().setString(5, phone2.getText());
+                            dataBase.getCstmt().setString(6, e_mail2.getText());
+                            dataBase.getCstmt().setString(7, address2.getText());
+                            dataBase.getCstmt().execute();
+                            JOptionPane.showMessageDialog(window, "Rejestracja przebiegła pomyślnie!");
+                            dataBase.getStmt().close();
+                            dataBase.getCstmt().close();
+                            //przejście do okna logowania
+                            Log_panel win = new Log_panel();
+                            exit();
+                            win.create();
+                        }
+
+
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+
+
                 }
             }
         });
@@ -264,10 +307,11 @@ public class Reg_panel extends JFrame {
         }
     }
     private boolean samePass(){
-        if (pass2 == pass_again2) return true;
+        if (Arrays.toString(pass2.getPassword()).equals(Arrays.toString(pass_again2.getPassword()))) return true;
         else return false;
     }
     private boolean phoneCheck(JTextField field) {
+        phone_correctness = true;
         if(field.getText().length() != 9) return false;
         for (int i = 0; i < field.getText().length(); i++) {
             if (!Character.isDigit(field.getText().charAt(i))) {
@@ -276,6 +320,7 @@ public class Reg_panel extends JFrame {
         }
         return phone_correctness;
     }
+
 }
 
 class Awt1 {
