@@ -358,6 +358,80 @@ CREATE OR REPLACE TRIGGER koszyk_zakupowy_nr_koszyka_trg BEFORE
 BEGIN
     :new.nr_koszyka := koszyk_zakupowy_nr_koszyka_seq.nextval;
 END;
+
+create or replace PROCEDURE nowyKlient
+    (vLogin IN VARCHAR2,
+    vHaslo IN VARCHAR2,
+    vImie IN VARCHAR2,
+    vNazwisko IN VARCHAR2,
+    vNr IN VARCHAR2,
+    vE_mail IN VARCHAR2,
+    vAdres IN VARCHAR2) IS
+BEGIN
+    INSERT INTO Uzytkownik VALUES(vLogin, vHaslo, vImie, vNazwisko, vNr, 'k');
+    INSERT INTO Klient VALUES(vLogin, vE_mail, vAdres);
+END nowyKlient;
+
+create or replace PROCEDURE nowyPracownik
+    (vLogin IN VARCHAR2,
+    vHaslo IN VARCHAR2,
+    vImie IN VARCHAR2,
+    vNazwisko IN VARCHAR2,
+    vNr IN VARCHAR2,
+    vData_zatrudnienia IN DATE,
+    vPensja IN FLOAT,
+    vStanowisko IN VARCHAR2,
+    vTyp_umowy IN VARCHAR2) IS
+BEGIN
+    INSERT INTO Uzytkownik VALUES(vLogin, vHaslo, vImie, vNazwisko, vNr, 'p');
+    INSERT INTO Pracownik VALUES(vLogin, vData_zatrudnienia, vPensja, vStanowisko, vTyp_umowy);
+END nowyPracownik;
+
+create or replace PROCEDURE nowaKsiazka
+    (vNazwa IN VARCHAR2,
+    vCena IN FLOAT,
+    vRok_wydania IN DATE,
+    vStan IN NUMBER,
+    vWydawnictwo IN VARCHAR2,
+    vTyp_okladki IN VARCHAR2,
+    vLiczba_stron IN NUMBER,
+    vFormat IN VARCHAR2,
+    vSeria IN VARCHAR2) IS
+BEGIN
+    INSERT INTO Produkt VALUES(vNazwa, vCena, vRok_wydania, vStan, vWydawnictwo, 'k');
+    INSERT INTO Ksiazka VALUES(vNazwa, vTyp_okladki, vLiczba_stron, vFormat, vSeria);
+END nowaKsiazka;
+
+create or replace PROCEDURE nowaGra
+    (vNazwa IN VARCHAR2,
+    vCena IN FLOAT,
+    vRok_wydania IN DATE,
+    vStan IN NUMBER,
+    vWydawnictwo IN VARCHAR2,
+    vMin_gracze IN NUMBER,
+    vMax_gracze IN NUMBER,
+    vMin_wiek IN NUMBER,
+    vCzas_gry IN NUMBER) IS
+BEGIN
+    INSERT INTO Produkt VALUES(vNazwa, vCena, vRok_wydania, vStan, vWydawnictwo, 'g');
+    INSERT INTO Ksiazka VALUES(vNazwa, vMin_gracze, vMax_gracze, vMin_wiek, vCzas_gry);
+END nowaGra;
+
+create or replace FUNCTION checkPwd 
+    (login_to_check IN VARCHAR2, 
+     pass_to_check IN VARCHAR2)
+    RETURN NUMBER IS 
+    res NUMBER;
+    user_log VARCHAR2(30);
+    user_pass VARCHAR2(30);
+BEGIN 
+    SELECT login, Haslo INTO user_log, user_pass FROM Uzytkownik WHERE login = login_to_check;
+    IF user_pass = pass_to_check THEN
+        res := 1;
+    ELSE res := 0;
+    END IF;
+    RETURN res;
+END checkPwd;
 /
 
 
@@ -371,8 +445,8 @@ END;
 -- ALTER VIEW                               0
 -- CREATE PACKAGE                           0
 -- CREATE PACKAGE BODY                      0
--- CREATE PROCEDURE                         0
--- CREATE FUNCTION                          0
+-- CREATE PROCEDURE                         4
+-- CREATE FUNCTION                          1
 -- CREATE TRIGGER                           6
 -- ALTER TRIGGER                            0
 -- CREATE COLLECTION TYPE                   0

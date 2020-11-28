@@ -63,7 +63,8 @@ public class Start_window extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    dataBase.getConn().close();
+                    dataBase.disconnect();
+                    System.out.println("Do widzenia!");
                     exit();
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();

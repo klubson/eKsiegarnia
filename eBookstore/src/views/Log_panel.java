@@ -71,29 +71,63 @@ public class Log_panel extends JFrame {
                 try {
                     dataBase.setStmt();
                     ResultSet rs = dataBase.getStmt().executeQuery(
-                            "SELECT Login FROM Uzytkownik WHERE Login = " + "'" + log2.getText() + "'"
-                    );
+                           "SELECT Login FROM Uzytkownik WHERE Login = " + "'" + log2.getText() + "'"
+                   );
+                    //if(dataBase.findUser(log2.getText())){
                     if(rs.next()){
                         rs.close();
-                        dataBase.getStmt().close();
                         dataBase.setCstmt("{? = call checkPwd(?,?)}");
                         dataBase.getCstmt().setString(2, log2.getText());
-                        dataBase.getCstmt().setString(3, Arrays.toString(pass2.getPassword()));
-                        dataBase.getCstmt().registerOutParameter(1, Types.BOOLEAN);
+                        String tmp = String.copyValueOf(pass2.getPassword());
+                        dataBase.getCstmt().setString(3, tmp);
+                        dataBase.getCstmt().registerOutParameter(1, Types.INTEGER);
                         dataBase.getCstmt().execute();
-                        boolean pass_good = dataBase.getCstmt().getBoolean(1);
-                        if(!pass_good){
+                        int pass_good = dataBase.getCstmt().getInt(1);
+                        dataBase.getCstmt().close();
+                        //String tmp = String.copyValueOf(pass2.getPassword());
+
+                        //if(dataBase.checkPwd(log2.getText(), tmp) == 0){
+
+                        if(pass_good == 0){
                             JOptionPane.showMessageDialog(window, "Niepoprawne hasło!",
                                     "Błąd logowania!", JOptionPane.ERROR_MESSAGE);
                         }
                         else{
+                            //String data = dataBase.getName(log2.getText());
+                            rs = dataBase.getStmt().executeQuery(
+                                    "SELECT Imie, Nazwisko FROM Uzytkownik WHERE Login = "
+                                            + "'" + log2.getText() + "'"
+                            );
+                            rs.next();
+                            String data = rs.getString(1) + " " + rs.getString(2);
+                            rs.close();
+                            rs = dataBase.getStmt().executeQuery(
+                                    "SELECT P_STANOWISKO FROM Pracownik WHERE Login = " +
+                                            "'" + log2.getText() + "'"
+                            );
+                            rs.next();
+                            String jobType = rs.getString(1);
+                            //String jobType = dataBase.getJob_type(log2.getText());
+                            System.out.println("Zalogowano jako: " + data);
                             rs.close();
                             dataBase.getStmt().close();
-                            dataBase.getCstmt().close();
-                            //przejście do Panelu klienta
+                            if (jobType.equals("kierownik")){
+                                Manager_panel new_wind = new Manager_panel();
+                                exit();
+                                new_wind.create(data);
+                            }
+                            else if(jobType.equals("magazynier")){
+                                //dokończyć panel pracownika
+                                Employee_panel new_wind = new Employee_panel();
+                                exit();
+                                new_wind.create(data);
+                            }
+                            else {
+                                //stworzyć panel klienta
+                                exit();
+                            }
                         }
                     }
-
                     else{
                         JOptionPane.showMessageDialog(window, "Brak użytkownika o podanym loginie!",
                                 "Błąd logowania!", JOptionPane.ERROR_MESSAGE);

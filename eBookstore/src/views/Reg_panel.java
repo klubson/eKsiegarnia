@@ -1,12 +1,11 @@
 package views;
 import models.dataBaseConnection;
+import models.Awt1;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.reflect.Field;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -68,70 +67,23 @@ public class Reg_panel extends JFrame {
         sign_up.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                fieldCheck(login2, 30);
-                passFieldCheck(pass2, 20);
-                passFieldCheck(pass_again2, 20);
-                fieldCheck(name2, 20);
-                fieldCheck(surname2, 20);
-                boolean number = phoneCheck(phone2);
-                fieldCheck(e_mail2, 30);
-                fieldCheck(address2, 50);
-                boolean correct_passwords = samePass();
-
-                if(!number) {
-                    JOptionPane.showMessageDialog(window, "Numer telefonu musi składać się z cyfr!",
-                            "Nieprawidłowy numer telefonu!", JOptionPane.ERROR_MESSAGE);
-                    phone2.setText("");
-                }
-                if(!correct_passwords){
-                    JOptionPane.showMessageDialog(window, "Hasła nie są identyczne!",
-                            "Błąd hasła!", JOptionPane.ERROR_MESSAGE);
-                    pass2.setText("");
-                    pass_again2.setText("");
-                }
-                if(too_long_fields.size() != 0 || too_long_pass_fields.size() != 0){
-                    JOptionPane.showMessageDialog(window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
-                    message = "W następujących polach wykryto błędy: ";
-                    for (int i = 0; i < too_long_fields.size(); i++) {
-                        JTextField tmp = Awt1.getComponentByName(window, too_long_fields.get(i));
-                        tmp.setText("");
-                    }
-                    for (int i = 0; i < too_long_pass_fields.size(); i++) {
-                        JPasswordField tmp = Awt1.getComponentByName(window, too_long_pass_fields.get(i));
-                        tmp.setText("");
-                    }
-
-                }
-
-                if (number && correct_passwords && too_long_fields.size() == 0 && too_long_pass_fields.size() == 0){
-
+                if (check()){
                     try {
-                        dataBase.setStmt();
-                        dataBase.getConn().setAutoCommit(false);
-                        ResultSet rs = dataBase.getStmt().executeQuery(
-                                "SELECT Login FROM Klient WHERE Login = " + "'" +login2.getText() + "'" +
-                                       " AND k_Adres_e_mail = " + "'" + e_mail2.getText() + "'"
-                        );
-                        if (rs.next()){
-                            rs.close();
+                        //dataBase.setStmt();
+                        //dataBase.getConn().setAutoCommit(false);
+                        //ResultSet rs = dataBase.getStmt().executeQuery(
+                          //      "SELECT Login FROM Klient WHERE Login = " + "'" +login2.getText() + "'" +
+                           //            " AND k_Adres_e_mail = " + "'" + e_mail2.getText() + "'"
+                        //);
+
+                        if (dataBase.findUser(login2.getText())){
                             JOptionPane.showMessageDialog(window, "Użytkownik o podanym loginie i/lub adresie " +
                                     "e-mail już istnieje!", "Błąd rejestracji!", JOptionPane.ERROR_MESSAGE);
-                            dataBase.getStmt().close();
                         }
                         else {
-                            rs.close();
-                            dataBase.setCstmt("{call nowyKlient(?,?,?,?,?,?,?}");
-                            dataBase.getCstmt().setString(1, login2.getText());
-                            dataBase.getCstmt().setString(2, Arrays.toString(pass2.getPassword()));
-                            dataBase.getCstmt().setString(3, name2.getText());
-                            dataBase.getCstmt().setString(4, surname2.getText());
-                            dataBase.getCstmt().setString(5, phone2.getText());
-                            dataBase.getCstmt().setString(6, e_mail2.getText());
-                            dataBase.getCstmt().setString(7, address2.getText());
-                            dataBase.getCstmt().execute();
+                            String tmp = String.copyValueOf(pass2.getPassword());
+                            dataBase.newClient(login2.getText(), tmp, name2.getText(), surname2.getText(), phone2.getText(), e_mail2.getText(), address.getText());
                             JOptionPane.showMessageDialog(window, "Rejestracja przebiegła pomyślnie!");
-                            dataBase.getStmt().close();
-                            dataBase.getCstmt().close();
                             //przejście do okna logowania
                             Log_panel win = new Log_panel();
                             exit();
@@ -320,41 +272,43 @@ public class Reg_panel extends JFrame {
         }
         return phone_correctness;
     }
+    private boolean check(){
+        fieldCheck(login2, 30);
+        passFieldCheck(pass2, 20);
+        passFieldCheck(pass_again2, 20);
+        fieldCheck(name2, 20);
+        fieldCheck(surname2, 20);
+        boolean number = phoneCheck(phone2);
+        fieldCheck(e_mail2, 30);
+        fieldCheck(address2, 50);
+        boolean correct_passwords = samePass();
 
-}
-
-class Awt1 {
-
-    /**
-     * attempts to retrieve a component from a JFrame or JDialog using the name
-     * of the private variable that NetBeans (or other IDE) created to refer to
-     * it in code.
-     * @param <T> Generics allow easier casting from the calling side.
-     * @param window JFrame or JDialog containing component
-     * @param name name of the private field variable, case sensitive
-     * @return null if no match, otherwise a component.
-     */
-    @SuppressWarnings("unchecked")
-    static public <T extends Component> T getComponentByName(Window window, String name) {
-        // loop through all of the class fields on that form
-        for (Field field : window.getClass().getDeclaredFields()) {
-            try {
-                // let us look at private fields, please
-                field.setAccessible(true);
-                // compare the variable name to the name passed in
-                if (name.equals(field.getName())) {
-                    // get a potential match (assuming correct &lt;T&gt;ype)
-                    final Object potentialMatch = field.get(window);
-                    // cast and return the component
-                    return (T) potentialMatch;
-                }
-            } catch (SecurityException | IllegalArgumentException
-                    | IllegalAccessException ex) {
-
-                // ignore exceptions
+        if(!number) {
+            JOptionPane.showMessageDialog(window, "Numer telefonu musi składać się z cyfr!",
+                    "Nieprawidłowy numer telefonu!", JOptionPane.ERROR_MESSAGE);
+            phone2.setText("");
+        }
+        if(!correct_passwords){
+            JOptionPane.showMessageDialog(window, "Hasła nie są identyczne!",
+                    "Błąd hasła!", JOptionPane.ERROR_MESSAGE);
+            pass2.setText("");
+            pass_again2.setText("");
+        }
+        if(too_long_fields.size() != 0 || too_long_pass_fields.size() != 0){
+            JOptionPane.showMessageDialog(window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
+            message = "W następujących polach wykryto błędy: ";
+            for (int i = 0; i < too_long_fields.size(); i++) {
+                JTextField tmp = Awt1.getComponentByName(window, too_long_fields.get(i));
+                tmp.setText("");
+            }
+            for (int i = 0; i < too_long_pass_fields.size(); i++) {
+                JPasswordField tmp = Awt1.getComponentByName(window, too_long_pass_fields.get(i));
+                tmp.setText("");
             }
         }
-        // no match found
-        return null;
+        if (number && correct_passwords && too_long_fields.size() == 0 && too_long_pass_fields.size() == 0) return true;
+        else return false;
+
     }
+
 }
