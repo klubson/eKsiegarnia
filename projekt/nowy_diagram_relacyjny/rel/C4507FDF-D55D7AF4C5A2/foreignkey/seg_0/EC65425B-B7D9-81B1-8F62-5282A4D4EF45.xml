@@ -1,0 +1,19 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="EC65425B-B7D9-81B1-8F62-5282A4D4EF45" containerWithKeyObject="CF34D4C5-D4E6-7714-86CE-3FBB6427F7E7" localFKIndex="BF8CA5D4-8AFB-90B1-DF74-5AE2DD8A50B6" name="Gra_planszowa_Produkt_FK">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-12-03 13:48:13 UTC</createdTime>
+<generatorID>2EB157B7-B713-6653-7C2B-F716EA42BC37</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<referredTableLongName>Produkt</referredTableLongName>
+<arc>6BF72058-A319-84BB-E069-1276B7DCC92E</arc>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>6062A479-3A66-7C91-8854-5D78EBB26789</referredTableID>
+<keyObject>C7B3311B-FA2E-82D2-E18B-721613F32CBC</keyObject>
+<referredKeyID>C7B3311B-FA2E-82D2-E18B-721613F32CBC</referredKeyID>
+<mandatory>true</mandatory>
+<refColNames>ID_produktu</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<discriminatorValue>g</discriminatorValue>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

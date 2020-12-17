@@ -1,0 +1,106 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="CF34D4C5-D4E6-7714-86CE-3FBB6427F7E7" name="Gra_planszowa">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>E15D7810-ED91-D575-238F-8EF39042EC79</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<abbreviation>g</abbreviation>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="ID_produktu" id="09F46D08-4BA1-1093-BB48-838169C248C4">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-12-03 12:53:13 UTC</createdTime>
+<generatorID>F3BC6E8C-6414-7B5A-4227-A129D8FF8D33</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="EC65425B-B7D9-81B1-8F62-5282A4D4EF45" referredColumn="EFDDA0C8-EB27-699F-CECD-4271E02CF02D"/>
+</associations>
+</Column>
+<Column name="g_Min_gracze" id="CD9FBA6D-96BF-0E04-9D92-28851814919C">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>3DBDF43C-C438-DDBE-3440-840402AABF91</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="g_Max_gracze" id="BDE833B0-3ECB-6587-4543-4F26BFC84167">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>771003A7-9C0E-3D47-2866-7B44A5028F57</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="g_Min_wiek" id="73A1F398-4F5A-423C-E0AE-F56E5CE96523">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>41E95843-F76E-FB59-5AFD-2949224E843A</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="g_Czas_gry" id="5EC892F1-616A-165A-D897-3FEFB0D8D0E6">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>DCE6A004-0388-71AC-6A2F-EE53510FA343</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="3DF7D1B6-CB00-99FC-F101-5349D218CB7B" name="Gra_planszowa_PK">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>E9A7616E-E5BE-4C33-D448-8B05D2067820</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="09F46D08-4BA1-1093-BB48-838169C248C4"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="BF8CA5D4-8AFB-90B1-DF74-5AE2DD8A50B6" name="Gra_planszowa_Produkt_FK">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-12-03 13:48:13 UTC</createdTime>
+<generatorID>2EB157B7-B713-6653-7C2B-F716EA42BC37</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="09F46D08-4BA1-1093-BB48-838169C248C4"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+<tableCheckConstraints itemClass="oracle.dbtools.crest.model.design.constraint.TableLevelConstraint">
+<tableCheckConstraint name="Gra_planszowa_CK_1" directorySegmentName="seg_0" id="5929B0ED-0E28-C8C6-864B-EF61586C0ADB">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 13:25:40 UTC</createdTime>
+<ownerDesignName>diagram_relacyjny</ownerDesignName>
+<rule><![CDATA[g_Min_gracze <= g_Max_gracze]]></rule>
+</tableCheckConstraint>
+</tableCheckConstraints>
+</Table>

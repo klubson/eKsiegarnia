@@ -1,0 +1,17 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="A3C6DBAA-0600-89CA-177E-74F5A3C9EE81" containerWithKeyObject="4C633AC4-1EB3-5B0A-C1CE-880C005C165A" localFKIndex="0828659A-47D3-FEE5-50F3-DF03080F2115" name="Ksiazka_Seria_FK">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-12-03 15:57:01 UTC</createdTime>
+<generatorID>E78B609D-00E6-BF8C-3D48-9EC5039BBC9F</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<referredTableLongName>Seria</referredTableLongName>
+<deleteRule>CASCADE</deleteRule>
+<referredTableID>4BFDBD48-CEA1-03B4-1AB3-A799AEE57561</referredTableID>
+<keyObject>24D6B670-80BD-B3A4-EFBC-133D5145AE12</keyObject>
+<referredKeyID>24D6B670-80BD-B3A4-EFBC-133D5145AE12</referredKeyID>
+<mandatory>false</mandatory>
+<refColNames>Tytul</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

@@ -1,0 +1,113 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="15D097F6-846D-C800-56E3-C5C060A9D0DE" name="Uzytkownik">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>5F6F8FEF-103C-0400-A98F-622526ECA907</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="Login" id="66433FB7-E8D2-8851-BEB9-47FD9D6C9AD6">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>DBE8B387-02F5-AF2F-3D5B-7F78AA3138C5</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>30</dataTypeSize>
+<ownDataTypeParameters>30,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="Haslo" id="6FC88B42-A5B9-82DD-F609-57E9D66684BC">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>225A0403-8AE5-3A8F-39C1-5D2A3B7E5E44</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>20</dataTypeSize>
+<ownDataTypeParameters>20,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="Imie" id="86C6978B-364C-60BE-F94D-951CD4F3213C">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>DC024B6D-DF37-6B90-40FE-823B23B1D836</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>20</dataTypeSize>
+<ownDataTypeParameters>20,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="Nazwisko" id="7026EF1D-8D92-7A14-5E38-BE7F34671C29">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>34E5D4CB-21F0-387D-B11C-B137E80F88A1</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>30</dataTypeSize>
+<ownDataTypeParameters>30,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="Nr_kontaktowy" id="0D076898-C4F2-655C-CDCF-DF453A9279C5">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>47E3783A-7962-39E5-02AC-803BF7A88FBF</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>9</dataTypeSize>
+<ownDataTypeParameters>9,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="kto" id="5E32BDE0-27D7-2635-E627-E2D4F3EC73DC">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:49:10 UTC</createdTime>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<constraintName>CH_INH_Użytkownik</constraintName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>1</dataTypeSize>
+<listOfValues>
+<valueDef value="k" description="entity Klient"/>
+<valueDef value="p" description="entity Pracownik"/>
+</listOfValues>
+<ownDataTypeParameters>1,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<isDiscriminatorColumn>true</isDiscriminatorColumn>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="FAADDF3E-B98A-8EBF-1509-D372D91E0212" name="Uzytkownik_PK">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>05B787C2-A4B0-A23E-B810-68F853BF717F</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="66433FB7-E8D2-8851-BEB9-47FD9D6C9AD6"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="F1F61701-AB07-5D6B-1630-1B51F6D28C3F" name="Uzytkownik__IDX">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:36:30 UTC</createdTime>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="66433FB7-E8D2-8851-BEB9-47FD9D6C9AD6"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

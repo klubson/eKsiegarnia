@@ -1,0 +1,17 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="284348E6-711F-5308-75FA-5C18D350EE9A" containerWithKeyObject="6062A479-3A66-7C91-8854-5D78EBB26789" localFKIndex="97A83EAD-64FC-B229-A32C-655E7D43085F" name="Produkt_Wydawnictwo_FK">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-12-03 15:58:03 UTC</createdTime>
+<generatorID>803ADF30-A714-DB66-32C3-C4029A300D07</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<referredTableLongName>Wydawnictwo</referredTableLongName>
+<deleteRule>CASCADE</deleteRule>
+<referredTableID>7970C82F-D77F-5EC0-967B-D7029CFE0A9B</referredTableID>
+<keyObject>197B4DBD-64EA-BF85-3ED4-C26C851CEE40</keyObject>
+<referredKeyID>197B4DBD-64EA-BF85-3ED4-C26C851CEE40</referredKeyID>
+<mandatory>true</mandatory>
+<refColNames>ID_wydawnictwa</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

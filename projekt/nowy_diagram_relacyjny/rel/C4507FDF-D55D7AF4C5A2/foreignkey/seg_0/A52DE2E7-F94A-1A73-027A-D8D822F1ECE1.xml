@@ -1,0 +1,17 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="A52DE2E7-F94A-1A73-027A-D8D822F1ECE1" containerWithKeyObject="4E2160FD-A11C-3216-5A3A-E8F9BFDA1EE1" localFKIndex="90E9BEBE-48AA-5BD6-1E0D-5FBF458240CA" name="Element_koszyka_Produkt_FK">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>3F62184B-C6FE-3F80-445C-58FAE75935A3</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<referredTableLongName>Produkt</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>6062A479-3A66-7C91-8854-5D78EBB26789</referredTableID>
+<keyObject>C7B3311B-FA2E-82D2-E18B-721613F32CBC</keyObject>
+<referredKeyID>C7B3311B-FA2E-82D2-E18B-721613F32CBC</referredKeyID>
+<mandatory>true</mandatory>
+<refColNames>ID_produktu</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

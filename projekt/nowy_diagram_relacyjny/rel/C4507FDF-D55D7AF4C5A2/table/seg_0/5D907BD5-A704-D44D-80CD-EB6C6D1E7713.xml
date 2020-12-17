@@ -1,0 +1,77 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="5D907BD5-A704-D44D-80CD-EB6C6D1E7713" name="Klient">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>D2CCFA62-9050-71A5-FFDC-B397E542304C</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<abbreviation>k</abbreviation>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="Login" id="749AB869-44DC-34B4-AFC7-20C0446FB6E9">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>DBE8B387-02F5-AF2F-3D5B-7F78AA3138C5</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>30</dataTypeSize>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="0B9F1E7B-2746-0774-AB73-A3BDF460FE66" referredColumn="66433FB7-E8D2-8851-BEB9-47FD9D6C9AD6"/>
+</associations>
+</Column>
+<Column name="k_Adres_e_mail" id="719CE732-22FC-1CB5-6E6F-7F0D8C183937">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>D39BD7D4-E241-9D7F-EAF3-D251855EFD1B</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>30</dataTypeSize>
+<ownDataTypeParameters>30,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="k_Adres" id="537C3D17-EB9D-00BE-40E8-1BFFC1193531">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>BC591078-FD0B-50A8-CAAB-D85AEE315559</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50</dataTypeSize>
+<ownDataTypeParameters>50,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="4538C848-C9B5-E2AD-2989-7750490DD6E2" name="Klient_PK">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>05B787C2-A4B0-A23E-B810-68F853BF717F</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="749AB869-44DC-34B4-AFC7-20C0446FB6E9"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="A086EF0A-1772-3FFE-F2E4-933353E9BBDE" name="Klient_Uzytkownik_FK">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>60D1BA18-A622-C351-048A-576819C8E6DC</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="749AB869-44DC-34B4-AFC7-20C0446FB6E9"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

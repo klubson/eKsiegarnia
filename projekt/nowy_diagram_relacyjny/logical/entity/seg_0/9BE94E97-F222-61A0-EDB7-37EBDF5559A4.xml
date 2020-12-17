@@ -1,0 +1,73 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="9BE94E97-F222-61A0-EDB7-37EBDF5559A4" name="Wydawnictwo">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-10-20 10:10:11 UTC</createdTime>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="ID_wydawnictwa" id="CB48B3D6-A05E-71FC-1F43-16DAB0267FAD">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-12-03 12:46:48 UTC</createdTime>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Nazwa" id="05EC492C-A786-89BE-2C2E-F8303F656E95">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-10-20 10:10:21 UTC</createdTime>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>30</dataTypeSize>
+<ownDataTypeParameters>30,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Kraj_pochodzenia" id="6A42F478-E30C-F374-847F-29E1847E83D9">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-10-20 10:10:24 UTC</createdTime>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>30</dataTypeSize>
+<ownDataTypeParameters>30,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="803ADF30-A714-DB66-32C3-C4029A300D07" name="Wydawnictwo PK">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-11-12 14:46:38 UTC</createdTime>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<shouldEngineer>false</shouldEngineer>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="false"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>CB48B3D6-A05E-71FC-1F43-16DAB0267FAD</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

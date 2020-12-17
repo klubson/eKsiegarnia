@@ -1,0 +1,113 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="72E6E4D0-CDB5-9B17-F2F3-D864D30D5386" name="Produkt">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-10-20 10:01:26 UTC</createdTime>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<generateDiscrimColumn>true</generateDiscrimColumn>
+<discriminatorColumnName>co</discriminatorColumnName>
+<completeSubtypes>true</completeSubtypes>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="ID_produktu" id="F3BC6E8C-6414-7B5A-4227-A129D8FF8D33">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-12-03 12:47:14 UTC</createdTime>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Nazwa" id="B4DBA6EF-18CC-7D7C-CDDC-C160F12851CE">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-10-20 10:01:33 UTC</createdTime>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>30</dataTypeSize>
+<ownDataTypeParameters>30,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Cena" id="F466F248-DA9F-9D23-701C-8A60F1C2A307">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-10-20 10:01:43 UTC</createdTime>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT021</logicalDatatype>
+<dataTypePrecision>2</dataTypePrecision>
+<ownDataTypeParameters>,2,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Rok_wydania" id="9E2B467F-D090-E7B7-1FB3-342CFBEC2D51">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-10-20 10:10:44 UTC</createdTime>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT007</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Stan_magazyn" id="0C53C2B6-BED8-7F18-F49B-B6770E86287C">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-11-06 11:17:20 UTC</createdTime>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="ID_wydawnictwa" id="8A78ECD7-4569-8721-0C36-77DFCA479BBE">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-12-03 12:46:58 UTC</createdTime>
+<generatorID>727BF7DD-F514-02C0-DFF7-959B6CCF498E</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="true"/>
+</engineerTo>
+<referedAttribute>CB48B3D6-A05E-71FC-1F43-16DAB0267FAD</referedAttribute>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="E9A7616E-E5BE-4C33-D448-8B05D2067820" name="Produkt PK">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-10-20 10:01:42 UTC</createdTime>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<shouldEngineer>false</shouldEngineer>
+<engineerTo>
+<item key="C4507FDF-9236-CD70-562B-D55D7AF4C5A2" value="false"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>F3BC6E8C-6414-7B5A-4227-A129D8FF8D33</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

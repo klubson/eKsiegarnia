@@ -1,0 +1,84 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="B1AED88E-621A-EC2D-FBC7-B9A2CD5F63AD" name="Autor_produktu">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="Autor_ID_autora" id="A05482FC-821A-D0AC-0FCF-CFFBF0923EAE">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="D3771887-D6A7-FF19-3009-41FF552AC29E" referredColumn="D5A3AC3B-5385-9BA2-02D9-E09A61FEAE4D"/>
+</associations>
+</Column>
+<Column name="Produkt_ID_produktu" id="B6575FB7-BBCF-50B2-AC87-B0C764E1DEBA">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-12-03 12:53:13 UTC</createdTime>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="33DDE49E-EDE4-BF01-4437-F0CC05FC8FD8" referredColumn="EFDDA0C8-EB27-699F-CECD-4271E02CF02D"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="960B9D34-5E1A-8A87-197D-5FF5B67C56D7" name="Autor_produktu_PK">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="A05482FC-821A-D0AC-0FCF-CFFBF0923EAE"/>
+<colUsage columnID="B6575FB7-BBCF-50B2-AC87-B0C764E1DEBA"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="2ADF244B-E822-7EB4-91C5-5548C0B9CBB4" name="Autor_produktu__IDX_autor">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 13:01:51 UTC</createdTime>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="A05482FC-821A-D0AC-0FCF-CFFBF0923EAE"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="12C213E4-628F-E017-602C-87ACB9264C1D" name="Autor_produktu_Produkt_FK">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>609610B1-736B-7582-2EC6-083CB42BE4A4</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="B6575FB7-BBCF-50B2-AC87-B0C764E1DEBA"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="791807DE-77D8-EF2C-CC9D-3C32ADD817B4" name="Autor_produktu_Autor_FK">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>609610B1-736B-7582-2EC6-083CB42BE4A4</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="A05482FC-821A-D0AC-0FCF-CFFBF0923EAE"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

@@ -1,0 +1,117 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="4C633AC4-1EB3-5B0A-C1CE-880C005C165A" name="Ksiazka">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>F6B70B72-F690-B607-81A6-43EFC2566515</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<abbreviation>k</abbreviation>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="ID_produktu" id="6566EC6F-9818-DD68-DCFC-50041E50DCD0">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-12-03 12:53:13 UTC</createdTime>
+<generatorID>F3BC6E8C-6414-7B5A-4227-A129D8FF8D33</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="FD969AB5-6E6A-3655-BB34-1D04D0AE3F0B" referredColumn="EFDDA0C8-EB27-699F-CECD-4271E02CF02D"/>
+</associations>
+</Column>
+<Column name="k_Typ_okladki" id="5273B48C-CAE8-5E50-1652-926C02BDA02F">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>6E181526-2F4D-CA22-1335-664B88761007</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>10</dataTypeSize>
+<ownDataTypeParameters>10,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="k_Liczba_stron" id="DDCF4DF4-CF75-FA15-B73F-6A1B4D589E75">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>5CFDA021-C069-5CFF-8995-8DD99DCDDB9E</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="k_Format" id="EC413B66-111B-398F-6DE2-BA169073E152">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>EEB38F97-A22F-CEB2-D8EA-13D68ACA9796</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>4</dataTypeSize>
+<ownDataTypeParameters>4,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="Seria_Tytul" id="F28FDAB2-463A-E285-8C6B-F692B0E158AE">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-12-03 15:57:01 UTC</createdTime>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50</dataTypeSize>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="A3C6DBAA-0600-89CA-177E-74F5A3C9EE81" referredColumn="E3F78311-DC7E-274F-D7DD-A0FF931C526A"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="90233277-8713-4DCF-1000-A34A9BB4F557" name="Ksiazka_PK">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>E9A7616E-E5BE-4C33-D448-8B05D2067820</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="6566EC6F-9818-DD68-DCFC-50041E50DCD0"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="894DC9FE-4FD2-EA23-A191-3459FE9DA1DA" name="Ksiazka_Produkt_FK">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-12-03 13:48:13 UTC</createdTime>
+<generatorID>AA222565-B617-7AE9-853A-EB4EC540601E</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="6566EC6F-9818-DD68-DCFC-50041E50DCD0"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="0828659A-47D3-FEE5-50F3-DF03080F2115" name="Ksiazka_Seria_FK">
+<createdBy>Mateusz</createdBy>
+<createdTime>2020-12-03 15:57:01 UTC</createdTime>
+<generatorID>E78B609D-00E6-BF8C-3D48-9EC5039BBC9F</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="F28FDAB2-463A-E285-8C6B-F692B0E158AE"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

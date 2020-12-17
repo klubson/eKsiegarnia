@@ -1,0 +1,19 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="6163F3B5-BC5B-47BA-C189-DA9852F376D5" containerWithKeyObject="300A1EE8-7E7D-4D18-7375-CD932177F8B0" localFKIndex="C9034814-D70A-C01C-7B87-498799A9F43D" name="Pracownik_Uzytkownik_FK">
+<createdBy>Kacpe</createdBy>
+<createdTime>2020-11-20 12:05:28 UTC</createdTime>
+<generatorID>5AA74979-3C56-6465-931C-2512A2066F3E</generatorID>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<referredTableLongName>Uzytkownik</referredTableLongName>
+<arc>65F648B3-D7CC-0A3A-5B5A-D71DCF4EEAB8</arc>
+<deleteRule>CASCADE</deleteRule>
+<referredTableID>15D097F6-846D-C800-56E3-C5C060A9D0DE</referredTableID>
+<keyObject>FAADDF3E-B98A-8EBF-1509-D372D91E0212</keyObject>
+<referredKeyID>FAADDF3E-B98A-8EBF-1509-D372D91E0212</referredKeyID>
+<mandatory>true</mandatory>
+<refColNames>Login</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<discriminatorValue>p</discriminatorValue>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>
