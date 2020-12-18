@@ -1,6 +1,14 @@
-package views.employee;
+package views.employee.supplier;
+import models.Current_date;
 import models.dataBaseConnection;
 import views.Start_window;
+import views.employee.Edit_employee_profile;
+import views.employee.author_panels.Authors;
+import views.employee.manager.employee_panels.Employees;
+import views.employee.product_panels.Add_product;
+import views.employee.product_panels.Products;
+import views.employee.publisher_panels.Publishers;
+import views.employee.series_panels.Series;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,54 +19,52 @@ import java.sql.SQLException;
 
 public class Employee_panel extends JFrame {
     private JFrame window;
-    private JLabel who_logged;
-    private String beginWho_logged = "Zalogowany jako: ";
-    private JButton log_out, add_product, delete_product, edit_product;
+    private JLabel who_logged, current_time;
+    private String beginWho_logged = "Zalogowany: ", user;
+    private JButton log_out, product_list, publisher_list, author_list, series_list, edit_profile;
     private JPanel up, center, down;
-    private dataBaseConnection dataBase;
+    private dataBaseConnection dataBase = new dataBaseConnection();
+    private Current_date time = new Current_date();
 
     public void create(String data) throws SQLException {
-        window = new JFrame("Pracownik");
+        window = new JFrame("Magazynier");
         settings();
         add_components();
-        setWho_logged(data);
+        user = data;
+        setWho_logged(user);
         window.setVisible(true);
+        time.clock(current_time);
     }
-    private void setWho_logged(String data){
-        who_logged.setText(beginWho_logged + data);
+    private void setWho_logged(String data) throws SQLException {
+        dataBase.setStmt();
+        ResultSet rs = dataBase.getStmt().executeQuery(
+                "SELECT Imie, Nazwisko FROM Uzytkownik WHERE LOGIN = '" + data + "'"
+        );
+        rs.next();
+        String name = rs.getString(1) + " " + rs.getString(2);
+        who_logged.setText(beginWho_logged + name);
+        rs.close();
+        dataBase.getStmt().close();
     }
+
     private void settings(){
-        window.setSize(600, 600);
+        window.setSize(600, 450);
         window.setLocation(400, 80);
         window.setDefaultCloseOperation(EXIT_ON_CLOSE);
         window.setLayout(new BorderLayout());
     }
     private void components() throws SQLException {
-        panels();
-
-    }
-    private void panels(){
-        buttons();
-        up = new JPanel();
-        up.add(who_logged);
-
-        center = new JPanel();
-
-        down = new JPanel();
-        down.add(log_out);
-    }
-    private void buttons(){
+        who_logged = new JLabel(beginWho_logged);
+        who_logged.setFont(who_logged.getFont().deriveFont(20.0f));
+        current_time = new JLabel(time.getTime());
+        current_time.setFont(current_time.getFont().deriveFont(20.0f));
         log_out = new JButton("Wyloguj się");
         log_out.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    dataBase.getConn().close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
                 Start_window win = new Start_window();
                 exit();
+                System.out.println("Wylogowano");
                 try {
                     win.create();
                 } catch (SQLException throwables) {
@@ -66,35 +72,103 @@ public class Employee_panel extends JFrame {
                 }
             }
         });
-        add_product = new JButton("Dodaj nowy produkt");
-        add_product.addActionListener(new ActionListener() {
+        product_list = new JButton("Lista produktów");
+        product_list.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                Products pr = new Products();
+                exit();
+                try {
+                    pr.create(user);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
             }
         });
-        edit_product = new JButton("Edytuj właściwości produktu");
-        edit_product.addActionListener(new ActionListener() {
+        publisher_list = new JButton("Lista wydawnictw");
+        publisher_list.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                Publishers pb = new Publishers();
+                exit();
+                try {
+                    pb.create(user);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
             }
         });
-        delete_product = new JButton("Usuń produkt");
-        delete_product.addActionListener(new ActionListener() {
+        author_list = new JButton("Lista autorów");
+        author_list.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                Authors au = new Authors();
+                exit();
+                try {
+                    au.create(user);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+        });
+        series_list = new JButton("Lista serii książek");
+        series_list.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Series ss = new Series();
+                exit();
+                try {
+                    ss.create(user);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+        });
+        edit_profile = new JButton("Edytuj profil");
+        edit_profile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Edit_employee_profile eep = new Edit_employee_profile();
+                exit();
+                try {
+                    eep.create(user, false);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
             }
         });
     }
-    private void add_components() throws SQLException {
+    private void panels() throws SQLException {
         components();
+        up = new JPanel();
+        up.setLayout(new BoxLayout(up, BoxLayout.PAGE_AXIS));
+        up.setPreferredSize(new Dimension(600, 50));
+        up.add(who_logged);
+        up.add(current_time);
+
+        center = new JPanel();
+        center.setPreferredSize(new Dimension(600, 300));
+        center.setLayout(new GridLayout(2,3));
+        center.add(product_list);
+        center.add(author_list);
+        center.add(publisher_list);
+        center.add(series_list);
+        center.add(edit_profile);
+
+        down = new JPanel();
+        down.setLayout(new BorderLayout());
+        down.setPreferredSize(new Dimension(600, 50));
+        down.add(log_out, BorderLayout.CENTER);
+    }
+
+    private void add_components() throws SQLException {
+        panels();
         window.add(up, BorderLayout.NORTH);
         window.add(center, BorderLayout.CENTER);
         window.add(down, BorderLayout.SOUTH);
     }
     private void exit(){
+        time.stopClock();
         window.setVisible(false);
         window.dispose();
     }

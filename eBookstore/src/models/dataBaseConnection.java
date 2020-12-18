@@ -92,6 +92,68 @@ public class dataBaseConnection {
         cstmt.execute();
         cstmt.close();
     }
-
-
+    public void newEmployee(String login, String pass, String name, String surname, String phone, String hired, float salary, String jobType, String contractType) throws SQLException {
+        setCstmt("{call nowyPracownik(?,?,?,?,?,?,?,?,?)}");
+        cstmt.setString(1, login);
+        cstmt.setString(2, pass);
+        cstmt.setString(3, name);
+        cstmt.setString(4, surname);
+        cstmt.setString(5, phone);
+        cstmt.setString(6, hired);
+        cstmt.setFloat(7, salary);
+        cstmt.setString(8, jobType);
+        cstmt.setString(9, contractType);
+        cstmt.execute();
+        cstmt.close();
+    }
+    public void newPublisher(String name, String country) throws SQLException {
+        setStmt();
+        int changes = stmt.executeUpdate(
+                "INSERT INTO Wydawnictwo(Nazwa, Kraj_pochodzenia) VALUES('" + name + "','" + country + "')"
+        );
+        System.out.println("Wstawiono " + changes + " krotkę");
+        stmt.close();
+    }
+    public void newAuthor(String name, String surname, String country) throws SQLException {
+        setStmt();
+        int changes = stmt.executeUpdate(
+                "INSERT INTO Autor(Imie, Nazwisko, Kraj_pochodzenia) VALUES('" + name + "','"+ surname + "','" + country + "')"
+        );
+        System.out.println("Wstawiono " + changes + " krotkę");
+        stmt.close();
+    }
+    public void newBook(String name, float price, String year, int storage, String publisher, String cover, int pages, String size, String seriesTitle) throws SQLException {
+        setCstmt("{call nowaKsiazka(?,?,?,?,?,?,?,?,?)}");
+        cstmt.setString(1, name);
+        cstmt.setFloat(2, price);
+        cstmt.setString(3, year);
+        cstmt.setInt(4, storage);
+        cstmt.setString(5, publisher);
+        cstmt.setString(6, cover);
+        cstmt.setInt(7, pages);
+        cstmt.setString(8, size);
+        cstmt.setString(9, seriesTitle);
+        cstmt.execute();
+        cstmt.close();
+    }
+    public void newGame(String name, float price, String year, int storage, String publisher, int min_players, int max_players, String min_age, String est_time) throws SQLException {
+        setCstmt("{call nowaGra(?,?,?,?,?,?,?,?,?)}");
+        cstmt.setString(1, name);
+        cstmt.setFloat(2, price);
+        cstmt.setString(3, year);
+        cstmt.setInt(4, storage);
+        cstmt.setString(5, publisher);
+        cstmt.setInt(6, min_players);
+        cstmt.setInt(7, max_players);
+        if (min_age.equals("")){
+            cstmt.setNull(8, Types.NUMERIC);
+        }
+        else cstmt.setInt(8, Integer.parseInt(min_age));
+        if (est_time.equals("")){
+            cstmt.setNull(9, Types.NUMERIC);
+        }
+        else cstmt.setInt(9, Integer.parseInt(est_time));
+        cstmt.execute();
+        cstmt.close();
+    }
 }

@@ -7,15 +7,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Current_date {
-    private static String date;
+    private static String time;
     private static boolean status = true;
     private Timer timer= new Timer();
     private void setTime(){
-        SimpleDateFormat formatter= new SimpleDateFormat("EEEE dd MMMM yyyy HH:mm:ss");
+        SimpleDateFormat formatter= new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm:ss");
         Date date = new Date(System.currentTimeMillis());
-        Current_date.date = formatter.format(date);
+        Current_date.time = formatter.format(date);
     }
-
     public void clock(JLabel label){
         status = true;
         int delay = 1000, period = 1000;
@@ -32,8 +31,9 @@ public class Current_date {
     }
     public String getTime(){
         setTime();
-        return date;
+        return time;
     }
+
     public void stopClock(){
         status = false;
     }

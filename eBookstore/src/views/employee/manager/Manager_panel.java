@@ -1,25 +1,33 @@
-package views;
+package views.employee.manager;
 
 import models.Current_date;
 import models.dataBaseConnection;
+import views.Start_window;
+import views.employee.Edit_employee_profile;
+import views.employee.author_panels.Authors;
+import views.employee.publisher_panels.Publishers;
+import views.employee.manager.employee_panels.Employees;
+import views.employee.product_panels.Products;
+import views.employee.series_panels.Series;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Manager_panel extends JFrame {
     private JFrame window;
     private JLabel who_logged, current_time;
     private String beginWho_logged = "Zalogowany: ", user;
-    private JButton log_out, product_list, add_product, delete_product, edit_product, employees_list, hire_employee, fire_employee, edit_employee;
+    private JButton log_out, product_list, employees_list, publisher_list, author_list, series_list, edit_profile;
     private JPanel up, center, down;
-    private dataBaseConnection dataBase;
+    private dataBaseConnection dataBase = new dataBaseConnection();
     private Current_date time = new Current_date();
 
     public void create(String data) throws SQLException {
-        window = new JFrame("Pracownik");
+        window = new JFrame("Kierownik");
         settings();
         add_components();
         user = data;
@@ -27,9 +35,18 @@ public class Manager_panel extends JFrame {
         window.setVisible(true);
         time.clock(current_time);
     }
-    private void setWho_logged(String data){
-        who_logged.setText(beginWho_logged + data);
+    private void setWho_logged(String data) throws SQLException {
+        dataBase.setStmt();
+        ResultSet rs = dataBase.getStmt().executeQuery(
+                "SELECT Imie, Nazwisko FROM Uzytkownik WHERE LOGIN = '" + data + "'"
+        );
+        rs.next();
+        String name = rs.getString(1) + " " + rs.getString(2);
+        who_logged.setText(beginWho_logged + name);
+        rs.close();
+        dataBase.getStmt().close();
     }
+
     private void settings(){
         window.setSize(600, 450);
         window.setLocation(400, 80);
@@ -46,7 +63,6 @@ public class Manager_panel extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Start_window win = new Start_window();
-                time.stopClock();
                 exit();
                 System.out.println("Wylogowano");
                 try {
@@ -60,66 +76,81 @@ public class Manager_panel extends JFrame {
         product_list.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        add_product = new JButton("Dodaj nowy produkt");
-        add_product.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Add_product win = new Add_product();
-                time.stopClock();
+                Products pr = new Products();
                 exit();
                 try {
-                    win.create(user);
+                    pr.create(user);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
             }
         });
-        edit_product = new JButton("<html>Edytuj <br /> właściwości<br />produktu</html>");
-        edit_product.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
 
-            }
-        });
-        delete_product = new JButton("Usuń produkt");
-        delete_product.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
         employees_list = new JButton("Lista pracowników");
         employees_list.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        hire_employee = new JButton("<html> Zatrudnij <br /> pracownika </html>");
-        hire_employee.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Hire_employee_panel he = new Hire_employee_panel();
+                Employees ee = new Employees();
                 exit();
-                he.create(user);
+                try {
+                    ee.create(user);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
 
             }
         });
-        fire_employee = new JButton("Zwolnij pracownika");
-        fire_employee.addActionListener(new ActionListener() {
+
+        publisher_list = new JButton("Lista wydawnictw");
+        publisher_list.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                Publishers pb = new Publishers();
+                exit();
+                try {
+                    pb.create(user);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
             }
         });
-        edit_employee = new JButton("<html> Edytuj dane <br /> pracownika </html>");
-        edit_employee.addActionListener(new ActionListener() {
+        author_list = new JButton("Lista autorów");
+        author_list.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                Authors au = new Authors();
+                exit();
+                try {
+                    au.create(user);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+        });
+        series_list = new JButton("Lista serii książek");
+        series_list.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Series ss = new Series();
+                exit();
+                try {
+                    ss.create(user);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+        });
+        edit_profile = new JButton("Edytuj profil");
+        edit_profile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Edit_employee_profile eep = new Edit_employee_profile();
+                exit();
+                try {
+                    eep.create(user, true);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
             }
         });
     }
@@ -133,15 +164,13 @@ public class Manager_panel extends JFrame {
 
         center = new JPanel();
         center.setPreferredSize(new Dimension(600, 300));
-        center.setLayout(new GridLayout(2,4));
+        center.setLayout(new GridLayout(2,3));
         center.add(employees_list);
-        center.add(hire_employee);
-        center.add(edit_employee);
-        center.add(fire_employee);
         center.add(product_list);
-        center.add(add_product);
-        center.add(edit_product);
-        center.add(delete_product);
+        center.add(author_list);
+        center.add(publisher_list);
+        center.add(series_list);
+        center.add(edit_profile);
 
         down = new JPanel();
         down.setLayout(new BorderLayout());
@@ -156,6 +185,7 @@ public class Manager_panel extends JFrame {
         window.add(down, BorderLayout.SOUTH);
     }
     private void exit(){
+        time.stopClock();
         window.setVisible(false);
         window.dispose();
     }

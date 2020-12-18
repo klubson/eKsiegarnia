@@ -1,10 +1,12 @@
-package views.employee.manager;
+package views.employee.manager.employee_panels;
 
 import models.dataBaseConnection;
 import org.jdatepicker.impl.DateComponentFormatter;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
+import views.employee.manager.Manager_panel;
+import views.employee.manager.employee_panels.Employees;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,7 +24,7 @@ public class Hire_employee_panel extends JFrame{
     private JPasswordField pass2;
     private JTextField login2, name2, surname2, phone2, salary2, job_type2, contract_type2;
     private JButton back, add;
-    private int dim_wdt = 250, dim_ht = 20;
+    private int error_counter;
     private Dimension dimension = new Dimension(250, 20);
     private JCheckBox pass_box;
     private JPanel center, down, login_pane, pass_pane, name_pane, surname_pane, phone_pane,hired_pane, salary_pane, job_type_pane, contract_type_pane;
@@ -117,7 +119,11 @@ public class Hire_employee_panel extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 Employees mg = new Employees();
                 exit();
-                mg.create(user);
+                try {
+                    mg.create(user);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
             }
         });
         add = new JButton("Dodaj pracownika");
@@ -138,20 +144,21 @@ public class Hire_employee_panel extends JFrame{
                         }
                         else{
                             String tmp = String.copyValueOf(pass2.getPassword());
-                            String selectedDate = datePicker.getModel().getYear() + "-" + datePicker.getModel().getMonth() + "-" + datePicker.getModel().getDay();
+                            int month = datePicker.getModel().getMonth()+1;
+                            String selectedDate = datePicker.getModel().getYear() + "-" + Integer.toString(month) + "-" + datePicker.getModel().getDay();
                             float salary = Float.parseFloat(salary2.getText());
+                            System.out.println(salary);
                             dataBase.newEmployee(login2.getText(), tmp, name2.getText(), surname2.getText(), phone2.getText(), selectedDate, salary, job_type2.getText(), contract_type2.getText());
                             JOptionPane.showMessageDialog(window, "Rejestracja przebiegła pomyślnie!");
                             //przejście do okna logowania
-                            Manager_panel win = new Manager_panel();
+                            Employees ee = new Employees();
                             exit();
-                            win.create(user);
+                            ee.create(user);
                         }
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }
                 }
-
             }
         });
         login2 = new JTextField();
@@ -162,7 +169,7 @@ public class Hire_employee_panel extends JFrame{
 
             }
         });
-        login2.setPreferredSize(new Dimension(dim_wdt, dim_ht));
+        login2.setPreferredSize(dimension);
         pass2 = new JPasswordField();
         pass2.setName("HASŁO");
         pass2.setEchoChar('\u25CF');
@@ -171,7 +178,7 @@ public class Hire_employee_panel extends JFrame{
             public void actionPerformed(ActionEvent e) {
             }
         });
-        pass2.setPreferredSize(new Dimension(dim_wdt, dim_ht));
+        pass2.setPreferredSize(dimension);
         name2 = new JTextField();
         name2.setName("IMIĘ");
         name2.addActionListener(new ActionListener() {
@@ -180,7 +187,7 @@ public class Hire_employee_panel extends JFrame{
 
             }
         });
-        name2.setPreferredSize(new Dimension(dim_wdt, dim_ht));
+        name2.setPreferredSize(dimension);
         surname2 = new JTextField();
         surname2.setName("NAZWISKO");
         surname2.addActionListener(new ActionListener() {
@@ -189,7 +196,7 @@ public class Hire_employee_panel extends JFrame{
 
             }
         });
-        surname2.setPreferredSize(new Dimension(dim_wdt, dim_ht));
+        surname2.setPreferredSize(dimension);
         phone2 = new JTextField();
         phone2.setName("NUMER TELEFONU");
         phone2.addActionListener(new ActionListener() {
@@ -198,7 +205,7 @@ public class Hire_employee_panel extends JFrame{
 
             }
         });
-        phone2.setPreferredSize(new Dimension(dim_wdt, dim_ht));
+        phone2.setPreferredSize(dimension);
         model = new UtilDateModel();
         Properties p = new Properties();
         p.put("text.today", "Dzisiaj");
@@ -217,7 +224,7 @@ public class Hire_employee_panel extends JFrame{
 
             }
         });
-        salary2.setPreferredSize(new Dimension(dim_wdt, dim_ht));
+        salary2.setPreferredSize(dimension);
         job_type2 = new JTextField();
         job_type2.setName("STANOWISKO");
         job_type2.addActionListener(new ActionListener() {
@@ -226,7 +233,7 @@ public class Hire_employee_panel extends JFrame{
 
             }
         });
-        job_type2.setPreferredSize(new Dimension(dim_wdt, dim_ht));
+        job_type2.setPreferredSize(dimension);
         contract_type2 = new JTextField();
         contract_type2.setName("TYP UMOWY");
         contract_type2.addActionListener(new ActionListener() {
@@ -241,7 +248,7 @@ public class Hire_employee_panel extends JFrame{
 
             }
         });
-        contract_type2.setPreferredSize(new Dimension(dim_wdt, dim_ht));
+        contract_type2.setPreferredSize(dimension);
         pass_box = new JCheckBox("Pokaż hasło");
         pass_box.addActionListener(new ActionListener() {
             @Override
@@ -253,24 +260,21 @@ public class Hire_employee_panel extends JFrame{
             }
         });
     }
-
     private void add_components(){
         panels();
         window.add(center, BorderLayout.CENTER);
         window.add(down, BorderLayout.SOUTH);
     }
-
     private boolean check(){
-        ArrayList<String> error_fields = new ArrayList<String>();
-        ArrayList<String> error_pass_fields = new ArrayList<String>();
-        fieldCheck(login2, 30, error_fields);
-        passFieldCheck(pass2, 20, error_pass_fields);
-        fieldCheck(name2, 20, error_fields);
-        fieldCheck(surname2, 20, error_fields);
+        error_counter = 0;
+        fieldCheck(login2, 1, 30, true, false);
+        passFieldCheck(pass2, 20);
+        fieldCheck(name2, 1, 20, true, true);
+        fieldCheck(surname2, 1, 30, true, true);
         boolean number = phoneCheck(phone2);
-        jobTypeCheck(job_type2, 20, error_fields);
-        salaryCheck(salary2, error_fields);
-        contractCheck(contract_type2, error_fields);
+        jobTypeCheck(job_type2);
+        salaryCheck(salary2);
+        contractCheck(contract_type2);
 
         if(!number) {
             JOptionPane.showMessageDialog(window, "Numer telefonu musi składać się z cyfr!",
@@ -278,29 +282,68 @@ public class Hire_employee_panel extends JFrame{
             phone2.setText("");
         }
 
-        if(error_fields.size() != 0 || error_pass_fields.size() != 0){
+        if(error_counter != 0){
             JOptionPane.showMessageDialog(window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
             message = "W następujących polach wykryto błędy: ";
         }
-        if (number && error_fields.size() == 0 && error_pass_fields.size() == 0) return true;
+        if (number && error_counter == 0) return true;
         else return false;
-
     }
-    private void fieldCheck(JTextField field, int size, ArrayList<String> error_fields){
-        if(field.getText().length() == 0 || field.getText().length() > size){
+    private void fieldCheck(JTextField field, int min_size, int max_size, boolean digitsEnabled, boolean spaceEnabled){
+        if(field.getText().length() < min_size || field.getText().length() > max_size){
             message += "\n" + field.getName();
-            error_fields.add(field.getName());
+            error_counter++;
+        }
+        else{
+            if(digitsEnabled && spaceEnabled){
+                for(int i = 0; i < field.getText().length(); i++){
+                    if(!Character.isLetterOrDigit(field.getText().charAt(i)) && !Character.isSpaceChar(field.getText().charAt(i))){
+                        message += "\n" + field.getName();
+                        error_counter++;
+                        break;
+                    }
+                }
+            }
+            else if(!digitsEnabled && spaceEnabled){
+                for(int i = 0; i < field.getText().length(); i++){
+                    if(!Character.isLetter(field.getText().charAt(i)) && !Character.isSpaceChar(field.getText().charAt(i))){
+                        message += "\n" + field.getName();
+                        error_counter++;
+                        break;
+                    }
+                }
+            }
+            else if(digitsEnabled && !spaceEnabled){
+                for(int i = 0; i < field.getText().length(); i++){
+                    if(!Character.isLetterOrDigit(field.getText().charAt(i))){
+                        message += "\n" + field.getName();
+                        error_counter++;
+                        break;
+                    }
+                }
+            }
+            else{
+                for(int i = 0; i < field.getText().length(); i++){
+                    if(!Character.isLetter(field.getText().charAt(i))){
+                        message += "\n" + field.getName();
+                        error_counter++;
+                        break;
+                    }
+                }
+            }
         }
     }
-    private void passFieldCheck(JPasswordField field, int size, ArrayList<String> error_pass_fields){
+    private void passFieldCheck(JPasswordField field, int size){
         if(field.getPassword().length == 0 || field.getPassword().length > size){
             message += "\n" + field.getName();
-            error_pass_fields.add(field.getName());
+            error_counter++;
         }
     }
     private boolean phoneCheck(JTextField field) {
         phone_correctness = true;
-        if(field.getText().length() != 9) return false;
+        if(field.getText().length() != 9){
+            if(field.getText().length() != 0) return false;
+        }
         for (int i = 0; i < field.getText().length(); i++) {
             if (!Character.isDigit(field.getText().charAt(i))) {
                 phone_correctness = false;
@@ -308,26 +351,24 @@ public class Hire_employee_panel extends JFrame{
         }
         return phone_correctness;
     }
-    private void jobTypeCheck(JTextField field, int size, ArrayList<String> error_fields){
+    private void jobTypeCheck(JTextField field){
         if(!(field.getText().equals("magazynier") || field.getText().equals("kierownik"))){
             message += "\n" + field.getName();
-            error_fields.add(field.getName());
+            error_counter++;
         }
     }
-    private void salaryCheck(JTextField field, ArrayList<String> error_fields){
+    private void salaryCheck(JTextField field){
         if (!field.getText().matches("[0-9]+[.]?[0-9]{1,2}")){
             message += "\n" + field.getName();
-            error_fields.add(field.getName());
+            error_counter++;
         }
-
     }
-    private void contractCheck(JTextField field, ArrayList<String> error_fields){
+    private void contractCheck(JTextField field){
         if(!field.getText().equals("praca")){
             message += "\n" + field.getName();
-            error_fields.add(field.getName());
+            error_counter++;
         }
     }
-
     private void exit(){
         window.setVisible(false);
         window.dispose();

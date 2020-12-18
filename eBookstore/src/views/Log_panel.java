@@ -1,6 +1,8 @@
 package views;
-import views.Start_window;
+import models.Image;
 import models.dataBaseConnection;
+import views.employee.supplier.Employee_panel;
+import views.employee.manager.Manager_panel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +11,6 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.Arrays;
 
 public class Log_panel extends JFrame {
 
@@ -19,9 +20,10 @@ public class Log_panel extends JFrame {
     private JPasswordField pass2;
     private JTextField log2;
     private JButton back, sign_in;
-    private JPanel center, down, login, passwd;
+    private JPanel up, center, down, login, passwd;
     private int dim_wdt = 250, dim_ht = 20;
     private dataBaseConnection dataBase = new dataBaseConnection();
+    private Image image = new Image("eksiegarnia.jpg");
 
 
 
@@ -33,7 +35,7 @@ public class Log_panel extends JFrame {
     }
 
     private void settings(){
-        window.setSize(600, 400);
+        window.setSize(600, 600);
         window.setLocation(400, 80);
         window.setDefaultCloseOperation(EXIT_ON_CLOSE);
         window.setLayout(new BorderLayout());
@@ -94,13 +96,7 @@ public class Log_panel extends JFrame {
                         }
                         else{
                             //String data = dataBase.getName(log2.getText());
-                            rs = dataBase.getStmt().executeQuery(
-                                    "SELECT Imie, Nazwisko FROM Uzytkownik WHERE Login = "
-                                            + "'" + log2.getText() + "'"
-                            );
-                            rs.next();
-                            String data = rs.getString(1) + " " + rs.getString(2);
-                            rs.close();
+                            String data = log2.getText();
                             rs = dataBase.getStmt().executeQuery(
                                     "SELECT P_STANOWISKO FROM Pracownik WHERE Login = " +
                                             "'" + log2.getText() + "'"
@@ -108,7 +104,7 @@ public class Log_panel extends JFrame {
                             rs.next();
                             String jobType = rs.getString(1);
                             //String jobType = dataBase.getJob_type(log2.getText());
-                            System.out.println("Zalogowano jako: " + data);
+                            System.out.println("Zalogowano jako (login): " + data);
                             rs.close();
                             dataBase.getStmt().close();
                             if (jobType.equals("kierownik")){
@@ -160,6 +156,9 @@ public class Log_panel extends JFrame {
     }
     private void panels(){
         components();
+        up = new JPanel();
+        up.setPreferredSize(new Dimension(600, 400));
+        up.add(image);
         login = new JPanel();
         login.add(log);
         login.add(log2);
@@ -180,6 +179,7 @@ public class Log_panel extends JFrame {
     }
     private void add_components(){
         panels();
+        window.add(up, BorderLayout.NORTH);
         window.add(center, BorderLayout.CENTER);
         window.add(down, BorderLayout.SOUTH);
     }
