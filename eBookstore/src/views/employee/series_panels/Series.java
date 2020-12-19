@@ -4,6 +4,7 @@ import models.dataBaseConnection;
 import views.employee.author_panels.Edit_author;
 import views.employee.manager.Manager_panel;
 import views.employee.publisher_panels.Publishers;
+import views.employee.supplier.Employee_panel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -27,11 +28,13 @@ public class Series extends JFrame {
     private Vector<Vector<String>> data = new Vector<Vector<String>>();
     private Vector<String> columnNames = new Vector<String>();
     private JTable table;
+    private boolean isManager;
 
-    public void create(String data) throws SQLException {
+    public void create(String data, boolean mode) throws SQLException {
         window = new JFrame("Serie książek");
         settings();
         user = data;
+        isManager = mode;
         add_components();
         window.setVisible(true);
         //printDebugData(table);
@@ -89,13 +92,25 @@ public class Series extends JFrame {
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Manager_panel mp = new Manager_panel();
-                exit();
-                try {
-                    mp.create(user);
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
+                if(isManager){
+                    Manager_panel mp = new Manager_panel();
+                    exit();
+                    try {
+                        mp.create(user);
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
                 }
+                else{
+                    Employee_panel ep = new Employee_panel();
+                    exit();
+                    try {
+                        ep.create(user);
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                }
+
             }
         });
         add = new JButton("Dodaj serię");
@@ -104,7 +119,7 @@ public class Series extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 Add_series as = new Add_series();
                 exit();
-                as.create(user);
+                as.create(user, isManager);
             }
         });
         edit = new JButton("Edytuj");
@@ -113,7 +128,7 @@ public class Series extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 Edit_series es = new Edit_series();
                 exit();
-                es.create(user, data.get(table.getSelectedRow()).get(0));
+                es.create(user, data.get(table.getSelectedRow()).get(0), isManager);
             }
         });
         delete = new JButton("Usuń");
@@ -138,7 +153,7 @@ public class Series extends JFrame {
                         dataBase.getStmt().close();
                         Series ss = new Series();
                         exit();
-                        ss.create(user);
+                        ss.create(user, isManager);
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }

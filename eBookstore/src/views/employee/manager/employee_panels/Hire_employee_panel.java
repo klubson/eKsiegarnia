@@ -52,8 +52,8 @@ public class Hire_employee_panel extends JFrame{
     }
 
     private void labels(){
-        login = new JLabel("Wybierz swój login (max 30 znaków): ");
-        pass = new JLabel("Wybierz swoje hasło (max 20 znaków): ");
+        login = new JLabel("Wybierz login (max 30 znaków): ");
+        pass = new JLabel("Wybierz hasło (max 20 znaków): ");
         name = new JLabel("Imię (max 20 znaków): ");
         surname = new JLabel("Nazwisko (max 30 znaków): ");
         phone = new JLabel("Numer telefonu: ");

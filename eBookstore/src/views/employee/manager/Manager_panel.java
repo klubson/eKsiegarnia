@@ -46,7 +46,6 @@ public class Manager_panel extends JFrame {
         rs.close();
         dataBase.getStmt().close();
     }
-
     private void settings(){
         window.setSize(600, 450);
         window.setLocation(400, 80);
@@ -79,7 +78,7 @@ public class Manager_panel extends JFrame {
                 Products pr = new Products();
                 exit();
                 try {
-                    pr.create(user);
+                    pr.create(user, true);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -108,7 +107,7 @@ public class Manager_panel extends JFrame {
                 Publishers pb = new Publishers();
                 exit();
                 try {
-                    pb.create(user);
+                    pb.create(user, true);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -121,7 +120,7 @@ public class Manager_panel extends JFrame {
                 Authors au = new Authors();
                 exit();
                 try {
-                    au.create(user);
+                    au.create(user, true);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -134,7 +133,7 @@ public class Manager_panel extends JFrame {
                 Series ss = new Series();
                 exit();
                 try {
-                    ss.create(user);
+                    ss.create(user, true);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }

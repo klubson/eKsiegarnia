@@ -26,7 +26,7 @@ public class Add_product extends JFrame {
     private JList publisherList, authorList, seriesList;
     private JScrollPane publisherListScroller, authorListScroller, seriesListScroller;
     private int error_counter;
-    private boolean date_correctness, number_correctness;
+    private boolean isManager;
 
 //    private JTextField[] tab_JTextField = {name2, price2, year2, storage2, publisher2, cover_type2, pages_amount2, size2, series_title2, min_players2, max_players2, min_age2, est_time2};
 //    private String[] tab_JTextFieldNames = {"NAZWA PRODUKTU", "CENA", "ROK WYDANIA", "STAN MAGAZYNU" ,"WYDAWNICTWO", "TYP OKŁADKI", "LICZBA STRON", "FORMAT KSIĄŻKI", "TYTUŁ SERII", "MINIMUM GRACZY", "MAKSIMUM GRACZY", "MINIMALNY WIEK GRACZA", "SZACOWANY CZAS GRY"};
@@ -35,10 +35,11 @@ public class Add_product extends JFrame {
 //    private JPanel[] tab_JPanel = {name_pane, price_pane, year_pane, storage_pane ,publisher_pane, cover_type_pane, pages_amount_pane, size_pane, series_title_pane, min_players_pane, max_players_pane, min_age_pane, est_time_pane};
 //    private int[] game_iterator = {0,1,2,3,8,9,10,11};
 
-    public void create(String data) throws SQLException {
+    public void create(String data, boolean mode) throws SQLException {
         window = new JFrame("Dodaj produkt");
         settings();
         user = data;
+        isManager = mode;
         add_components();
         window.setVisible(true);
     }
@@ -75,7 +76,7 @@ public class Add_product extends JFrame {
                 Products pr = new Products();
                 exit();
                 try {
-                    pr.create(user);
+                    pr.create(user, isManager);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -116,7 +117,7 @@ public class Add_product extends JFrame {
                                     JOptionPane.showMessageDialog(window, "Książka dodana pomyślnie");
                                     Products pr = new Products();
                                     exit();
-                                    pr.create(user);
+                                    pr.create(user, isManager);
                                 } catch (SQLException throwables) {
                                     throwables.printStackTrace();
                                 }
@@ -142,7 +143,7 @@ public class Add_product extends JFrame {
                                     JOptionPane.showMessageDialog(window, "Gra planszowa dodana pomyślnie");
                                     Products pr = new Products();
                                     exit();
-                                    pr.create(user);
+                                    pr.create(user, isManager);
                                 } catch (SQLException throwables) {
                                     throwables.printStackTrace();
                                 }
@@ -159,7 +160,7 @@ public class Add_product extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 Add_publisher ap = new Add_publisher();
                 exit();
-                ap.create(user);
+                ap.create(user, isManager);
             }
         });
         add_author = new JButton("Nowy autor...");
@@ -168,7 +169,7 @@ public class Add_product extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 Add_author aa = new Add_author();
                 exit();
-                aa.create(user);
+                aa.create(user, isManager);
             }
         });
         add_series = new JButton("Nowa seria...");
@@ -177,7 +178,7 @@ public class Add_product extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 Add_series as = new Add_series();
                 exit();
-                as.create(user);
+                as.create(user, isManager);
             }
         });
         name2 = new JTextField();
@@ -574,7 +575,6 @@ public class Add_product extends JFrame {
         }
     }
     private void dateCheck(JTextField field, int min_size, int max_size) {
-        date_correctness = true;
         if(field.getText().length() != min_size){
             if(field.getText().length() != 0){
                 message += "\n" + field.getName();
@@ -589,7 +589,6 @@ public class Add_product extends JFrame {
         }
     }
     private void numberCheck(JTextField field, int min_size, int max_size){
-        number_correctness = true;
         if(field.getText().length() < min_size || field.getText().length() > max_size){
             message += "\n" + field.getName();
             error_counter++;

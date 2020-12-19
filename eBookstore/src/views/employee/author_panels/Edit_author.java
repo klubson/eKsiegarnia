@@ -20,12 +20,14 @@ public class Edit_author extends JFrame {
     private Dimension dimension = new Dimension(250, 20);
     private int error_counter = 0, IDToEdit;
     private dataBaseConnection dataBase = new dataBaseConnection();
+    private boolean isManager;
 
-    public void create(String data, int ID) throws SQLException {
+    public void create(String data, int ID, boolean mode) throws SQLException {
         window = new JFrame("Edytuj autora");
         settings();
         user = data;
         IDToEdit = ID;
+        isManager = mode;
         add_components();
         setAuthor(ID);
         window.setVisible(true);
@@ -62,7 +64,7 @@ public class Edit_author extends JFrame {
                 Authors au = new Authors();
                 exit();
                 try {
-                    au.create(user);
+                    au.create(user, isManager);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -87,7 +89,7 @@ public class Edit_author extends JFrame {
                         dataBase.getStmt().close();
                         Authors au = new Authors();
                         exit();
-                        au.create(user);
+                        au.create(user, isManager);
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }

@@ -2,6 +2,8 @@ package views.employee.author_panels;
 
 import models.dataBaseConnection;
 import views.employee.manager.Manager_panel;
+import views.employee.publisher_panels.Publishers;
+import views.employee.supplier.Employee_panel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -25,11 +27,13 @@ public class Authors extends JFrame {
     private Vector<Vector<String>> data = new Vector<Vector<String>>();
     private Vector<String> columnNames = new Vector<String>();
     private JTable table;
+    private boolean isManager;
 
-    public void create(String data) throws SQLException {
+    public void create(String data, boolean mode) throws SQLException {
         window = new JFrame("Autorzy");
         settings();
         user = data;
+        isManager = mode;
         add_components();
         window.setVisible(true);
     }
@@ -89,12 +93,23 @@ public class Authors extends JFrame {
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Manager_panel mg = new Manager_panel();
-                exit();
-                try {
-                    mg.create(user);
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
+                if(isManager){
+                    Manager_panel mg = new Manager_panel();
+                    exit();
+                    try {
+                        mg.create(user);
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                }
+                else{
+                    Employee_panel ep = new Employee_panel();
+                    exit();
+                    try {
+                        ep.create(user);
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
                 }
             }
         });
@@ -105,7 +120,7 @@ public class Authors extends JFrame {
                 //dodawanie autora
                 Add_author aa = new Add_author();
                 exit();
-                aa.create(user);
+                aa.create(user, isManager);
             }
         });
         edit = new JButton("Edytuj");
@@ -116,7 +131,7 @@ public class Authors extends JFrame {
                 Edit_author ea = new Edit_author();
                 exit();
                 try {
-                    ea.create(user, Integer.parseInt(data.get(table.getSelectedRow()).get(0)));
+                    ea.create(user, Integer.parseInt(data.get(table.getSelectedRow()).get(0)), isManager);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -127,6 +142,37 @@ public class Authors extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //usuń
+                try {
+                    int dialogButton = JOptionPane.YES_NO_OPTION;
+                    int dialogResult = JOptionPane.showConfirmDialog (null,
+                            "Czy na pewno chcesz usunąć autora " +
+                                    data.get(table.getSelectedRow()).get(1) + " " + data.get(table.getSelectedRow()).get(2) +"?",
+                            "Ostrzeżenie!",dialogButton);
+                    if(dialogResult == JOptionPane.YES_OPTION){
+                        dataBase.setStmt();
+                        ResultSet rs = dataBase.getStmt().executeQuery(
+                                "SELECT Autor_ID_Autora FROM Autor_produktu WHERE Autor_ID_Autora = " + data.get(table.getSelectedRow()).get(0)
+                        );
+                        if(rs.next()){
+                            JOptionPane.showMessageDialog(window, "Nie można usunąć autora kiedy jest powiązany z produktami! Najpierw" +
+                                    " usuń odpowiednie produkty!", "Błąd", JOptionPane.ERROR_MESSAGE);
+                        }
+                        else{
+                            dataBase.getConn().setAutoCommit(true);
+                            int changes = dataBase.getStmt().executeUpdate(
+                                    "DELETE FROM Autor WHERE ID_Autora = " +
+                                            data.get(table.getSelectedRow()).get(0)
+                            );
+                            System.out.println("Usunięto "+ changes + " rekord");
+                            JOptionPane.showMessageDialog(window, "Autor usunięty pomyślnie!");
+                            Authors as = new Authors();
+                            exit();
+                            as.create(user, isManager);
+                        }
+                    }
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
             }
         });
         filter = new JButton("Sortuj");
@@ -232,8 +278,8 @@ public class Authors extends JFrame {
         });
 
         columnNames.add("ID autora");
-        columnNames.add("Nazwisko");
         columnNames.add("Imię");
+        columnNames.add("Nazwisko");
         columnNames.add("Kraj pochodzenia");
         createTable(1);
 

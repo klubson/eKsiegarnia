@@ -19,11 +19,13 @@ public class Add_publisher extends JFrame {
     private Dimension dimension = new Dimension(250, 20);
     private dataBaseConnection dataBase = new dataBaseConnection();
     private int error_counter;
+    private boolean isManager;
 
-    public void create(String data){
+    public void create(String data, boolean mode){
         window = new JFrame("Dodaj wydawnictwo");
         settings();
         user = data;
+        isManager = mode;
         add_components();
         window.setVisible(true);
     }
@@ -43,7 +45,7 @@ public class Add_publisher extends JFrame {
                 Publishers pb = new Publishers();
                 exit();
                 try {
-                    pb.create(user);
+                    pb.create(user, isManager);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -60,7 +62,7 @@ public class Add_publisher extends JFrame {
                         JOptionPane.showMessageDialog(window, "Wydawca dodany pomyślnie");
                         Publishers pb = new Publishers();
                         exit();
-                        pb.create(user);
+                        pb.create(user, isManager);
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }

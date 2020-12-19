@@ -19,12 +19,14 @@ public class Edit_series extends JFrame {
     private String user, message = "W następujących polach wykryto błędy: ", beginTitle = "Tytuł serii: ", toEdit;
     private Dimension dimension = new Dimension(250, 20);
     private int error_counter;
+    private boolean isManager;
 
-    public void create(String data, String titleToEdit){
+    public void create(String data, String titleToEdit, boolean mode){
         window = new JFrame("Edytuj serię książek");
         settings();
         user = data;
         toEdit = titleToEdit;
+        isManager = mode;
         add_components();
         title.setText(beginTitle + titleToEdit);
         window.setVisible(true);
@@ -45,7 +47,7 @@ public class Edit_series extends JFrame {
                 Series ss = new Series();
                 exit();
                 try {
-                    ss.create(user);
+                    ss.create(user, isManager);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -70,7 +72,7 @@ public class Edit_series extends JFrame {
                         dataBase.getStmt().close();
                         Series ss = new Series();
                         exit();
-                        ss.create(user);
+                        ss.create(user, isManager);
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }

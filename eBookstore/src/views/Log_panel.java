@@ -1,6 +1,7 @@
 package views;
 import models.Image;
 import models.dataBaseConnection;
+import views.customer.Customer_panel;
 import views.employee.supplier.Employee_panel;
 import views.employee.manager.Manager_panel;
 
@@ -86,41 +87,45 @@ public class Log_panel extends JFrame {
                         dataBase.getCstmt().execute();
                         int pass_good = dataBase.getCstmt().getInt(1);
                         dataBase.getCstmt().close();
-                        //String tmp = String.copyValueOf(pass2.getPassword());
-
-                        //if(dataBase.checkPwd(log2.getText(), tmp) == 0){
-
                         if(pass_good == 0){
                             JOptionPane.showMessageDialog(window, "Niepoprawne hasło!",
                                     "Błąd logowania!", JOptionPane.ERROR_MESSAGE);
                         }
                         else{
-                            //String data = dataBase.getName(log2.getText());
                             String data = log2.getText();
                             rs = dataBase.getStmt().executeQuery(
-                                    "SELECT P_STANOWISKO FROM Pracownik WHERE Login = " +
+                                    "SELECT kto FROM Uzytkownik WHERE Login = " +
                                             "'" + log2.getText() + "'"
                             );
                             rs.next();
-                            String jobType = rs.getString(1);
-                            //String jobType = dataBase.getJob_type(log2.getText());
-                            System.out.println("Zalogowano jako (login): " + data);
+                            String userType = rs.getString(1);
                             rs.close();
-                            dataBase.getStmt().close();
-                            if (jobType.equals("kierownik")){
-                                Manager_panel new_wind = new Manager_panel();
+                            if(userType.equals("k")){
+                                System.out.println("Zalogowano jako (login): " + data);
+                                Customer_panel cp = new Customer_panel();
                                 exit();
-                                new_wind.create(data);
+                                cp.create(data);
                             }
-                            else if(jobType.equals("magazynier")){
-                                //dokończyć panel pracownika
-                                Employee_panel new_wind = new Employee_panel();
-                                exit();
-                                new_wind.create(data);
-                            }
-                            else {
-                                //stworzyć panel klienta
-                                exit();
+                            else if(userType.equals("p")){
+                                rs = dataBase.getStmt().executeQuery(
+                                        "SELECT P_STANOWISKO FROM Pracownik WHERE Login = " +
+                                                "'" + log2.getText() + "'"
+                                );
+                                rs.next();
+                                String jobType = rs.getString(1);
+                                System.out.println("Zalogowano jako (login): " + data);
+                                rs.close();
+                                dataBase.getStmt().close();
+                                if (jobType.equals("kierownik")){
+                                    Manager_panel new_wind = new Manager_panel();
+                                    exit();
+                                    new_wind.create(data);
+                                }
+                                else if(jobType.equals("magazynier")){
+                                    Employee_panel new_wind = new Employee_panel();
+                                    exit();
+                                    new_wind.create(data);
+                                }
                             }
                         }
                     }

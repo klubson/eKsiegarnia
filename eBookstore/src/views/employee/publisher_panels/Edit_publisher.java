@@ -20,12 +20,14 @@ public class Edit_publisher extends JFrame {
     private Dimension dimension = new Dimension(250, 20);
     private dataBaseConnection dataBase = new dataBaseConnection();
     private int ID, error_counter;
+    private boolean isManager;
 
-    public void create(String data, int publisherID) throws SQLException {
+    public void create(String data, int publisherID, boolean mode) throws SQLException {
         window = new JFrame("Edytuj wydawnictwo");
         settings();
         user = data;
         ID = publisherID;
+        isManager = mode;
         add_components();
         setPublisherData(ID);
         window.setVisible(true);
@@ -59,7 +61,7 @@ public class Edit_publisher extends JFrame {
                 Publishers pb = new Publishers();
                 exit();
                 try {
-                    pb.create(user);
+                    pb.create(user, isManager);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -84,7 +86,7 @@ public class Edit_publisher extends JFrame {
                         dataBase.getStmt().close();
                         Publishers pb = new Publishers();
                         exit();
-                        pb.create(user);
+                        pb.create(user, isManager);
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }

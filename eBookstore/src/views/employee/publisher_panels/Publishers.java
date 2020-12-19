@@ -2,6 +2,7 @@ package views.employee.publisher_panels;
 
 import models.dataBaseConnection;
 import views.employee.manager.Manager_panel;
+import views.employee.supplier.Employee_panel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -24,12 +25,15 @@ public class Publishers extends JFrame {
     private Vector<Vector<String>> data = new Vector<Vector<String>>();
     private Vector<String> columnNames = new Vector<String>();
     private JTable table;
+    private boolean isManager;
 
-    public void create(String data) throws SQLException {
+
+    public void create(String data, boolean mode) throws SQLException {
         window = new JFrame("Wydawnictwa");
         settings();
         user = data;
         add_components();
+        isManager = mode;
         window.setVisible(true);
         //printDebugData(table);
     }
@@ -86,13 +90,25 @@ public class Publishers extends JFrame {
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Manager_panel mg = new Manager_panel();
-                exit();
-                try {
-                    mg.create(user);
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
+                if(isManager){
+                    Manager_panel mg = new Manager_panel();
+                    exit();
+                    try {
+                        mg.create(user);
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
                 }
+                else{
+                    Employee_panel ep = new Employee_panel();
+                    exit();
+                    try {
+                        ep.create(user);
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                }
+
             }
         });
         add = new JButton("Dodaj wydawnictwo");
@@ -101,7 +117,7 @@ public class Publishers extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 Add_publisher ap = new Add_publisher();
                 exit();
-                ap.create(user);
+                ap.create(user, isManager);
             }
         });
         edit = new JButton("Edytuj wydawnictwo");
@@ -111,7 +127,7 @@ public class Publishers extends JFrame {
                 Edit_publisher ep = new Edit_publisher();
                 exit();
                 try {
-                    ep.create(user, Integer.parseInt(data.get(table.getSelectedRow()).get(0)));
+                    ep.create(user, Integer.parseInt(data.get(table.getSelectedRow()).get(0)), isManager);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -146,7 +162,7 @@ public class Publishers extends JFrame {
                             JOptionPane.showMessageDialog(window, "Wydawnictwo usunięte pomyślnie!");
                             Publishers ps = new Publishers();
                             exit();
-                            ps.create(user);
+                            ps.create(user, isManager);
                         }
                     }
                 } catch (SQLException throwables) {

@@ -20,11 +20,13 @@ public class Add_author extends JFrame {
     private Dimension dimension = new Dimension(250, 20);
     private int error_counter = 0;
     private dataBaseConnection dataBase = new dataBaseConnection();
+    private boolean isManager;
 
-    public void create(String data){
+    public void create(String data, boolean mode){
         window = new JFrame("Dodaj autora");
         settings();
         user = data;
+        isManager = mode;
         add_components();
         window.setVisible(true);
     }
@@ -47,7 +49,7 @@ public class Add_author extends JFrame {
                 Authors au = new Authors();
                 exit();
                 try {
-                    au.create(user);
+                    au.create(user, isManager);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -65,7 +67,7 @@ public class Add_author extends JFrame {
                         JOptionPane.showMessageDialog(window, "Autor dodany pomyślnie");
                         Authors au = new Authors();
                         exit();
-                        au.create(user);
+                        au.create(user, isManager);
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }

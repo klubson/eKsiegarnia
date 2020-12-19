@@ -79,7 +79,7 @@ public class Employee_panel extends JFrame {
                 Products pr = new Products();
                 exit();
                 try {
-                    pr.create(user);
+                    pr.create(user, false);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -92,7 +92,7 @@ public class Employee_panel extends JFrame {
                 Publishers pb = new Publishers();
                 exit();
                 try {
-                    pb.create(user);
+                    pb.create(user, false);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -105,7 +105,7 @@ public class Employee_panel extends JFrame {
                 Authors au = new Authors();
                 exit();
                 try {
-                    au.create(user);
+                    au.create(user, false);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -118,7 +118,7 @@ public class Employee_panel extends JFrame {
                 Series ss = new Series();
                 exit();
                 try {
-                    ss.create(user);
+                    ss.create(user, false);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }

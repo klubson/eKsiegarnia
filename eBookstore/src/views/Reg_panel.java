@@ -22,7 +22,7 @@ public class Reg_panel extends JFrame {
     private int dim_wdt = 250, dim_ht = 20, error_counter;
     private Dimension dimension = new Dimension(250, 20);
     private String message = "W następujących polach wykryto błędy: ";
-    private boolean phone_correctness;
+    private boolean phone_correctness, email_correctness;
     private dataBaseConnection dataBase = new dataBaseConnection();
 //    private JLabel[] tab_JLabel = {login, pass, pass_again, name, surname, phone, e_mail, address};
 //    private JPanel[] tab_JPanel = {login_pane, pass_pane, pass_pane2, name_pane, surname_pane, phone_pane, e_mail_pane, address_pane};
@@ -385,6 +385,18 @@ public class Reg_panel extends JFrame {
         }
         return phone_correctness;
     }
+    private void emailCheck(JTextField field, int max_size){
+        if(field.getText().length() == 0 || field.getText().length() > max_size) {
+            message += "\n" + field.getName();
+            error_counter++;
+        }
+        else{
+            if(!field.getText().matches("[A-Za-z0-9]{1,}[@]{1}[a-z0-9]{1,5}[.]{1}[a-z]{2,3}")) {
+                message += "\n" + field.getName();
+                error_counter++;
+            }
+        }
+    }
     private boolean check(){
         error_counter = 0;
         fieldCheck(login2, 30, true, true);
@@ -393,7 +405,7 @@ public class Reg_panel extends JFrame {
         fieldCheck(name2, 20, false, true);
         fieldCheck(surname2, 20, false, true);
         boolean number = phoneCheck(phone2);
-        fieldCheck(e_mail2, 30, true, false);
+        emailCheck(e_mail2, 30);
         fieldCheck(address2, 50, true, true);
         boolean correct_passwords = samePass();
 

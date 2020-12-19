@@ -88,8 +88,6 @@ public class Edit_employee_profile extends JFrame {
                         throwables.printStackTrace();
                     }
                 }
-
-
             }
         });
         edit = new JButton("Edytuj");

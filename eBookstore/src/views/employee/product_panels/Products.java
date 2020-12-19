@@ -2,6 +2,7 @@ package views.employee.product_panels;
 
 import models.dataBaseConnection;
 import views.employee.manager.Manager_panel;
+import views.employee.supplier.Employee_panel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -27,11 +28,13 @@ public class Products extends JFrame {
     private JTable table;
     private Vector<Vector<String>> data = new Vector<Vector<String>>();
     private Vector<String> columnNames = new Vector<String>();
+    private boolean isManager;
 
-    public void create(String data) throws SQLException {
+    public void create(String data, boolean mode) throws SQLException {
         window = new JFrame("Produkty");
         settings();
         user = data;
+        isManager = mode;
         add_components();
         window.setVisible(true);
     }
@@ -53,7 +56,7 @@ public class Products extends JFrame {
             );
         }
         if(mode == 2){
-            String query = "SELECT ID_Produktu, Nazwa, Cena, Rok_wydania, Stan_magazyn, co, Wydawnictwo_ID_wydawnictwa FROM Produkt ORDER BY";
+            String query = "SELECT ID_Produktu, Nazwa, Cena, Rok_wydania, Stan_magazyn, co, Wydawnictwo_ID_wydawnictwa FROM Produkt ORDER BY ";
             if(sort_asc != "" && sort_desc != ""){
                 query += sort_asc + " ASC, ";
                 query += sort_desc + " DESC";
@@ -99,13 +102,25 @@ public class Products extends JFrame {
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Manager_panel mg = new Manager_panel();
-                exit();
-                try {
-                    mg.create(user);
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
+                if(isManager){
+                    Manager_panel mg = new Manager_panel();
+                    exit();
+                    try {
+                        mg.create(user);
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
                 }
+                else{
+                    Employee_panel ep = new Employee_panel();
+                    exit();
+                    try {
+                        ep.create(user);
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                }
+
             }
         });
         add = new JButton("Dodaj produkt");
@@ -115,7 +130,7 @@ public class Products extends JFrame {
                 Add_product ap = new Add_product();
                 exit();
                 try {
-                    ap.create(user);
+                    ap.create(user, isManager);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -125,7 +140,7 @@ public class Products extends JFrame {
         edit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //edycja pracownika
+                //edycja produktu
             }
         });
         delete = new JButton("Usuń");
@@ -260,7 +275,7 @@ public class Products extends JFrame {
         up.add(price_desc);
         up.add(year_asc);
         up.add(year_desc);
-        up.add(empty);
+        //up.add(empty);
         up.add(filter);
 
         center = new JPanel();
