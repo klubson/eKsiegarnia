@@ -1,5 +1,6 @@
 package views.customer.Product_panels;
 
+import models.CartInfo;
 import models.dataBaseConnection;
 import views.customer.Customer_panel;
 import views.employee.manager.Manager_panel;
@@ -21,20 +22,28 @@ public class Products_customer extends JFrame {
     private JCheckBox name_asc, name_desc, price_asc, price_desc, year_asc, year_desc;
     private JPanel up, center, down;
     private JButton details, back, filter, addToCart;
-    private dataBaseConnection dataBase = new dataBaseConnection();
+    private dataBaseConnection dataBase = null;//new dataBaseConnection();
     private DefaultTableModel tableModel = new DefaultTableModel();
     private JScrollPane listScroller;
     private String sort_asc, sort_desc, user;
     private JTable table;
     private Vector<Vector<String>> data = new Vector<Vector<String>>();
     private Vector<String> columnNames = new Vector<String>();
+    private CartInfo cart;
 
-    public void create(String data) throws SQLException {
+    public void create(String data , dataBaseConnection dataBase , CartInfo cart) throws SQLException {
+        this.dataBase = dataBase;
+
+        this.cart = cart;
         window = new JFrame("Produkty");
         settings();
         user = data;
+
+
+
         add_components();
         window.setVisible(true);
+
     }
     private void settings(){
         window.setSize(600, 600);
@@ -45,16 +54,16 @@ public class Products_customer extends JFrame {
     private void getProductList(int mode) throws SQLException {
         data.clear();
         dataBase.setStmt();
-        dataBase.getConn().setAutoCommit(true);
+        //dataBase.getConn().setAutoCommit(true);
         ResultSet rs = null;
         if(sort_asc == "" && sort_desc == "") mode = 1;
         if(mode == 1) {
             rs = dataBase.getStmt().executeQuery(
-                    "SELECT Nazwa, Cena, Rok_wydania, Stan_magazyn, co FROM Produkt ORDER BY ID_Produktu"
+                    "SELECT Nazwa, Cena, Rok_wydania, Stan_magazyn, co ,id_produktu  FROM Produkt ORDER BY ID_Produktu"
             );
         }
         if(mode == 2){
-            String query = "SELECT Nazwa, Cena, Rok_wydania, Stan_magazyn, co FROM Produkt ORDER BY ";
+            String query = "SELECT Nazwa, Cena, Rok_wydania, Stan_magazyn, co,id_produktu FROM Produkt ORDER BY ";
             if(sort_asc != "" && sort_desc != ""){
                 query += sort_asc + " ASC, ";
                 query += sort_desc + " DESC";
@@ -66,6 +75,7 @@ public class Products_customer extends JFrame {
         }
         while(rs.next()){
             Vector<String> vString = new Vector<String>();
+
             vString.add(rs.getString(1));
             vString.add(Float.toString(rs.getFloat(2)));
             vString.add(rs.getString(3));
@@ -77,6 +87,7 @@ public class Products_customer extends JFrame {
             else if(tmp.equals("k")){
                 vString.add("książka");
             }
+            vString.add(Integer.toString(rs.getInt(6)));
             data.add(vString);
         }
         rs.close();
@@ -86,6 +97,7 @@ public class Products_customer extends JFrame {
         getProductList(mode);
         tableModel = new DefaultTableModel(data, columnNames);
         table = new JTable(tableModel);
+        table.removeColumn(table.getColumnModel().getColumn(5));
         table.setPreferredScrollableViewportSize(new Dimension(600, 300));
         table.setFillsViewportHeight(true);
         table.changeSelection(0,0, false, false);
@@ -101,7 +113,7 @@ public class Products_customer extends JFrame {
                 Customer_panel cp = new Customer_panel();
                 exit();
                 try {
-                    cp.create(user);
+                    cp.createFromBack(user , dataBase);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -126,11 +138,11 @@ public class Products_customer extends JFrame {
                     dataBase.getStmt().close();
                     if(type.equals("k")){
                         Book_details bd = new Book_details();
-                        bd.create(id);
+                        bd.create(id , dataBase , cart);
                     }
                     else if(type.equals("g")){
                         Game_details gd = new Game_details();
-                        gd.create(id);
+                        gd.create(id , dataBase , cart);
                     }
 
                 } catch (SQLException throwables) {
@@ -142,7 +154,11 @@ public class Products_customer extends JFrame {
         addToCart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                //TODO właściwe id produktu, cena, ilość produktu, l.p
+                int id = Integer.parseInt((String) table.getModel().getValueAt(table.getSelectedRow(), 5 ));
+                double price = Double.parseDouble(data.get(table.getSelectedRow()).get(1));
+                //dataBase.newCartItem(cart, id, price);
+                new BuyPanel(dataBase,id,price,cart  );
             }
         });
         filter = new JButton("Sortuj");
@@ -228,11 +244,14 @@ public class Products_customer extends JFrame {
                 }
             }
         });
+
         columnNames.add("Nazwa");
         columnNames.add("Cena");
         columnNames.add("Rok wydania");
         columnNames.add("Dostępność");
         columnNames.add("Typ produktu");
+        columnNames.add("Id_produktu");
+
         createTable(1);
     }
     private void panels() throws SQLException {

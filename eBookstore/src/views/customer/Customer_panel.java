@@ -1,5 +1,6 @@
 package views.customer;
 
+import models.CartInfo;
 import models.Current_date;
 import models.dataBaseConnection;
 import views.Start_window;
@@ -9,19 +10,22 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+//TODO sprawdzić co przy włączaniu po przez X
 public class Customer_panel extends JFrame {
     private JFrame window;
     private JButton log_out, shopping_history, current_cart, product_list, author_list, series_list, edit_profile;
     private JPanel up, center, down;
     private JLabel who_logged, current_time;
     private String beginWho_logged = "Zalogowany: ", user;
-    private dataBaseConnection dataBase = new dataBaseConnection();
+    private dataBaseConnection dataBase = null;//new dataBaseConnection();
     private Current_date time = new Current_date();
+    private CartInfo cart;
 
-    public void create(String data) throws SQLException {
+    public void createCommon(String data)  throws SQLException
+    {
         window = new JFrame("Panel klienta");
         settings();
         add_components();
@@ -29,6 +33,21 @@ public class Customer_panel extends JFrame {
         setWho_logged(user);
         window.setVisible(true);
         time.clock(current_time);
+    }
+
+    public void create(String data) throws SQLException {
+
+        dataBase = new dataBaseConnection();
+        createCommon(data);
+
+        dataBase.getConn().setAutoCommit(false);
+        cart= new CartInfo(dataBase.newCart(user));
+
+    }
+
+    public void createFromBack(String data , dataBaseConnection dataBase) throws SQLException{
+        this.dataBase = dataBase;
+        createCommon( data);
     }
     private void setWho_logged(String data) throws SQLException {
         dataBase.setStmt();
@@ -56,6 +75,12 @@ public class Customer_panel extends JFrame {
         log_out.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                try {
+                    dataBase.getConn().rollback();
+                } catch (SQLException ex) {
+                    System.out.println("Błąd przy rollbacku przy wylogowywaniu się klienta");
+                    ex.printStackTrace();
+                }
                 Start_window win = new Start_window();
                 exit();
                 System.out.println("Wylogowano");
@@ -85,9 +110,10 @@ public class Customer_panel extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Products_customer pc = new Products_customer();
+
                 exit();
                 try {
-                    pc.create(user);
+                    pc.create(user , dataBase , cart);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }

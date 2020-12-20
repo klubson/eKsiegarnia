@@ -46,7 +46,7 @@ public class Series_customer extends JFrame {
     private void getSeriesList(int mode) throws SQLException {
         data.clear();
         dataBase.setStmt();
-        dataBase.getConn().setAutoCommit(true);
+        //dataBase.getConn().setAutoCommit(true);
         ResultSet rs = null;
         if(sort_asc == "" && sort_desc == "") mode = 1;
         if(mode == 1) {

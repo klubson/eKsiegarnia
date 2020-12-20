@@ -93,7 +93,7 @@ public class Edit_customer_profile extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if(check()){
                     try {
-                        dataBase.getConn().setAutoCommit(true);
+                        //dataBase.getConn().setAutoCommit(true);
                         dataBase.setStmt();
                         String tmp = String.copyValueOf(pass2.getPassword());
                         int changes = dataBase.getStmt().executeUpdate(
@@ -101,6 +101,7 @@ public class Edit_customer_profile extends JFrame {
                                         + tmp + "', Imie = '" + name2.getText() + "', Nazwisko = '" + surname2.getText() + "'," +
                                         "Nr_kontaktowy = '" + phone2.getText() + "' WHERE Login = '" + user + "'"
                         );
+                        System.out.println("Edytowano " + changes + " rekordów");
                         JOptionPane.showMessageDialog(window, "Pracownik " + name2.getText() + " " +
                                 surname2.getText() + " edytowany pomyślnie!");
                         Manager_panel mp = new Manager_panel();

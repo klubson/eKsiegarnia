@@ -156,4 +156,90 @@ public class dataBaseConnection {
         cstmt.execute();
         cstmt.close();
     }
+
+    public int newCart(String login)   {
+        int cartId = -1;
+        try{
+            setStmt();
+            int changes = stmt.executeUpdate(
+                    "INSERT INTO Koszyk_zakupowy(Klient_login, Nr_koszyka, Wartosc_zakupow , Sposob_platnosci , Koszt_wysylki , Calkowita_wartosc_zamowienia) " +
+                            "VALUES('" + login + "', KOSZYK_ZAKUPOWY_NR_KOSZYKA_SEQ.nextval , 0 , 'BLIK' , 0, 0 )"
+            );
+            System.out.println("Wstawiono " + changes + " krotkę");
+        }
+        catch (SQLException e)
+        {
+            System.out.println("Błąd przy tworzeniu koszyka");
+        }
+        finally {
+            if(stmt != null){
+                try{
+                    stmt.close();
+                }
+                catch (SQLException e)
+                {
+                    System.out.println("Błąd przy zamykaniu statement przy tworzeniu koszyka");
+                }
+            }
+        }
+
+        try{
+            setStmt();
+            ResultSet rs = stmt.executeQuery(
+                    "SELECT KOSZYK_ZAKUPOWY_NR_KOSZYKA_SEQ.currval FROM dual"
+            );
+            rs.next();
+            cartId = rs.getInt(1);
+            System.out.println("id koszyka " + cartId );
+        }
+        catch (SQLException e)
+        {
+            System.out.println("Błąd przy pobieraniu id koszyka");
+        }
+        finally {
+            if(stmt != null){
+                try{
+                    stmt.close();
+                }
+                catch (SQLException e)
+                {
+                    System.out.println("Błąd przy zamykaniu statement przy pobieraniu id koszyka");
+                }
+            }
+        }
+        return cartId;
+    }
+
+    public void newCartItem(CartInfo cart , int produktId , double productPrice , int amount)
+    {
+        try{
+            setStmt();
+            int changes = stmt.executeUpdate(
+                    "INSERT INTO Element_koszyka " +
+                            "VALUES("+ cart.getNextLP() + ", "+ produktId + ", " + cart.getCartId() + ", " + amount+", " +productPrice +" )"
+            );
+            System.out.println("Wstawiono " + changes + " krotkę");
+            changes = stmt.executeUpdate(
+                    "Update koszyk_zakupowy SET Wartosc_zakupow = Wartosc_zakupow + " + productPrice + ", Calkowita_wartosc_zamowienia = Calkowita_wartosc_zamowienia + " +
+                            productPrice + " WHERE Nr_koszyka = "+ cart.getCartId()
+
+            );
+            System.out.println("Zmodyfikowano " + changes + " krotkę");
+        }
+        catch (SQLException e)
+        {
+            System.out.println("Błąd przy dodawaniu pozycji do koszyka");
+        }
+        finally {
+            if(stmt != null){
+                try{
+                    stmt.close();
+                }
+                catch (SQLException e)
+                {
+                    System.out.println("Błąd przy zamykaniu statement przy dodawaniu do koszyka");
+                }
+            }
+        }
+    }
 }

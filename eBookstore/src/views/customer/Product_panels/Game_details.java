@@ -1,5 +1,6 @@
 package views.customer.Product_panels;
 
+import models.CartInfo;
 import models.dataBaseConnection;
 
 import javax.swing.*;
@@ -14,14 +15,20 @@ public class Game_details extends JFrame {
     private JFrame window;
     private JLabel name, price, year, storage, storage2, product_type, publisher, authors, min_players, max_players, min_age, est_time;
     private dataBaseConnection dataBase = new dataBaseConnection();
-    private JButton back;
+    private JButton back , buy;
     private JPanel center, down, storage_panel;
+    private  int produktId ;
+    private double productPrice;
+    private CartInfo cart;
 
-    public void create(int product_id) throws SQLException {
+    public void create(int product_id , dataBaseConnection dataBase , CartInfo cart) throws SQLException {
+        this.dataBase = dataBase;
+        this.cart = cart;
         window = new JFrame("Szczegóły produktu");
         settings();
         add_components();
         setLabels(product_id);
+        produktId = product_id;
         window.setVisible(true);
     }
     private void settings(){
@@ -39,6 +46,7 @@ public class Game_details extends JFrame {
         rs.next();
         name.setText(name.getText() + rs.getString(1));
         price.setText(price.getText() + Float.toString(rs.getFloat(2)));
+        productPrice = rs.getFloat(2);
         year.setText(year.getText() + rs.getString(3));
         int amount = rs.getInt(4);
         if(amount == 0){
@@ -112,6 +120,14 @@ public class Game_details extends JFrame {
                 exit();
             }
         });
+
+        buy = new JButton("Dodaj do koszyka");
+        buy.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new BuyPanel(dataBase,produktId,productPrice,cart  );
+            }
+        });
     }
     private void panels(){
         components();
@@ -141,6 +157,7 @@ public class Game_details extends JFrame {
         panels();
         window.add(center, BorderLayout.CENTER);
         window.add(down, BorderLayout.SOUTH);
+        down.add(buy , BorderLayout.EAST);
     }
     private void exit(){
         window.setVisible(false);
