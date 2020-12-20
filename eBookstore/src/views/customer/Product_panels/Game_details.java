@@ -47,7 +47,8 @@ public class Game_details extends JFrame {
         name.setText(name.getText() + rs.getString(1));
         price.setText(price.getText() + Float.toString(rs.getFloat(2)));
         productPrice = rs.getFloat(2);
-        year.setText(year.getText() + rs.getString(3));
+        //year.setText(year.getText() + rs.getString(3));
+        setInfoLabel(year , rs.getString(3));
         int amount = rs.getInt(4);
         if(amount == 0){
             storage2.setText("Produkt niedostępny");
@@ -92,10 +93,23 @@ public class Game_details extends JFrame {
         rs.next();
         min_players.setText(min_players.getText() + Integer.toString(rs.getInt(1)));
         max_players.setText(max_players.getText() + Integer.toString(rs.getInt(2)));
-        min_age.setText(min_age.getText() + Integer.toString(rs.getInt(3)));
-        est_time.setText(est_time.getText() + Integer.toString(rs.getInt(4)));
+        //min_age.setText(min_age.getText() + Integer.toString(rs.getInt(3)));
+        //est_time.setText(est_time.getText() + Integer.toString(rs.getInt(4)));
+        setInfoLabel(min_age , rs.getString(3));
+        setInfoLabel(est_time , rs.getString(3));
         rs.close();
         dataBase.getStmt().close();
+    }
+    private void setInfoLabel(JLabel label , String info)
+    {
+        if(info != null)
+        {
+            label.setText(label.getText() + info);
+        }
+        else
+        {
+            label.setText(label.getText() + "brak informacji");
+        }
     }
     private void labels(){
         name = new JLabel("Nazwa produktu: ");

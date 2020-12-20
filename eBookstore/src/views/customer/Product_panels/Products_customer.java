@@ -127,9 +127,8 @@ public class Products_customer extends JFrame {
                 try {
                     dataBase.setStmt();
                     ResultSet rs = dataBase.getStmt().executeQuery(
-                            "SELECT ID_produktu, co FROM Produkt WHERE Nazwa = '" + data.get(table.getSelectedRow()).get(0)
-                            + "' AND Cena = " + data.get(table.getSelectedRow()).get(1) +
-                                    " AND Stan_magazyn = " + data.get(table.getSelectedRow()).get(3)
+                            "SELECT ID_produktu, co FROM Produkt WHERE ID_produktu = " + Integer.parseInt((String) table.getModel().getValueAt(table.getSelectedRow(), 5 ))
+
                     );
                     rs.next();
                     int id = rs.getInt(1);
@@ -154,7 +153,7 @@ public class Products_customer extends JFrame {
         addToCart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO właściwe id produktu, cena, ilość produktu, l.p
+
                 int id = Integer.parseInt((String) table.getModel().getValueAt(table.getSelectedRow(), 5 ));
                 double price = Double.parseDouble(data.get(table.getSelectedRow()).get(1));
                 //dataBase.newCartItem(cart, id, price);

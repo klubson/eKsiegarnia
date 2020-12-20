@@ -46,7 +46,8 @@ public class Book_details extends JFrame {
         name.setText(name.getText() + rs.getString(1));
         price.setText(price.getText() + Float.toString(rs.getFloat(2)));
         productPrice = rs.getFloat(2);
-        year.setText(year.getText() + rs.getString(3));
+
+        setInfoLabel(year , rs.getString(3));
         int amount = rs.getInt(4);
         if(amount == 0){
             storage2.setText("Produkt niedostępny");
@@ -79,10 +80,15 @@ public class Book_details extends JFrame {
                 "SELECT k_Typ_okladki, k_Liczba_stron, k_format, Seria_tytul FROM Ksiazka WHERE ID_produktu = " + id
         );
         rs.next();
-        cover_type.setText(cover_type.getText() + rs.getString(1));
-        pages.setText(pages.getText() + Integer.toString(rs.getInt(2)));
-        size.setText(size.getText() + rs.getString(3));
-        series.setText(series.getText() + rs.getString(4));
+
+        setInfoLabel(cover_type , rs.getString(1));
+        //pages.setText(pages.getText() + Integer.toString(rs.getInt(2)));
+        setInfoLabel(pages , rs.getString(2));
+
+        setInfoLabel(size , rs.getString(3));
+        setInfoLabel(series , rs.getString(4));
+
+
         rs.close();
         rs = dataBase.getStmt().executeQuery(
                 "SELECT a.Imie, a.Nazwisko FROM Autor a JOIN Autor_produktu b ON b.Autor_ID_autora = a.ID_autora WHERE Produkt_ID_produktu = " + id
@@ -95,6 +101,17 @@ public class Book_details extends JFrame {
         if(authors_tmp.length() > 10) authors_tmp = authors_tmp.substring(0, authors_tmp.length() - 2);
         authors.setText(authors_tmp);
         dataBase.getStmt().close();
+    }
+    private void setInfoLabel(JLabel label , String info)
+    {
+        if(info != null)
+        {
+            label.setText(label.getText() + info);
+        }
+        else
+        {
+            label.setText(label.getText() + "brak informacji");
+        }
     }
     private void labels(){
         name = new JLabel("Nazwa produktu: ");

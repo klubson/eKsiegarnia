@@ -29,7 +29,7 @@ public class BuyPanel extends JFrame {
         addComponents();
         window.setVisible(true);
     }
-    //TODO ustawić poprawnie maksymalną wartość spinnera
+    //TODO ustawić poprawnie maksymalną wartość spinnera, dodawanie zmniejsza stan w magazynie
     private void addComponents() {
         prepButtons();
         prepLabels();

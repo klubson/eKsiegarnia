@@ -13,3 +13,7 @@ hasło: admin
 dla klienta:
 login: klient
 hasło: klient
+
+## TODO
+w BuyPanel ustawić poprawnie maksymalną wartość spinnera, dodawanie zmniejsza stan w magazynie
+
