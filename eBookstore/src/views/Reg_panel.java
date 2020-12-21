@@ -1,18 +1,15 @@
 package views;
+import models.WindowMethods;
 import models.dataBaseConnection;
-import models.Awt1;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Reg_panel extends JFrame {
-    private JFrame window;
     private JLabel login, pass, pass_again, name, surname, phone, e_mail, address;
     private JTextField login2, name2, surname2, phone2, e_mail2, address2;
     private JPasswordField pass2, pass_again2;
@@ -24,26 +21,13 @@ public class Reg_panel extends JFrame {
     private String message = "W następujących polach wykryto błędy: ";
     private boolean phone_correctness, email_correctness;
     private dataBaseConnection dataBase = new dataBaseConnection();
-//    private JLabel[] tab_JLabel = {login, pass, pass_again, name, surname, phone, e_mail, address};
-//    private JPanel[] tab_JPanel = {login_pane, pass_pane, pass_pane2, name_pane, surname_pane, phone_pane, e_mail_pane, address_pane};
-//    private JTextField[] tab_JTextField = {login2, name2, surname2, phone2, e_mail2, address2};
-//    private JPasswordField[] tab_JPassField = {pass2, pass_again2};
-//    private String[] tab_JLabelNames = {"Wybierz swój login (max 30 znaków): ", "Wybierz swoje hasło (max 20 znaków): ", "Powtórz hasło: ", "Imię (max 20 znaków): ", "Nazwisko (max 30 znaków): ", "Numer telefonu: ", "Adres e-mail (max 30 znaków): ", "Adres zamieszkania (max 50 znaków): "};
-//    private String[] tab_JTextFieldNames = {"LOGIN", "IMIĘ", "NAZWISKO", "NR TELEFONU", "ADRES E-MAIL", "ADRES ZAMIESZKANIA"};
-//    private String[] tab_JPassFieldNames = {"HASŁO", "POWTÓRZ HASŁO"};
+    private WindowMethods windowMethods = new WindowMethods();
 
     public void create(){
-        window = new JFrame("Rejestracja");
-        settings();
+        windowMethods.window = new JFrame("Rejestracja");
+        windowMethods.settings();
         add_components();
-        window.setVisible(true);
-    }
-
-    private void settings(){
-        window.setSize(600, 600);
-        window.setLocation(400, 80);
-        window.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        window.setLayout(new BorderLayout());
+        windowMethods.window.setVisible(true);
     }
     private void labels(){
         login = new JLabel("Wybierz swój login (max 30 znaków): ");
@@ -54,16 +38,23 @@ public class Reg_panel extends JFrame {
         phone = new JLabel("Numer telefonu: ");
         e_mail = new JLabel("Adres e-mail (max 30 znaków): ");
         address = new JLabel("Adres zamieszkania (max 50 znaków): ");
-//        for (int i = 0; i < tab_JLabel.length; i++){
-//            tab_JLabel[i] = new JLabel(tab_JLabelNames[i]);
-//        }
     }
     private void components(){
+        login2 = windowMethods.setJTextField(login2, "LOGIN");
+        pass2 = windowMethods.setJPasswordField(pass2, "HASŁO");
+        pass_box = windowMethods.setPassCheckBox(pass_box, pass2, "Pokaż hasło");
+        pass_again2 = windowMethods.setJPasswordField(pass_again2, "POWTÓRZ HASŁO");
+        pass_box2 = windowMethods.setPassCheckBox(pass_box2, pass_again2, "Pokaż hasło");
+        name2 = windowMethods.setJTextField(name2, "IMIĘ");
+        surname2 = windowMethods.setJTextField(surname2, "NAZWISKO");
+        phone2 = windowMethods.setJTextField(phone2, "NUMER TELEFONU");
+        e_mail2 = windowMethods.setJTextField(e_mail2, "ADRES E-MAIL");
+        address2 = windowMethods.setJTextField(address2, "ADRES ZAMIESZKANIA");
         back = new JButton("Powrót");
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                exit();
+                windowMethods.exit();
                 try {
                     Start_window win2 = new Start_window();
                     win2.create();
@@ -86,7 +77,7 @@ public class Reg_panel extends JFrame {
 
                         //if (dataBase.findUser(login2.getText())){
                         if(rs.next()){
-                            JOptionPane.showMessageDialog(window, "Użytkownik o podanym loginie już istnieje!",
+                            JOptionPane.showMessageDialog(windowMethods.window, "Użytkownik o podanym loginie już istnieje!",
                                     "Błąd rejestracji!", JOptionPane.ERROR_MESSAGE);
                             rs.close();
                         }
@@ -96,146 +87,26 @@ public class Reg_panel extends JFrame {
                                     "SELECT k_Adres_e_mail FROM Klient WHERE k_Adres_e_mail = " + "'" +e_mail2.getText() + "'"
                             );
                             if(rs.next()){
-                                JOptionPane.showMessageDialog(window, "Użytkownik o podanym adresie " +
+                                JOptionPane.showMessageDialog(windowMethods.window, "Użytkownik o podanym adresie " +
                                         "e-mail już istnieje!", "Błąd rejestracji!", JOptionPane.ERROR_MESSAGE);
                                 rs.close();
                             }
                             else{
                                 String tmp = String.copyValueOf(pass2.getPassword());
                                 dataBase.newClient(login2.getText(), tmp, name2.getText(), surname2.getText(), phone2.getText(), e_mail2.getText(), address2.getText());
-                                JOptionPane.showMessageDialog(window, "Rejestracja przebiegła pomyślnie!");
+                                JOptionPane.showMessageDialog(windowMethods.window, "Rejestracja przebiegła pomyślnie!");
                                 //przejście do okna logowania
-                                Log_panel win = new Log_panel();
-                                exit();
+                                var win = new Log_panel();
+                                windowMethods.exit();
                                 win.create();
                             }
                         }
-
-
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }
-
-
                 }
             }
         });
-        pass_box = new JCheckBox("Pokaż hasło");
-        pass_box.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(pass_box.isSelected()){
-                    pass2.setEchoChar((char)0);
-                }
-                else pass2.setEchoChar('\u25CF');
-            }
-        });
-        pass_box2 = new JCheckBox("Pokaż hasło");
-        pass_box2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(pass_box2.isSelected()){
-                    pass_again2.setEchoChar((char)0);
-                }
-                else pass_again2.setEchoChar('\u25CF');
-            }
-        });
-
-        login2 = new JTextField();
-        login2.setName("LOGIN");
-        login2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        login2.setPreferredSize(new Dimension(dim_wdt, dim_ht));
-        pass2 = new JPasswordField();
-        pass2.setName("HASŁO");
-        pass2.setEchoChar('\u25CF');
-        pass2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            }
-        });
-        pass2.setPreferredSize(new Dimension(dim_wdt, dim_ht));
-        pass_again2 = new JPasswordField();
-        pass_again2.setName("POWTÓRZ HASŁO");
-        pass_again2.setEchoChar('\u25CF');
-        pass_again2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            }
-        });
-        pass_again2.setPreferredSize(new Dimension(dim_wdt, dim_ht));
-        name2 = new JTextField();
-        name2.setName("IMIĘ");
-        name2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        name2.setPreferredSize(new Dimension(dim_wdt, dim_ht));
-        surname2 = new JTextField();
-        surname2.setName("NAZWISKO");
-        surname2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        surname2.setPreferredSize(new Dimension(dim_wdt, dim_ht));
-        phone2 = new JTextField();
-        phone2.setName("NUMER TELEFONU");
-        phone2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        phone2.setPreferredSize(new Dimension(dim_wdt, dim_ht));
-        e_mail2 = new JTextField();
-        e_mail2.setName("ADRES E-MAIL");
-        e_mail2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        e_mail2.setPreferredSize(new Dimension(dim_wdt, dim_ht));
-        address2 = new JTextField();
-        address2.setName("ADRES ZAMIESZKANIA");
-        address2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        address2.setPreferredSize(new Dimension(dim_wdt, dim_ht));
-//        for (int i = 0; i < tab_JTextField.length; i++){
-//            tab_JTextField[i] = new JTextField();
-//            tab_JTextField[i].setName(tab_JTextFieldNames[i]);
-//            tab_JTextField[i].addActionListener(new ActionListener() {
-//                @Override
-//                public void actionPerformed(ActionEvent e) {
-//
-//                }
-//            });
-//            tab_JTextField[i].setPreferredSize(dimension);
-//        }
-//        for (int i = 0; i < tab_JPassField.length; i++){
-//            tab_JPassField[i] = new JPasswordField();
-//            tab_JPassField[i].setName(tab_JPassFieldNames[i]);
-//            tab_JPassField[i].setEchoChar('\u25CF');
-//            tab_JPassField[i].addActionListener(new ActionListener() {
-//                @Override
-//                public void actionPerformed(ActionEvent e) {
-//
-//                }
-//            });
-//            tab_JPassField[i].setPreferredSize(dimension);
-//        }
     }
     private void panels(){
         labels();
@@ -302,12 +173,8 @@ public class Reg_panel extends JFrame {
     }
     private void add_components(){
         panels();
-        window.add(center, BorderLayout.CENTER);
-        window.add(down, BorderLayout.SOUTH);
-    }
-    private void exit(){
-        window.setVisible(false);
-        window.dispose();
+        windowMethods.window.add(center, BorderLayout.CENTER);
+        windowMethods.window.add(down, BorderLayout.SOUTH);
     }
     private void fieldCheck(JTextField field, int size, boolean digitsEnabled, boolean spaceEnabled){
         if(field.getText().length() == 0 || field.getText().length() > size){
@@ -410,18 +277,18 @@ public class Reg_panel extends JFrame {
         boolean correct_passwords = samePass();
 
         if(!number) {
-            JOptionPane.showMessageDialog(window, "Numer telefonu musi składać się z cyfr!",
+            JOptionPane.showMessageDialog(windowMethods.window, "Numer telefonu musi składać się z cyfr!",
                     "Nieprawidłowy numer telefonu!", JOptionPane.ERROR_MESSAGE);
             phone2.setText("");
         }
         if(!correct_passwords){
-            JOptionPane.showMessageDialog(window, "Hasła nie są identyczne!",
+            JOptionPane.showMessageDialog(windowMethods.window, "Hasła nie są identyczne!",
                     "Błąd hasła!", JOptionPane.ERROR_MESSAGE);
             pass2.setText("");
             pass_again2.setText("");
         }
         if(error_counter != 0){
-            JOptionPane.showMessageDialog(window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(windowMethods.window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
             message = "W następujących polach wykryto błędy: ";
         }
         if (number && correct_passwords && error_counter == 0) return true;

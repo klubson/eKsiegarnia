@@ -1,5 +1,6 @@
 package views.employee.product_panels;
 
+import models.WindowMethods;
 import models.dataBaseConnection;
 import views.employee.manager.Manager_panel;
 import views.employee.supplier.Employee_panel;
@@ -15,8 +16,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
 
-public class Products extends JFrame {
-    private JFrame window;
+public class Products {
+    private WindowMethods windowMethods = new WindowMethods();
     private JLabel empty;
     private JCheckBox id_asc, id_desc, name_asc, name_desc, price_asc, price_desc, year_asc, year_desc;
     private JPanel up, center, down, down_center;
@@ -31,18 +32,12 @@ public class Products extends JFrame {
     private boolean isManager;
 
     public void create(String data, boolean mode) throws SQLException {
-        window = new JFrame("Produkty");
-        settings();
+        windowMethods.window = new JFrame("Produkty");
+        windowMethods.settings();
         user = data;
         isManager = mode;
         add_components();
-        window.setVisible(true);
-    }
-    private void settings(){
-        window.setSize(600, 600);
-        window.setLocation(400, 80);
-        window.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        window.setLayout(new BorderLayout());
+        windowMethods.window.setVisible(true);
     }
     private void getProductList(int mode) throws SQLException {
         data.clear();
@@ -97,6 +92,23 @@ public class Products extends JFrame {
         listScroller.setViewportView(table);
     }
     private void components() throws SQLException {
+        id_asc = new JCheckBox("ID - rosnąco");
+        id_desc = new JCheckBox("ID - malejąco");
+        name_asc = new JCheckBox("Nazwa - rosnąco");
+        name_desc = new JCheckBox("Nazwa - malejąco");
+        price_asc = new JCheckBox("Cena - rosnąco");
+        price_desc = new JCheckBox("Cena - malejąco");
+        year_asc = new JCheckBox("Rok wyd. - rosnąco");
+        year_desc = new JCheckBox("Rok wyd. - malejąco");
+        id_asc = windowMethods.setSortCheckBox(id_asc, id_desc);
+        id_desc = windowMethods.setSortCheckBox(id_desc, id_asc);
+        name_asc = windowMethods.setSortCheckBox(name_asc, name_desc);
+        name_desc = windowMethods.setSortCheckBox(name_desc, name_asc);
+        price_asc = windowMethods.setSortCheckBox(price_asc, price_desc);
+        price_desc = windowMethods.setSortCheckBox(price_desc, price_asc);
+        year_asc = windowMethods.setSortCheckBox(year_asc, year_desc);
+        year_desc = windowMethods.setSortCheckBox(year_desc, year_asc);
+
         empty = new JLabel("");
         back = new JButton("Powrót");
         back.addActionListener(new ActionListener() {
@@ -104,7 +116,7 @@ public class Products extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if(isManager){
                     Manager_panel mg = new Manager_panel();
-                    exit();
+                    windowMethods.exit();
                     try {
                         mg.create(user);
                     } catch (SQLException throwables) {
@@ -113,7 +125,7 @@ public class Products extends JFrame {
                 }
                 else{
                     Employee_panel ep = new Employee_panel();
-                    exit();
+                    windowMethods.exit();
                     try {
                         ep.create(user);
                     } catch (SQLException throwables) {
@@ -128,7 +140,7 @@ public class Products extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Add_product ap = new Add_product();
-                exit();
+                windowMethods.exit();
                 try {
                     ap.create(user, isManager);
                 } catch (SQLException throwables) {
@@ -177,80 +189,7 @@ public class Products extends JFrame {
                 //printDebugData(table);
                 listScroller.revalidate();
                 listScroller.repaint();
-                window.repaint();
-
-            }
-        });
-        id_asc = new JCheckBox("ID - rosnąco");
-        id_asc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(id_asc.isSelected()){
-                    id_desc.setSelected(false);
-                }
-            }
-        });
-        id_desc = new JCheckBox("ID - malejąco");
-        id_desc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(id_desc.isSelected()){
-                    id_asc.setSelected(false);
-                }
-            }
-        });
-        name_asc = new JCheckBox("Nazwa - rosnąco");
-        name_asc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(name_asc.isSelected()){
-                    name_desc.setSelected(false);
-                }
-            }
-        });
-        name_desc = new JCheckBox("Nazwa - malejąco");
-        name_desc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(name_desc.isSelected()){
-                    name_asc.setSelected(false);
-                }
-            }
-        });
-        price_asc = new JCheckBox("Cena - rosnąco");
-        price_asc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(price_asc.isSelected()){
-                    price_desc.setSelected(false);
-                }
-            }
-        });
-        price_desc = new JCheckBox("Cena - malejąco");
-        price_desc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(price_desc.isSelected()){
-                    price_asc.setSelected(false);
-                }
-            }
-        });
-        year_asc = new JCheckBox("Rok wyd. - rosnąco");
-        year_asc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(year_asc.isSelected()){
-                    year_desc.setSelected(false);
-                }
-            }
-        });
-        year_desc = new JCheckBox("Rok wyd. - malejąco");
-        year_desc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(year_desc.isSelected()){
-                    year_asc.setSelected(false);
-                }
+                windowMethods.window.repaint();
             }
         });
         columnNames.add("ID produktu");
@@ -294,12 +233,8 @@ public class Products extends JFrame {
     }
     private void add_components() throws SQLException {
         panels();
-        window.add(up, BorderLayout.NORTH);
-        window.add(center, BorderLayout.CENTER);
-        window.add(down, BorderLayout.SOUTH);
-    }
-    private void exit(){
-        window.setVisible(false);
-        window.dispose();
+        windowMethods.window.add(up, BorderLayout.NORTH);
+        windowMethods.window.add(center, BorderLayout.CENTER);
+        windowMethods.window.add(down, BorderLayout.SOUTH);
     }
 }

@@ -1,5 +1,6 @@
 package views.customer;
 
+import models.WindowMethods;
 import models.dataBaseConnection;
 import views.employee.manager.Manager_panel;
 import views.employee.supplier.Employee_panel;
@@ -12,8 +13,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 
-public class Edit_customer_profile extends JFrame {
-    private JFrame window;
+public class Edit_customer_profile {
+    private WindowMethods windowMethods = new WindowMethods();
     private JLabel login, pass, pass_again, name, surname, phone, email, address;
     private JPasswordField pass2, pass_again2;
     private JTextField login2, name2, surname2, phone2, email2, address2;
@@ -21,24 +22,18 @@ public class Edit_customer_profile extends JFrame {
     private int error_counter;
     private Dimension dimension = new Dimension(250, 20);
     private JCheckBox pass_box, pass_box2;
-    private JPanel center, down, login_pane, pass_pane,pass_again_pane, name_pane, surname_pane, phone_pane;
+    private JPanel center, down, login_pane, pass_pane,pass_again_pane, name_pane, surname_pane, phone_pane,email_pane, address_pane;
     private dataBaseConnection dataBase = new dataBaseConnection();
     private boolean phone_correctness;
     private String message = "W następujących polach wykryto błędy: ", user;
 
     public void create(String data) throws SQLException {
-        window = new JFrame("Edytuj profil");
-        settings();
+        windowMethods.window = new JFrame("Edytuj profil");
+        windowMethods.settings();
         user = data;
         add_components();
         setData(user);
-        window.setVisible(true);
-    }
-    private void settings(){
-        window.setSize(600, 600);
-        window.setLocation(400, 80);
-        window.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        window.setLayout(new BorderLayout());
+        windowMethods.window.setVisible(true);
     }
     private void setData(String data) throws SQLException {
         dataBase.setStmt();
@@ -74,12 +69,23 @@ public class Edit_customer_profile extends JFrame {
         address = new JLabel("Adres (max 50 znaków): ");
     }
     private void components(){
+        login2 = windowMethods.setJTextField(login2, "LOGIN");
+        pass2 = windowMethods.setJPasswordField(pass2, "HASŁO");
+        pass_box = windowMethods.setPassCheckBox(pass_box, pass2, "Pokaż hasło");
+        pass_again2 = windowMethods.setJPasswordField(pass_again2, "POWTÓRZ HASŁO");
+        pass_box2 = windowMethods.setPassCheckBox(pass_box2, pass_again2, "Pokaż hasło");
+        name2 = windowMethods.setJTextField(name2, "IMIĘ");
+        surname2 = windowMethods.setJTextField(surname2, "NAZWISKO");
+        phone2 = windowMethods.setJTextField(phone2, "NUMER TELEFONU");
+        email2 = windowMethods.setJTextField(email2, "ADRES E-MAIL");
+        address2 = windowMethods.setJTextField(address2, "ADRES ZAMIESZKANIA");
+
         back = new JButton("Powrót");
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Customer_panel cp = new Customer_panel();
-                exit();
+                windowMethods.exit();
                 try {
                     cp.create(user);
                 } catch (SQLException throwables) {
@@ -101,11 +107,11 @@ public class Edit_customer_profile extends JFrame {
                                         + tmp + "', Imie = '" + name2.getText() + "', Nazwisko = '" + surname2.getText() + "'," +
                                         "Nr_kontaktowy = '" + phone2.getText() + "' WHERE Login = '" + user + "'"
                         );
-                        System.out.println("Edytowano " + changes + " rekordów");
-                        JOptionPane.showMessageDialog(window, "Pracownik " + name2.getText() + " " +
+                        System.out.println("Edytowano " + changes + " rekord");
+                        JOptionPane.showMessageDialog(windowMethods.window, "Pracownik " + name2.getText() + " " +
                                 surname2.getText() + " edytowany pomyślnie!");
                         Manager_panel mp = new Manager_panel();
-                        exit();
+                        windowMethods.exit();
                         mp.create(user);
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
@@ -113,98 +119,98 @@ public class Edit_customer_profile extends JFrame {
                 }
             }
         });
-        login2 = new JTextField();
-        login2.setName("LOGIN");
-        login2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        login2.setPreferredSize(dimension);
-        pass2 = new JPasswordField();
-        pass2.setName("HASŁO");
-        pass2.setEchoChar('\u25CF');
-        pass2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            }
-        });
-        pass2.setPreferredSize(dimension);
-        pass_again2 = new JPasswordField();
-        pass_again2.setName("POWTÓRZ HASŁO");
-        pass_again2.setEchoChar('\u25CF');
-        pass_again2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            }
-        });
-        pass_again2.setPreferredSize(dimension);
-        name2 = new JTextField();
-        name2.setName("IMIĘ");
-        name2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        name2.setPreferredSize(dimension);
-        surname2 = new JTextField();
-        surname2.setName("NAZWISKO");
-        surname2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        surname2.setPreferredSize(dimension);
-        phone2 = new JTextField();
-        phone2.setName("NUMER TELEFONU");
-        phone2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        phone2.setPreferredSize(dimension);
-        email2 = new JTextField();
-        email2.setName("ADRES E-MAIL");
-        email2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        email2.setPreferredSize(dimension);
-        address2 = new JTextField();
-        address2.setName("ADRES ZAMIESZKANIA");
-        address2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        address2.setPreferredSize(dimension);
-        pass_box = new JCheckBox("Pokaż hasło");
-        pass_box.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(pass_box.isSelected()){
-                    pass2.setEchoChar((char)0);
-                }
-                else pass2.setEchoChar('\u25CF');
-            }
-        });
-        pass_box2 = new JCheckBox("Pokaż hasło");
-        pass_box2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(pass_box2.isSelected()){
-                    pass_again2.setEchoChar((char)0);
-                }
-                else pass_again2.setEchoChar('\u25CF');
-            }
-        });
+//        login2 = new JTextField();
+//        login2.setName("LOGIN");
+//        login2.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//
+//            }
+//        });
+//        login2.setPreferredSize(dimension);
+//        pass2 = new JPasswordField();
+//        pass2.setName("HASŁO");
+//        pass2.setEchoChar('\u25CF');
+//        pass2.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//            }
+//        });
+//        pass2.setPreferredSize(dimension);
+//        pass_again2 = new JPasswordField();
+//        pass_again2.setName("POWTÓRZ HASŁO");
+//        pass_again2.setEchoChar('\u25CF');
+//        pass_again2.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//            }
+//        });
+//        pass_again2.setPreferredSize(dimension);
+//        name2 = new JTextField();
+//        name2.setName("IMIĘ");
+//        name2.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//
+//            }
+//        });
+//        name2.setPreferredSize(dimension);
+//        surname2 = new JTextField();
+//        surname2.setName("NAZWISKO");
+//        surname2.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//
+//            }
+//        });
+//        surname2.setPreferredSize(dimension);
+//        phone2 = new JTextField();
+//        phone2.setName("NUMER TELEFONU");
+//        phone2.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//
+//            }
+//        });
+//        phone2.setPreferredSize(dimension);
+//        email2 = new JTextField();
+//        email2.setName("ADRES E-MAIL");
+//        email2.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//
+//            }
+//        });
+//        email2.setPreferredSize(dimension);
+//        address2 = new JTextField();
+//        address2.setName("ADRES ZAMIESZKANIA");
+//        address2.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//
+//            }
+//        });
+//        address2.setPreferredSize(dimension);
+//        pass_box = new JCheckBox("Pokaż hasło");
+//        pass_box.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                if(pass_box.isSelected()){
+//                    pass2.setEchoChar((char)0);
+//                }
+//                else pass2.setEchoChar('\u25CF');
+//            }
+//        });
+//        pass_box2 = new JCheckBox("Pokaż hasło");
+//        pass_box2.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                if(pass_box2.isSelected()){
+//                    pass_again2.setEchoChar((char)0);
+//                }
+//                else pass_again2.setEchoChar('\u25CF');
+//            }
+//        });
     }
     private void panels(){
         labels();
@@ -231,6 +237,12 @@ public class Edit_customer_profile extends JFrame {
         phone_pane = new JPanel();
         phone_pane.add(phone);
         phone_pane.add(phone2);
+        email_pane = new JPanel();
+        email_pane.add(email);
+        email_pane.add(email2);
+        address_pane = new JPanel();
+        address_pane.add(address);
+        address_pane.add(address2);
 
         center.add(login_pane);
         center.add(pass_pane);
@@ -238,6 +250,8 @@ public class Edit_customer_profile extends JFrame {
         center.add(name_pane);
         center.add(surname_pane);
         center.add(phone_pane);
+        center.add(email_pane);
+        center.add(address_pane);
 
         down = new JPanel();
         down.setLayout(new BorderLayout());
@@ -246,8 +260,8 @@ public class Edit_customer_profile extends JFrame {
     }
     private void add_components(){
         panels();
-        window.add(center, BorderLayout.CENTER);
-        window.add(down, BorderLayout.SOUTH);
+        windowMethods.window.add(center, BorderLayout.CENTER);
+        windowMethods.window.add(down, BorderLayout.SOUTH);
     }
     private boolean check(){
         error_counter = 0;
@@ -258,18 +272,18 @@ public class Edit_customer_profile extends JFrame {
         boolean number = phoneCheck(phone2);
         boolean correct_passwords = samePass();
         if(!number) {
-            JOptionPane.showMessageDialog(window, "Numer telefonu musi składać się z cyfr!",
+            JOptionPane.showMessageDialog(windowMethods.window, "Numer telefonu musi składać się z cyfr!",
                     "Nieprawidłowy numer telefonu!", JOptionPane.ERROR_MESSAGE);
             phone2.setText("");
         }
         if(!correct_passwords){
-            JOptionPane.showMessageDialog(window, "Hasła nie są identyczne!",
+            JOptionPane.showMessageDialog(windowMethods.window, "Hasła nie są identyczne!",
                     "Błąd hasła!", JOptionPane.ERROR_MESSAGE);
             pass2.setText("");
             pass_again2.setText("");
         }
         if(error_counter != 0){
-            JOptionPane.showMessageDialog(window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(windowMethods.window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
             message = "W następujących polach wykryto błędy: ";
         }
         if (number && correct_passwords && error_counter == 0) return true;
@@ -341,9 +355,5 @@ public class Edit_customer_profile extends JFrame {
     private boolean samePass(){
         if (Arrays.toString(pass2.getPassword()).equals(Arrays.toString(pass_again2.getPassword()))) return true;
         else return false;
-    }
-    private void exit(){
-        window.setVisible(false);
-        window.dispose();
     }
 }

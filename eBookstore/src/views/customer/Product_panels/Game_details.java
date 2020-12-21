@@ -1,6 +1,7 @@
 package views.customer.Product_panels;
 
 import models.CartInfo;
+import models.WindowMethods;
 import models.dataBaseConnection;
 
 import javax.swing.*;
@@ -10,9 +11,8 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Game_details extends JFrame {
-
-    private JFrame window;
+public class Game_details {
+    private WindowMethods windowMethods = new WindowMethods();
     private JLabel name, price, year, storage, storage2, product_type, publisher, authors, min_players, max_players, min_age, est_time;
     private dataBaseConnection dataBase = new dataBaseConnection();
     private JButton back , buy;
@@ -24,18 +24,14 @@ public class Game_details extends JFrame {
     public void create(int product_id , dataBaseConnection dataBase , CartInfo cart) throws SQLException {
         this.dataBase = dataBase;
         this.cart = cart;
-        window = new JFrame("Szczegóły produktu");
-        settings();
+        windowMethods.window = new JFrame("Szczegóły produktu");
+        windowMethods.settings();
+        windowMethods.window.setSize(400, 250);
+        windowMethods.window.setLocation(800, 80);
         add_components();
         setLabels(product_id);
         produktId = product_id;
-        window.setVisible(true);
-    }
-    private void settings(){
-        window.setSize(400, 250);
-        window.setLocation(800, 80);
-        window.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        window.setLayout(new BorderLayout());
+        windowMethods.window.setVisible(true);
     }
     private void setLabels(int id) throws SQLException {
         dataBase.setStmt();
@@ -131,7 +127,7 @@ public class Game_details extends JFrame {
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                exit();
+                windowMethods.exit();
             }
         });
 
@@ -169,12 +165,8 @@ public class Game_details extends JFrame {
     }
     private void add_components(){
         panels();
-        window.add(center, BorderLayout.CENTER);
-        window.add(down, BorderLayout.SOUTH);
+        windowMethods.window.add(center, BorderLayout.CENTER);
+        windowMethods.window.add(down, BorderLayout.SOUTH);
         down.add(buy , BorderLayout.EAST);
-    }
-    private void exit(){
-        window.setVisible(false);
-        window.dispose();
     }
 }

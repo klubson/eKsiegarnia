@@ -1,6 +1,7 @@
 package views.customer.Product_panels;
 
 import models.CartInfo;
+import models.WindowMethods;
 import models.dataBaseConnection;
 
 import javax.swing.*;
@@ -8,8 +9,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class BuyPanel extends JFrame {
-    private JFrame window;
+public class BuyPanel {
+    private WindowMethods windowMethods = new WindowMethods();
     private dataBaseConnection dataBase;
     private JButton back , buy;
     private JLabel info;
@@ -24,10 +25,12 @@ public class BuyPanel extends JFrame {
         this.productPrice = productPrice;
         this.produktId = produktId;
         this.cart = cart;
-        window = new JFrame("Kupowanie");
-        windowSettings();
+        windowMethods.window = new JFrame("Kupowanie");
+        windowMethods.settings();
+        windowMethods.window.setSize(400, 250);
+        windowMethods.window.setLocation(800, 80);
         addComponents();
-        window.setVisible(true);
+        windowMethods.window.setVisible(true);
     }
     //TODO ustawić poprawnie maksymalną wartość spinnera, dodawanie zmniejsza stan w magazynie
     private void addComponents() {
@@ -42,8 +45,8 @@ public class BuyPanel extends JFrame {
         down.setLayout(new BorderLayout());
         down.add(back, BorderLayout.WEST);
         down.add(buy, BorderLayout.EAST);
-        window.add(center, BorderLayout.CENTER);
-        window.add(down, BorderLayout.SOUTH);
+        windowMethods.window.add(center, BorderLayout.CENTER);
+        windowMethods.window.add(down, BorderLayout.SOUTH);
     }
 
     private void prepLabels()
@@ -56,7 +59,7 @@ public class BuyPanel extends JFrame {
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                exit();
+                windowMethods.exit();
             }
         });
 
@@ -67,20 +70,8 @@ public class BuyPanel extends JFrame {
                 //FOO
                 int amount = (int) amountSpinnerModel.getNumber();
                 dataBase.newCartItem(cart, produktId, productPrice *amount , amount);
-                exit();
+                windowMethods.exit();
             }
         });
-    }
-
-    private void windowSettings(){
-        window.setSize(400, 250);
-        window.setLocation(800, 80);
-        window.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        window.setLayout(new BorderLayout());
-    }
-
-    private void exit(){
-        window.setVisible(false);
-        window.dispose();
     }
 }

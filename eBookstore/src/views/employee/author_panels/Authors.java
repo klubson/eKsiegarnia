@@ -1,5 +1,6 @@
 package views.employee.author_panels;
 
+import models.WindowMethods;
 import models.dataBaseConnection;
 import views.employee.manager.Manager_panel;
 import views.employee.publisher_panels.Publishers;
@@ -15,8 +16,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
 
-public class Authors extends JFrame {
-    private JFrame window;
+public class Authors {
+    private WindowMethods windowMethods = new WindowMethods();
     private JCheckBox id_asc, id_desc, name_asc, name_desc, surname_asc, surname_desc, country_asc, country_desc;
     private JButton back, add, edit, delete, filter;
     private JPanel up, center, down_center, down;
@@ -30,18 +31,12 @@ public class Authors extends JFrame {
     private boolean isManager;
 
     public void create(String data, boolean mode) throws SQLException {
-        window = new JFrame("Autorzy");
-        settings();
+        windowMethods.window = new JFrame("Autorzy");
+        windowMethods.settings();
         user = data;
         isManager = mode;
         add_components();
-        window.setVisible(true);
-    }
-    private void settings(){
-        window.setSize(600, 600);
-        window.setLocation(400, 80);
-        window.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        window.setLayout(new BorderLayout());
+        windowMethods.window.setVisible(true);
     }
     private void getAuthorList(int mode) throws SQLException {
         data.clear();
@@ -89,13 +84,30 @@ public class Authors extends JFrame {
         listScroller.setViewportView(table);
     }
     private void components() throws SQLException {
+        id_asc = new JCheckBox("ID - rosnąco");
+        id_desc = new JCheckBox("ID - malejąco");
+        name_asc = new JCheckBox("Imię - rosnąco");
+        name_desc = new JCheckBox("Imię - malejąco");
+        surname_asc = new JCheckBox("Nazwisko - rosnąco");
+        surname_desc = new JCheckBox("Nazwisko - malejąco");
+        country_asc = new JCheckBox("Kraj - rosnąco");
+        country_desc = new JCheckBox("Kraj - malejąco");
+        id_asc = windowMethods.setSortCheckBox(id_asc, id_desc);
+        id_desc = windowMethods.setSortCheckBox(id_desc, id_asc);
+        name_asc = windowMethods.setSortCheckBox(name_asc, name_desc);
+        name_desc = windowMethods.setSortCheckBox(name_desc, name_asc);
+        surname_asc = windowMethods.setSortCheckBox(surname_asc, surname_desc);
+        surname_desc = windowMethods.setSortCheckBox(surname_desc, surname_asc);
+        country_asc = windowMethods.setSortCheckBox(country_asc, country_desc);
+        country_desc = windowMethods.setSortCheckBox(country_desc, country_asc);
+
         back = new JButton("Powrót");
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(isManager){
                     Manager_panel mg = new Manager_panel();
-                    exit();
+                    windowMethods.exit();
                     try {
                         mg.create(user);
                     } catch (SQLException throwables) {
@@ -104,7 +116,7 @@ public class Authors extends JFrame {
                 }
                 else{
                     Employee_panel ep = new Employee_panel();
-                    exit();
+                    windowMethods.exit();
                     try {
                         ep.create(user);
                     } catch (SQLException throwables) {
@@ -119,7 +131,7 @@ public class Authors extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 //dodawanie autora
                 Add_author aa = new Add_author();
-                exit();
+                windowMethods.exit();
                 aa.create(user, isManager);
             }
         });
@@ -129,7 +141,7 @@ public class Authors extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 //edytowanie autora
                 Edit_author ea = new Edit_author();
-                exit();
+                windowMethods.exit();
                 try {
                     ea.create(user, Integer.parseInt(data.get(table.getSelectedRow()).get(0)), isManager);
                 } catch (SQLException throwables) {
@@ -154,7 +166,7 @@ public class Authors extends JFrame {
                                 "SELECT Autor_ID_Autora FROM Autor_produktu WHERE Autor_ID_Autora = " + data.get(table.getSelectedRow()).get(0)
                         );
                         if(rs.next()){
-                            JOptionPane.showMessageDialog(window, "Nie można usunąć autora kiedy jest powiązany z produktami! Najpierw" +
+                            JOptionPane.showMessageDialog(windowMethods.window, "Nie można usunąć autora kiedy jest powiązany z produktami! Najpierw" +
                                     " usuń odpowiednie produkty!", "Błąd", JOptionPane.ERROR_MESSAGE);
                         }
                         else{
@@ -164,9 +176,9 @@ public class Authors extends JFrame {
                                             data.get(table.getSelectedRow()).get(0)
                             );
                             System.out.println("Usunięto "+ changes + " rekord");
-                            JOptionPane.showMessageDialog(window, "Autor usunięty pomyślnie!");
+                            JOptionPane.showMessageDialog(windowMethods.window, "Autor usunięty pomyślnie!");
                             Authors as = new Authors();
-                            exit();
+                            windowMethods.exit();
                             as.create(user, isManager);
                         }
                     }
@@ -201,82 +213,9 @@ public class Authors extends JFrame {
                 }
                 listScroller.revalidate();
                 listScroller.repaint();
-                window.repaint();
+                windowMethods.window.repaint();
             }
         });
-        id_asc = new JCheckBox("ID - rosnąco");
-        id_asc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(id_asc.isSelected()){
-                    id_desc.setSelected(false);
-                }
-            }
-        });
-        id_desc = new JCheckBox("ID - malejąco");
-        id_desc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(id_desc.isSelected()){
-                    id_asc.setSelected(false);
-                }
-            }
-        });
-        name_asc = new JCheckBox("Imię - rosnąco");
-        name_asc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(name_asc.isSelected()){
-                    name_desc.setSelected(false);
-                }
-            }
-        });
-        name_desc = new JCheckBox("Imię - malejąco");
-        name_desc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(name_desc.isSelected()){
-                    name_asc.setSelected(false);
-                }
-            }
-        });
-        surname_asc = new JCheckBox("Nazwisko - rosnąco");
-        surname_asc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(surname_asc.isSelected()){
-                    surname_desc.setSelected(false);
-                }
-            }
-        });
-        surname_desc = new JCheckBox("Nazwisko - malejąco");
-        surname_desc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(surname_desc.isSelected()){
-                    surname_asc.setSelected(false);
-                }
-            }
-        });
-        country_asc = new JCheckBox("Kraj - rosnąco");
-        country_asc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(country_asc.isSelected()){
-                    country_desc.setSelected(false);
-                }
-            }
-        });
-        country_desc = new JCheckBox("Kraj - malejąco");
-        country_desc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(country_desc.isSelected()){
-                    country_asc.setSelected(false);
-                }
-            }
-        });
-
         columnNames.add("ID autora");
         columnNames.add("Imię");
         columnNames.add("Nazwisko");
@@ -315,13 +254,8 @@ public class Authors extends JFrame {
     }
     private void add_components() throws SQLException {
         panels();
-        window.add(up, BorderLayout.NORTH);
-        window.add(center, BorderLayout.CENTER);
-        window.add(down, BorderLayout.SOUTH);
-    }
-
-    private void exit(){
-        window.setVisible(false);
-        window.dispose();
+        windowMethods.window.add(up, BorderLayout.NORTH);
+        windowMethods.window.add(center, BorderLayout.CENTER);
+        windowMethods.window.add(down, BorderLayout.SOUTH);
     }
 }

@@ -1,11 +1,10 @@
 package views.employee.supplier;
 import models.Current_date;
+import models.WindowMethods;
 import models.dataBaseConnection;
 import views.Start_window;
 import views.employee.Edit_employee_profile;
 import views.employee.author_panels.Authors;
-import views.employee.manager.employee_panels.Employees;
-import views.employee.product_panels.Add_product;
 import views.employee.product_panels.Products;
 import views.employee.publisher_panels.Publishers;
 import views.employee.series_panels.Series;
@@ -14,44 +13,25 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Employee_panel extends JFrame {
-    private JFrame window;
+public class Employee_panel {
+    private WindowMethods windowMethods = new WindowMethods();
     private JLabel who_logged, current_time;
     private String beginWho_logged = "Zalogowany: ", user;
     private JButton log_out, product_list, publisher_list, author_list, series_list, edit_profile;
     private JPanel up, center, down;
-    private dataBaseConnection dataBase = new dataBaseConnection();
     private Current_date time = new Current_date();
 
     public void create(String data) throws SQLException {
-        window = new JFrame("Magazynier");
-        settings();
+        windowMethods.window = new JFrame("Magazynier");
+        windowMethods.settings();
+        windowMethods.window.setSize(600, 450);
         add_components();
         user = data;
-        setWho_logged(user);
-        window.setVisible(true);
+        windowMethods.setWho_logged(who_logged, user);
+        windowMethods.window.setVisible(true);
         time.clock(current_time);
-    }
-    private void setWho_logged(String data) throws SQLException {
-        dataBase.setStmt();
-        ResultSet rs = dataBase.getStmt().executeQuery(
-                "SELECT Imie, Nazwisko FROM Uzytkownik WHERE LOGIN = '" + data + "'"
-        );
-        rs.next();
-        String name = rs.getString(1) + " " + rs.getString(2);
-        who_logged.setText(beginWho_logged + name);
-        rs.close();
-        dataBase.getStmt().close();
-    }
-
-    private void settings(){
-        window.setSize(600, 450);
-        window.setLocation(400, 80);
-        window.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        window.setLayout(new BorderLayout());
     }
     private void components() throws SQLException {
         who_logged = new JLabel(beginWho_logged);
@@ -72,7 +52,7 @@ public class Employee_panel extends JFrame {
                 }
             }
         });
-        product_list = new JButton("Lista produktów");
+        product_list = new JButton("Produkty");
         product_list.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -85,7 +65,7 @@ public class Employee_panel extends JFrame {
                 }
             }
         });
-        publisher_list = new JButton("Lista wydawnictw");
+        publisher_list = new JButton("Wydawnictwa");
         publisher_list.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -98,7 +78,7 @@ public class Employee_panel extends JFrame {
                 }
             }
         });
-        author_list = new JButton("Lista autorów");
+        author_list = new JButton("Autorzy");
         author_list.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -111,7 +91,7 @@ public class Employee_panel extends JFrame {
                 }
             }
         });
-        series_list = new JButton("Lista serii książek");
+        series_list = new JButton("Serie książek");
         series_list.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -163,13 +143,13 @@ public class Employee_panel extends JFrame {
 
     private void add_components() throws SQLException {
         panels();
-        window.add(up, BorderLayout.NORTH);
-        window.add(center, BorderLayout.CENTER);
-        window.add(down, BorderLayout.SOUTH);
+        windowMethods.window.add(up, BorderLayout.NORTH);
+        windowMethods.window.add(center, BorderLayout.CENTER);
+        windowMethods.window.add(down, BorderLayout.SOUTH);
     }
     private void exit(){
         time.stopClock();
-        window.setVisible(false);
-        window.dispose();
+        windowMethods.window.setVisible(false);
+        windowMethods.window.dispose();
     }
 }

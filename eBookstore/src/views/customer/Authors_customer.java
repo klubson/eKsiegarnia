@@ -1,5 +1,6 @@
 package views.customer;
 
+import models.WindowMethods;
 import models.dataBaseConnection;
 
 import javax.swing.*;
@@ -11,8 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
 
-public class Authors_customer extends JFrame {
-    private JFrame window;
+public class Authors_customer {
+    private WindowMethods windowMethods = new WindowMethods();
     private JCheckBox name_asc, name_desc, surname_asc, surname_desc, country_asc, country_desc;
     private JButton back, filter;
     private JPanel up, center, down;
@@ -26,18 +27,13 @@ public class Authors_customer extends JFrame {
     private JTable table;
 
     public void create(String data) throws SQLException {
-        window = new JFrame("Autorzy");
-        settings();
+        windowMethods.window = new JFrame("Autorzy");
+        windowMethods.settings();
         user = data;
         add_components();
-        window.setVisible(true);
+        windowMethods.window.setVisible(true);
     }
-    private void settings(){
-        window.setSize(600, 600);
-        window.setLocation(400, 80);
-        window.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        window.setLayout(new BorderLayout());
-    }
+
     private void getAuthorList(int mode) throws SQLException {
         data.clear();
         dataBase.setStmt();
@@ -83,13 +79,26 @@ public class Authors_customer extends JFrame {
         listScroller.setViewportView(table);
     }
     private void components() throws SQLException {
+        name_asc = new JCheckBox("Imię - rosnąco");
+        name_desc = new JCheckBox("Imię - malejąco");
+        surname_asc = new JCheckBox("Nazwisko - rosnąco");
+        surname_desc = new JCheckBox("Nazwisko - malejąco");
+        country_asc = new JCheckBox("Kraj - rosnąco");
+        country_desc = new JCheckBox("Kraj - malejąco");
+        name_asc = windowMethods.setSortCheckBox(name_asc, name_desc);
+        name_desc = windowMethods.setSortCheckBox(name_desc, name_asc);
+        surname_asc = windowMethods.setSortCheckBox(surname_asc, surname_desc);
+        surname_desc = windowMethods.setSortCheckBox(surname_desc, surname_asc);
+        country_asc = windowMethods.setSortCheckBox(country_asc, country_desc);
+        country_desc = windowMethods.setSortCheckBox(country_desc, country_asc);
+
         empty = new JLabel("");
         back = new JButton("Powrót");
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Customer_panel cp = new Customer_panel();
-                exit();
+                windowMethods.exit();
                 try {
                     cp.create(user);
                 } catch (SQLException throwables) {
@@ -121,61 +130,7 @@ public class Authors_customer extends JFrame {
                 }
                 listScroller.revalidate();
                 listScroller.repaint();
-                window.repaint();
-            }
-        });
-        name_asc = new JCheckBox("Imię - rosnąco");
-        name_asc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(name_asc.isSelected()){
-                    name_desc.setSelected(false);
-                }
-            }
-        });
-        name_desc = new JCheckBox("Imię - malejąco");
-        name_desc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(name_desc.isSelected()){
-                    name_asc.setSelected(false);
-                }
-            }
-        });
-        surname_asc = new JCheckBox("Nazwisko - rosnąco");
-        surname_asc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(surname_asc.isSelected()){
-                    surname_desc.setSelected(false);
-                }
-            }
-        });
-        surname_desc = new JCheckBox("Nazwisko - malejąco");
-        surname_desc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(surname_desc.isSelected()){
-                    surname_asc.setSelected(false);
-                }
-            }
-        });
-        country_asc = new JCheckBox("Kraj - rosnąco");
-        country_asc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(country_asc.isSelected()){
-                    country_desc.setSelected(false);
-                }
-            }
-        });
-        country_desc = new JCheckBox("Kraj - malejąco");
-        country_desc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(country_desc.isSelected()){
-                    country_asc.setSelected(false);
-                }
+                windowMethods.window.repaint();
             }
         });
         columnNames.add("Imię");
@@ -208,12 +163,8 @@ public class Authors_customer extends JFrame {
     }
     private void add_components() throws SQLException {
         panels();
-        window.add(up, BorderLayout.NORTH);
-        window.add(center, BorderLayout.CENTER);
-        window.add(down, BorderLayout.SOUTH);
-    }
-    private void exit(){
-        window.setVisible(false);
-        window.dispose();
+        windowMethods.window.add(up, BorderLayout.NORTH);
+        windowMethods.window.add(center, BorderLayout.CENTER);
+        windowMethods.window.add(down, BorderLayout.SOUTH);
     }
 }

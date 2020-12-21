@@ -1,5 +1,6 @@
 package views.employee.manager.employee_panels;
 
+import models.WindowMethods;
 import models.dataBaseConnection;
 import org.jdatepicker.impl.DateComponentFormatter;
 import org.jdatepicker.impl.JDatePanelImpl;
@@ -18,8 +19,8 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.Properties;
 
-public class Edit_employee extends JFrame{
-    private JFrame window;
+public class Edit_employee {
+    private WindowMethods windowMethods = new WindowMethods();
     private JButton back, edit;
     private JLabel name, hired, salary, job_type, contract_type;
     private JTextField hired2, salary2, job_type2, contract_type2;
@@ -34,19 +35,14 @@ public class Edit_employee extends JFrame{
     private int error_counter;
 
     public void create(String data, String loginToEdit) throws SQLException {
-        window = new JFrame("Edytuj dane pracownika");
-        settings();
+        windowMethods.window = new JFrame("Edytuj dane pracownika");
+        windowMethods.settings();
+        windowMethods.window.setSize(600, 400);
         user = data;
         toEdit = loginToEdit;
         add_components();
         setEmployee(loginToEdit);
-        window.setVisible(true);
-    }
-    private void settings(){
-        window.setSize(600, 400);
-        window.setLocation(400, 80);
-        window.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        window.setLayout(new BorderLayout());
+        windowMethods.window.setVisible(true);
     }
     private void setEmployee(String login) throws SQLException {
         dataBase.setStmt();
@@ -75,12 +71,16 @@ public class Edit_employee extends JFrame{
         name = new JLabel();
     }
     private void components(){
+        salary2 = windowMethods.setJTextField(salary2, "PENSJA");
+        job_type2 = windowMethods.setJTextField(job_type2, "STANOWISKO");
+        contract_type2 = windowMethods.setJTextField(contract_type2, "TYP UMOWY");
+
         back = new JButton("Powrót");
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Employees mg = new Employees();
-                exit();
+                windowMethods.exit();
                 try {
                     mg.create(user);
                 } catch (SQLException throwables) {
@@ -106,17 +106,15 @@ public class Edit_employee extends JFrame{
                                 + job_type2.getText() + "', P_Typ_umowy = '" + contract_type2.getText() +
                                         "' WHERE Login = '" + toEdit + "'"
                         );
-                        JOptionPane.showMessageDialog(window, "Pracownik " + user_name + " edytowany pomyślnie");
-                        System.out.println("Zaktualizowano " + changes + "rekord");
+                        JOptionPane.showMessageDialog(windowMethods.window, "Pracownik " + user_name + " edytowany pomyślnie");
+                        System.out.println("Zaktualizowano " + changes + " rekord");
                         dataBase.getStmt().close();
                         Employees ee = new Employees();
-                        exit();
+                        windowMethods.exit();
                         ee.create(user);
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }
-
-
                 }
             }
         });
@@ -129,40 +127,6 @@ public class Edit_employee extends JFrame{
         model.setDate(now.getYear(), now.getMonthValue()-1, now.getDayOfMonth());
         model.setSelected(true);
         datePicker = new JDatePickerImpl(datePanel, new DateComponentFormatter());
-
-        salary2 = new JTextField();
-        salary2.setName("PENSJA");
-        salary2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        salary2.setPreferredSize(dimension);
-        job_type2 = new JTextField();
-        job_type2.setName("STANOWISKO");
-        job_type2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        job_type2.setPreferredSize(dimension);
-        contract_type2 = new JTextField();
-        contract_type2.setName("TYP UMOWY");
-        contract_type2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        contract_type2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        contract_type2.setPreferredSize(dimension);
     }
     private void panels(){
         labels();
@@ -196,8 +160,8 @@ public class Edit_employee extends JFrame{
     }
     private void add_components(){
         panels();
-        window.add(center, BorderLayout.CENTER);
-        window.add(down, BorderLayout.SOUTH);
+        windowMethods.window.add(center, BorderLayout.CENTER);
+        windowMethods.window.add(down, BorderLayout.SOUTH);
     }
     private boolean check(){
         error_counter = 0;
@@ -205,7 +169,7 @@ public class Edit_employee extends JFrame{
         salaryCheck(salary2);
         contractCheck(contract_type2);
         if(error_counter != 0){
-            JOptionPane.showMessageDialog(window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(windowMethods.window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
             message = "W następujących polach wykryto błędy: ";
         }
         if (error_counter == 0) return true;
@@ -230,9 +194,4 @@ public class Edit_employee extends JFrame{
             error_counter++;
         }
     }
-    private void exit(){
-        window.setVisible(false);
-        window.dispose();
-    }
-
 }

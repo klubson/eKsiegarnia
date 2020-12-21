@@ -1,5 +1,6 @@
 package views.employee.publisher_panels;
 
+import models.WindowMethods;
 import models.dataBaseConnection;
 import views.employee.manager.Manager_panel;
 import views.employee.supplier.Employee_panel;
@@ -13,9 +14,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
 
-public class Publishers extends JFrame {
-    private JFrame window;
-    private JCheckBox name_asc, name_desc, id_asc, id_desc, country_asc, country_desc;
+public class Publishers {
+    private WindowMethods windowMethods = new WindowMethods();
+    private JCheckBox id_asc, id_desc, name_asc, name_desc, country_asc, country_desc;
     private JPanel up, center, down, down_center;
     private JButton add, back, edit, filter, delete;
     private dataBaseConnection dataBase = new dataBaseConnection();
@@ -29,19 +30,13 @@ public class Publishers extends JFrame {
 
 
     public void create(String data, boolean mode) throws SQLException {
-        window = new JFrame("Wydawnictwa");
-        settings();
+        windowMethods.window = new JFrame("Wydawnictwa");
+        windowMethods.settings();
         user = data;
         add_components();
         isManager = mode;
-        window.setVisible(true);
+        windowMethods.window.setVisible(true);
         //printDebugData(table);
-    }
-    private void settings(){
-        window.setSize(600, 600);
-        window.setLocation(400, 80);
-        window.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        window.setLayout(new BorderLayout());
     }
     private void getPublisherList(int mode) throws SQLException {
         data.clear();
@@ -86,13 +81,25 @@ public class Publishers extends JFrame {
         listScroller.setViewportView(table);
     }
     private void components() throws SQLException {
+        id_asc = new JCheckBox("ID - rosnąco");
+        id_desc = new JCheckBox("ID - malejąco");
+        name_asc = new JCheckBox("Nazwa - rosnąco");
+        name_desc = new JCheckBox("Nazwa - malejąco");
+        country_asc = new JCheckBox("Kraj - rosnąco");
+        country_desc = new JCheckBox("Kraj - malejąco");
+        id_asc = windowMethods.setSortCheckBox(id_asc, id_desc);
+        id_desc = windowMethods.setSortCheckBox(id_desc, id_asc);
+        name_asc = windowMethods.setSortCheckBox(name_asc, name_desc);
+        name_desc = windowMethods.setSortCheckBox(name_desc, name_asc);
+        country_asc = windowMethods.setSortCheckBox(country_asc, country_desc);
+        country_desc = windowMethods.setSortCheckBox(country_desc, country_asc);
         back = new JButton("Powrót");
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(isManager){
                     Manager_panel mg = new Manager_panel();
-                    exit();
+                    windowMethods.exit();
                     try {
                         mg.create(user);
                     } catch (SQLException throwables) {
@@ -101,7 +108,7 @@ public class Publishers extends JFrame {
                 }
                 else{
                     Employee_panel ep = new Employee_panel();
-                    exit();
+                    windowMethods.exit();
                     try {
                         ep.create(user);
                     } catch (SQLException throwables) {
@@ -116,7 +123,7 @@ public class Publishers extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Add_publisher ap = new Add_publisher();
-                exit();
+                windowMethods.exit();
                 ap.create(user, isManager);
             }
         });
@@ -125,7 +132,7 @@ public class Publishers extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Edit_publisher ep = new Edit_publisher();
-                exit();
+                windowMethods.exit();
                 try {
                     ep.create(user, Integer.parseInt(data.get(table.getSelectedRow()).get(0)), isManager);
                 } catch (SQLException throwables) {
@@ -149,7 +156,7 @@ public class Publishers extends JFrame {
                                 "SELECT Wydawnictwo_ID_wydawnictwa FROM Produkt WHERE Wydawnictwo_ID_wydawnictwa = " + data.get(table.getSelectedRow()).get(0)
                         );
                         if(rs.next()){
-                            JOptionPane.showMessageDialog(window, "Nie można usunąć wydawnictwa kiedy jest powiązane z produktami! Najpierw" +
+                            JOptionPane.showMessageDialog(windowMethods.window, "Nie można usunąć wydawnictwa kiedy jest powiązane z produktami! Najpierw" +
                                     " usuń odpowiednie produkty!", "Błąd", JOptionPane.ERROR_MESSAGE);
                         }
                         else{
@@ -159,9 +166,9 @@ public class Publishers extends JFrame {
                                             data.get(table.getSelectedRow()).get(0)
                             );
                             System.out.println("Usunięto "+ changes + " rekord");
-                            JOptionPane.showMessageDialog(window, "Wydawnictwo usunięte pomyślnie!");
+                            JOptionPane.showMessageDialog(windowMethods.window, "Wydawnictwo usunięte pomyślnie!");
                             Publishers ps = new Publishers();
-                            exit();
+                            windowMethods.exit();
                             ps.create(user, isManager);
                         }
                     }
@@ -194,68 +201,12 @@ public class Publishers extends JFrame {
                 //printDebugData(table);
                 listScroller.revalidate();
                 listScroller.repaint();
-                window.repaint();
-
-            }
-        });
-        name_asc = new JCheckBox("Nazwa - rosnąco");
-        name_asc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(name_asc.isSelected()){
-                    name_desc.setSelected(false);
-                }
-            }
-        });
-        name_desc = new JCheckBox("Nazwa - malejąco");
-        name_desc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(name_desc.isSelected()){
-                    name_asc.setSelected(false);
-                }
-            }
-        });
-        id_asc = new JCheckBox("ID - rosnąco");
-        id_asc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(id_asc.isSelected()){
-                    id_desc.setSelected(false);
-                }
-            }
-        });
-        id_desc = new JCheckBox("ID - malejąco");
-        id_desc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(id_desc.isSelected()){
-                    id_asc.setSelected(false);
-                }
-            }
-        });
-        country_asc = new JCheckBox("Kraj - rosnąco");
-        country_asc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(country_asc.isSelected()){
-                    country_desc.setSelected(false);
-                }
-            }
-        });
-        country_desc = new JCheckBox("Kraj - malejąco");
-        country_desc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(country_desc.isSelected()){
-                    country_asc.setSelected(false);
-                }
+                windowMethods.window.repaint();
             }
         });
         columnNames.add("ID Wydawnictwa");
         columnNames.add("Nazwa");
         columnNames.add("Kraj pochodzenia");
-
         createTable(1);
     }
     private void panels() throws SQLException {
@@ -289,13 +240,9 @@ public class Publishers extends JFrame {
 
     private void add_components() throws SQLException {
         panels();
-        window.add(up, BorderLayout.NORTH);
-        window.add(center, BorderLayout.CENTER);
-        window.add(down, BorderLayout.SOUTH);
-    }
-    private void exit(){
-        window.setVisible(false);
-        window.dispose();
+        windowMethods.window.add(up, BorderLayout.NORTH);
+        windowMethods.window.add(center, BorderLayout.CENTER);
+        windowMethods.window.add(down, BorderLayout.SOUTH);
     }
     private void printDebugData(JTable table) {
         int numRows = table.getRowCount();

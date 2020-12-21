@@ -1,5 +1,6 @@
 package views.employee.author_panels;
 
+import models.WindowMethods;
 import models.dataBaseConnection;
 import views.employee.manager.employee_panels.Employees;
 
@@ -10,33 +11,27 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Edit_author extends JFrame {
-    private JFrame window;
+public class Edit_author {
+    private WindowMethods windowMethods = new WindowMethods();
     private JLabel name, surname, country;
     private JButton edit, back;
     private JTextField name2, surname2, country2;
     private JPanel center, down, name_pane, surname_pane, country_pane;
-    private String user, userToEdit, message = "W następujących polach wykryto błędy: ";
-    private Dimension dimension = new Dimension(250, 20);
+    private String user, message = "W następujących polach wykryto błędy: ";
     private int error_counter = 0, IDToEdit;
     private dataBaseConnection dataBase = new dataBaseConnection();
     private boolean isManager;
 
     public void create(String data, int ID, boolean mode) throws SQLException {
-        window = new JFrame("Edytuj autora");
-        settings();
+        windowMethods.window = new JFrame("Edytuj autora");
+        windowMethods.settings();
+        windowMethods.window.setSize(600, 300);
         user = data;
         IDToEdit = ID;
         isManager = mode;
         add_components();
         setAuthor(ID);
-        window.setVisible(true);
-    }
-    private void settings(){
-        window.setSize(600, 300);
-        window.setLocation(400, 80);
-        window.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        window.setLayout(new BorderLayout());
+        windowMethods.window.setVisible(true);
     }
     private void setAuthor(int id) throws SQLException {
         dataBase.setStmt();
@@ -57,12 +52,15 @@ public class Edit_author extends JFrame {
         country = new JLabel("Kraj pochodzenia (max 30 znaków): ");
     }
     private void components(){
+        name2 = windowMethods.setJTextField(name2, "IMIĘ");
+        surname2 = windowMethods.setJTextField(surname2, "NAZWISKO");
+        country2 = windowMethods.setJTextField(country2, "KRAJ POCHODZENIA");
         back = new JButton("Powrót");
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Authors au = new Authors();
-                exit();
+                windowMethods.exit();
                 try {
                     au.create(user, isManager);
                 } catch (SQLException throwables) {
@@ -84,44 +82,16 @@ public class Edit_author extends JFrame {
                                         "', Kraj_pochodzenia = '" + country2.getText() +
                                         "' WHERE ID_Autora = " + IDToEdit
                         );
-                        JOptionPane.showMessageDialog(window, "Autor " + name2.getText() + " " + surname2.getText() + " edytowany pomyślnie");
+                        JOptionPane.showMessageDialog(windowMethods.window, "Autor " + name2.getText() + " " + surname2.getText() + " edytowany pomyślnie");
                         System.out.println("Zaktualizowano " + changes + " rekord");
                         dataBase.getStmt().close();
                         Authors au = new Authors();
-                        exit();
+                        windowMethods.exit();
                         au.create(user, isManager);
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }
                 }
-            }
-        });
-
-        name2 = new JTextField();
-        name2.setName("IMIĘ");
-        name2.setPreferredSize(dimension);
-        name2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        surname2 = new JTextField();
-        surname2.setName("NAZWISKO");
-        surname2.setPreferredSize(dimension);
-        surname2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        country2 = new JTextField();
-        country2.setName("KRAJ POCHODZENIA");
-        country2.setPreferredSize(dimension);
-        country2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
             }
         });
     }
@@ -153,8 +123,8 @@ public class Edit_author extends JFrame {
     }
     private void add_components(){
         panels();
-        window.add(center, BorderLayout.CENTER);
-        window.add(down, BorderLayout.SOUTH);
+        windowMethods.window.add(center, BorderLayout.CENTER);
+        windowMethods.window.add(down, BorderLayout.SOUTH);
     }
     private boolean check(){
         error_counter = 0;
@@ -163,7 +133,7 @@ public class Edit_author extends JFrame {
         fieldCheck(country2, 0, 30, true, true);
 
         if(error_counter != 0){
-            JOptionPane.showMessageDialog(window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(windowMethods.window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
             message = "W następujących polach wykryto błędy: ";
         }
         if (error_counter == 0) return true;
@@ -213,9 +183,5 @@ public class Edit_author extends JFrame {
                 }
             }
         }
-    }
-    private void exit(){
-        window.setVisible(false);
-        window.dispose();
     }
 }

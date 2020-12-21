@@ -1,5 +1,6 @@
 package views.employee.manager.employee_panels;
 
+import models.WindowMethods;
 import models.dataBaseConnection;
 import org.jdatepicker.impl.DateComponentFormatter;
 import org.jdatepicker.impl.JDatePanelImpl;
@@ -18,14 +19,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Properties;
 
-public class Hire_employee_panel extends JFrame{
-    private JFrame window;
+public class Hire_employee_panel {
+    private WindowMethods windowMethods = new WindowMethods();
     private JLabel login, pass, name, surname, phone, hired, salary, job_type, contract_type;
     private JPasswordField pass2;
     private JTextField login2, name2, surname2, phone2, salary2, job_type2, contract_type2;
     private JButton back, add;
     private int error_counter;
-    private Dimension dimension = new Dimension(250, 20);
     private JCheckBox pass_box;
     private JPanel center, down, login_pane, pass_pane, name_pane, surname_pane, phone_pane,hired_pane, salary_pane, job_type_pane, contract_type_pane;
     private dataBaseConnection dataBase = new dataBaseConnection();
@@ -37,20 +37,12 @@ public class Hire_employee_panel extends JFrame{
     private LocalDate now = LocalDate.now();
 
     public void create(String data){
-        window = new JFrame("Dodaj pracownika");
-        settings();
+        windowMethods.window = new JFrame("Dodaj pracownika");
+        windowMethods.settings();
         user = data;
         add_components();
-        window.setVisible(true);
+        windowMethods.window.setVisible(true);
     }
-
-    private void settings(){
-        window.setSize(600, 600);
-        window.setLocation(400, 80);
-        window.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        window.setLayout(new BorderLayout());
-    }
-
     private void labels(){
         login = new JLabel("Wybierz login (max 30 znaków): ");
         pass = new JLabel("Wybierz hasło (max 20 znaków): ");
@@ -113,12 +105,22 @@ public class Hire_employee_panel extends JFrame{
     }
 
     private void components(){
+        login2 = windowMethods.setJTextField(login2, "LOGIN");
+        pass2 = windowMethods.setJPasswordField(pass2, "HASŁO");
+        pass_box = windowMethods.setPassCheckBox(pass_box, pass2, "Pokaż hasło");
+        name2 = windowMethods.setJTextField(name2, "IMIĘ");
+        surname2 = windowMethods.setJTextField(surname2, "NAZWISKO");
+        phone2 = windowMethods.setJTextField(phone2, "NUMER TELEFONU");
+        salary2 = windowMethods.setJTextField(salary2, "PENSJA");
+        job_type2 = windowMethods.setJTextField(job_type2, "STANOWISKO");
+        contract_type2 = windowMethods.setJTextField(contract_type2, "TYP UMOWY");
+
         back = new JButton("Powrót");
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Employees mg = new Employees();
-                exit();
+                windowMethods.exit();
                 try {
                     mg.create(user);
                 } catch (SQLException throwables) {
@@ -138,7 +140,7 @@ public class Hire_employee_panel extends JFrame{
                                 "SELECT Login FROM Uzytkownik WHERE Login = " + "'" +login2.getText() + "'"
                         );
                         if(rs.next()){
-                            JOptionPane.showMessageDialog(window, "Użytkownik o podanym loginie już istnieje!",
+                            JOptionPane.showMessageDialog(windowMethods.window, "Użytkownik o podanym loginie już istnieje!",
                                     "Błąd rejestracji!", JOptionPane.ERROR_MESSAGE);
                             rs.close();
                         }
@@ -149,10 +151,10 @@ public class Hire_employee_panel extends JFrame{
                             float salary = Float.parseFloat(salary2.getText());
                             System.out.println(salary);
                             dataBase.newEmployee(login2.getText(), tmp, name2.getText(), surname2.getText(), phone2.getText(), selectedDate, salary, job_type2.getText(), contract_type2.getText());
-                            JOptionPane.showMessageDialog(window, "Rejestracja przebiegła pomyślnie!");
+                            JOptionPane.showMessageDialog(windowMethods.window, "Rejestracja przebiegła pomyślnie!");
                             //przejście do okna logowania
                             Employees ee = new Employees();
-                            exit();
+                            windowMethods.exit();
                             ee.create(user);
                         }
                     } catch (SQLException throwables) {
@@ -161,51 +163,6 @@ public class Hire_employee_panel extends JFrame{
                 }
             }
         });
-        login2 = new JTextField();
-        login2.setName("LOGIN");
-        login2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        login2.setPreferredSize(dimension);
-        pass2 = new JPasswordField();
-        pass2.setName("HASŁO");
-        pass2.setEchoChar('\u25CF');
-        pass2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            }
-        });
-        pass2.setPreferredSize(dimension);
-        name2 = new JTextField();
-        name2.setName("IMIĘ");
-        name2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        name2.setPreferredSize(dimension);
-        surname2 = new JTextField();
-        surname2.setName("NAZWISKO");
-        surname2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        surname2.setPreferredSize(dimension);
-        phone2 = new JTextField();
-        phone2.setName("NUMER TELEFONU");
-        phone2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        phone2.setPreferredSize(dimension);
         model = new UtilDateModel();
         Properties p = new Properties();
         p.put("text.today", "Dzisiaj");
@@ -216,54 +173,11 @@ public class Hire_employee_panel extends JFrame{
         model.setSelected(true);
         datePicker = new JDatePickerImpl(datePanel, new DateComponentFormatter());
 
-        salary2 = new JTextField();
-        salary2.setName("PENSJA");
-        salary2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        salary2.setPreferredSize(dimension);
-        job_type2 = new JTextField();
-        job_type2.setName("STANOWISKO");
-        job_type2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        job_type2.setPreferredSize(dimension);
-        contract_type2 = new JTextField();
-        contract_type2.setName("TYP UMOWY");
-        contract_type2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        contract_type2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        contract_type2.setPreferredSize(dimension);
-        pass_box = new JCheckBox("Pokaż hasło");
-        pass_box.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(pass_box.isSelected()){
-                    pass2.setEchoChar((char)0);
-                }
-                else pass2.setEchoChar('\u25CF');
-            }
-        });
     }
     private void add_components(){
         panels();
-        window.add(center, BorderLayout.CENTER);
-        window.add(down, BorderLayout.SOUTH);
+        windowMethods.window.add(center, BorderLayout.CENTER);
+        windowMethods.window.add(down, BorderLayout.SOUTH);
     }
     private boolean check(){
         error_counter = 0;
@@ -277,13 +191,13 @@ public class Hire_employee_panel extends JFrame{
         contractCheck(contract_type2);
 
         if(!number) {
-            JOptionPane.showMessageDialog(window, "Numer telefonu musi składać się z cyfr!",
+            JOptionPane.showMessageDialog(windowMethods.window, "Numer telefonu musi składać się z cyfr!",
                     "Nieprawidłowy numer telefonu!", JOptionPane.ERROR_MESSAGE);
             phone2.setText("");
         }
 
         if(error_counter != 0){
-            JOptionPane.showMessageDialog(window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(windowMethods.window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
             message = "W następujących polach wykryto błędy: ";
         }
         if (number && error_counter == 0) return true;
@@ -368,9 +282,5 @@ public class Hire_employee_panel extends JFrame{
             message += "\n" + field.getName();
             error_counter++;
         }
-    }
-    private void exit(){
-        window.setVisible(false);
-        window.dispose();
     }
 }

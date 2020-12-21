@@ -1,5 +1,6 @@
 package views.customer;
 
+import models.WindowMethods;
 import models.dataBaseConnection;
 import views.employee.manager.Manager_panel;
 import views.employee.series_panels.Add_series;
@@ -16,8 +17,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
 
-public class Series_customer extends JFrame {
-    private JFrame window;
+public class Series_customer {
+    private WindowMethods windowMethods = new WindowMethods();
     private JButton back, filter;
     private JCheckBox title_asc, title_desc, tomes_asc, tomes_desc;
     private JPanel up, center, down;
@@ -31,22 +32,16 @@ public class Series_customer extends JFrame {
     private JTable table;
 
     public void create(String data) throws SQLException {
-        window = new JFrame("Serie książek");
-        settings();
+        windowMethods.window = new JFrame("Serie książek");
+        windowMethods.settings();
+        windowMethods.window.setSize(620, 600);
         user = data;
         add_components();
-        window.setVisible(true);
-    }
-    private void settings(){
-        window.setSize(620, 600);
-        window.setLocation(400, 80);
-        window.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        window.setLayout(new BorderLayout());
+        windowMethods.window.setVisible(true);
     }
     private void getSeriesList(int mode) throws SQLException {
         data.clear();
         dataBase.setStmt();
-        //dataBase.getConn().setAutoCommit(true);
         ResultSet rs = null;
         if(sort_asc == "" && sort_desc == "") mode = 1;
         if(mode == 1) {
@@ -91,7 +86,7 @@ public class Series_customer extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Customer_panel cp = new Customer_panel();
-                exit();
+                windowMethods.exit();
                 try {
                     cp.create(user);
                 } catch (SQLException throwables) {
@@ -105,12 +100,12 @@ public class Series_customer extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 sort_asc = "";
                 sort_desc = "";
-                if(title_asc.isSelected()) sort_asc += "ID_wydawnictwa, ";
-                if(tomes_asc.isSelected()) sort_asc += "Nazwa, ";
+                if(title_asc.isSelected()) sort_asc += "Tytul, ";
+                if(tomes_asc.isSelected()) sort_asc += "Liczba_tomow, ";
                 if(sort_asc.length() != 0) sort_asc = sort_asc.substring(0, sort_asc.length()-2);
                 //System.out.println(sort_asc);
-                if(title_desc.isSelected()) sort_desc += "ID_wydawnictwa, ";
-                if(tomes_desc.isSelected()) sort_desc += "Nazwa, ";
+                if(title_desc.isSelected()) sort_desc += "Tytul, ";
+                if(tomes_desc.isSelected()) sort_desc += "Liczba_tomow, ";
                 if(sort_desc.length() != 0) sort_desc = sort_desc.substring(0, sort_desc.length()-2);
                 //System.out.println(sort_desc);
                 try {
@@ -121,46 +116,54 @@ public class Series_customer extends JFrame {
                 //printDebugData(table);
                 listScroller.revalidate();
                 listScroller.repaint();
-                window.repaint();
+                windowMethods.window.repaint();
 
             }
         });
         title_asc = new JCheckBox("Tytuł - rosnąco");
-        title_asc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(title_asc.isSelected()){
-                    title_desc.setSelected(false);
-                }
-            }
-        });
         title_desc = new JCheckBox("Tytuł - malejąco");
-        title_desc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(title_desc.isSelected()){
-                    title_asc.setSelected(false);
-                }
-            }
-        });
         tomes_asc = new JCheckBox("Liczba tomów - rosnąco");
-        tomes_asc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(tomes_asc.isSelected()){
-                    title_desc.setSelected(false);
-                }
-            }
-        });
         tomes_desc = new JCheckBox("Liczba tomów - malejąco");
-        tomes_desc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(tomes_desc.isSelected()){
-                    tomes_asc.setSelected(false);
-                }
-            }
-        });
+        title_asc = windowMethods.setSortCheckBox(title_asc, title_desc);
+        title_desc = windowMethods.setSortCheckBox(title_desc, title_asc);
+        tomes_asc = windowMethods.setSortCheckBox(tomes_asc, tomes_desc);
+        tomes_desc = windowMethods.setSortCheckBox(tomes_desc, title_asc);
+//        title_asc = new JCheckBox("Tytuł - rosnąco");
+//        title_asc.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                if(title_asc.isSelected()){
+//                    title_desc.setSelected(false);
+//                }
+//            }
+//        });
+//        title_desc = new JCheckBox("Tytuł - malejąco");
+//        title_desc.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                if(title_desc.isSelected()){
+//                    title_asc.setSelected(false);
+//                }
+//            }
+//        });
+//        tomes_asc = new JCheckBox("Liczba tomów - rosnąco");
+//        tomes_asc.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                if(tomes_asc.isSelected()){
+//                    title_desc.setSelected(false);
+//                }
+//            }
+//        });
+//        tomes_desc = new JCheckBox("Liczba tomów - malejąco");
+//        tomes_desc.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                if(tomes_desc.isSelected()){
+//                    tomes_asc.setSelected(false);
+//                }
+//            }
+//        });
 
         columnNames.add("Tytuł serii");
         columnNames.add("Liczba tomów");
@@ -184,12 +187,8 @@ public class Series_customer extends JFrame {
     }
     private void add_components() throws SQLException {
         panels();
-        window.add(up, BorderLayout.NORTH);
-        window.add(center, BorderLayout.CENTER);
-        window.add(down, BorderLayout.SOUTH);
-    }
-    private void exit(){
-        window.setVisible(false);
-        window.dispose();
+        windowMethods.window.add(up, BorderLayout.NORTH);
+        windowMethods.window.add(center, BorderLayout.CENTER);
+        windowMethods.window.add(down, BorderLayout.SOUTH);
     }
 }

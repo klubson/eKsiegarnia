@@ -1,5 +1,6 @@
 package views.employee.manager.employee_panels;
 
+import models.WindowMethods;
 import models.dataBaseConnection;
 import views.employee.manager.Manager_panel;
 
@@ -15,8 +16,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
 
-public class Employees extends JFrame {
-    private JFrame window;
+public class Employees {
+    private WindowMethods windowMethods = new WindowMethods();
     private JCheckBox name_asc, name_desc, surname_asc, surname_desc, salary_asc, salary_desc, hired_asc, hired_desc;
     private JPanel up, center, down, down_center;
     private JButton hire, back, edit, filter, fire;
@@ -29,17 +30,11 @@ public class Employees extends JFrame {
     private JTable table;
 
     public void create(String data) throws SQLException {
-        window = new JFrame("Pracownicy");
-        settings();
+        windowMethods.window = new JFrame("Pracownicy");
+        windowMethods.settings();
         user = data;
         add_components();
-        window.setVisible(true);
-    }
-    private void settings(){
-        window.setSize(600, 600);
-        window.setLocation(400, 80);
-        window.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        window.setLayout(new BorderLayout());
+        windowMethods.window.setVisible(true);
     }
     private void getEmployeeList(int mode) throws SQLException {
         data.clear();
@@ -91,6 +86,23 @@ public class Employees extends JFrame {
         listScroller.setViewportView(table);
     }
     private void components() throws SQLException {
+        name_asc = new JCheckBox("Imię - rosnąco");
+        name_desc = new JCheckBox("Imię - malejąco");
+        surname_asc = new JCheckBox("Nazwisko - rosnąco");
+        surname_desc = new JCheckBox("Nazwisko - malejąco");
+        salary_asc = new JCheckBox("Pensja - rosnąco");
+        salary_desc = new JCheckBox("Pensja - malejąco");
+        hired_asc = new JCheckBox("Zatrudniony - najwcześniej");
+        hired_desc = new JCheckBox("Zatrudniony - najpóźniej");
+        name_asc = windowMethods.setSortCheckBox(name_asc, name_desc);
+        name_desc = windowMethods.setSortCheckBox(name_desc, name_asc);
+        surname_asc = windowMethods.setSortCheckBox(surname_asc, surname_desc);
+        surname_desc = windowMethods.setSortCheckBox(surname_desc, surname_asc);
+        salary_asc = windowMethods.setSortCheckBox(salary_asc, salary_desc);
+        salary_desc = windowMethods.setSortCheckBox(salary_desc, salary_asc);
+        hired_asc = windowMethods.setSortCheckBox(hired_asc, hired_desc);
+        hired_desc = windowMethods.setSortCheckBox(hired_desc, hired_asc);
+
         filter = new JButton("Sortuj");
         filter.addActionListener(new ActionListener() {
             @Override
@@ -116,7 +128,7 @@ public class Employees extends JFrame {
                 }
                 listScroller.revalidate();
                 listScroller.repaint();
-                window.repaint();
+                windowMethods.window.repaint();
 
             }
         });
@@ -125,7 +137,7 @@ public class Employees extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Manager_panel win = new Manager_panel();
-                exit();
+                windowMethods.exit();
                 try {
                     win.create(user);
                 } catch (SQLException throwables) {
@@ -138,7 +150,7 @@ public class Employees extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Hire_employee_panel he = new Hire_employee_panel();
-                exit();
+                windowMethods.exit();
                 he.create(user);
             }
         });
@@ -147,7 +159,7 @@ public class Employees extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Edit_employee ee = new Edit_employee();
-                exit();
+                windowMethods.exit();
                 try {
                     ee.create(user, data.get(table.getSelectedRow()).get(0));
                 } catch (SQLException throwables) {
@@ -174,7 +186,7 @@ public class Employees extends JFrame {
                         rs.close();
                         dataBase.getStmt().close();
                         if(selectedUser.equals(loggedUser)){
-                            JOptionPane.showMessageDialog(window, "Nie możesz zwolnić samego siebie!", "Błąd!", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(windowMethods.window, "Nie możesz zwolnić samego siebie!", "Błąd!", JOptionPane.ERROR_MESSAGE);
                         }
                         else{
                             System.out.println("zaraz usuwanie pracownika");
@@ -198,83 +210,11 @@ public class Employees extends JFrame {
 
                     try {
                         Employees ee = new Employees();
-                        exit();
+                        windowMethods.exit();
                         ee.create(user);
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }
-                }
-            }
-        });
-        name_asc = new JCheckBox("Imię - rosnąco");
-        name_asc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(name_asc.isSelected()){
-                    name_desc.setSelected(false);
-                }
-            }
-        });
-        name_desc = new JCheckBox("Imię - malejąco");
-        name_desc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(name_desc.isSelected()){
-                    name_asc.setSelected(false);
-                }
-            }
-        });
-        surname_asc = new JCheckBox("Nazwisko - rosnąco");
-        surname_asc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(surname_asc.isSelected()){
-                    surname_desc.setSelected(false);
-                }
-            }
-        });
-        surname_desc = new JCheckBox("Nazwisko - malejąco");
-        surname_desc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(surname_desc.isSelected()){
-                    surname_asc.setSelected(false);
-                }
-            }
-        });
-        salary_asc = new JCheckBox("Pensja - rosnąco");
-        salary_asc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(salary_asc.isSelected()){
-                    salary_desc.setSelected(false);
-                }
-            }
-        });
-        salary_desc = new JCheckBox("Pensja - malejąco");
-        salary_desc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(salary_desc.isSelected()){
-                    salary_asc.setSelected(false);
-                }
-            }
-        });
-        hired_asc = new JCheckBox("Zatrudniony - najwcześniej");
-        hired_asc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(hired_asc.isSelected()){
-                    hired_desc.setSelected(false);
-                }
-            }
-        });
-        hired_desc = new JCheckBox("Zatrudniony - najpóźniej");
-        hired_desc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(hired_desc.isSelected()){
-                    hired_asc.setSelected(false);
                 }
             }
         });
@@ -315,16 +255,10 @@ public class Employees extends JFrame {
         down.add(down_center, BorderLayout.CENTER);
         down.add(fire, BorderLayout.EAST);
     }
-
     private void add_components() throws SQLException {
         panels();
-        window.add(up, BorderLayout.NORTH);
-        window.add(center, BorderLayout.CENTER);
-        window.add(down, BorderLayout.SOUTH);
-    }
-
-    private void exit(){
-        window.setVisible(false);
-        window.dispose();
+        windowMethods.window.add(up, BorderLayout.NORTH);
+        windowMethods.window.add(center, BorderLayout.CENTER);
+        windowMethods.window.add(down, BorderLayout.SOUTH);
     }
 }

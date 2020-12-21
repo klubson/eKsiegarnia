@@ -1,5 +1,6 @@
 package views.employee.series_panels;
 
+import models.WindowMethods;
 import models.dataBaseConnection;
 import views.employee.author_panels.Edit_author;
 import views.employee.manager.Manager_panel;
@@ -15,8 +16,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
 
-public class Series extends JFrame {
-    private JFrame window;
+public class Series {
+    private WindowMethods windowMethods = new WindowMethods();
     private JButton back, add, edit, delete, filter;
     private JCheckBox title_asc, title_desc, tomes_asc, tomes_desc;
     private JPanel up, center, down, down_center;
@@ -31,19 +32,14 @@ public class Series extends JFrame {
     private boolean isManager;
 
     public void create(String data, boolean mode) throws SQLException {
-        window = new JFrame("Serie książek");
-        settings();
+        windowMethods.window = new JFrame("Serie książek");
+        windowMethods.settings();
+        windowMethods.window.setSize(620, 600);
         user = data;
         isManager = mode;
         add_components();
-        window.setVisible(true);
+        windowMethods.window.setVisible(true);
         //printDebugData(table);
-    }
-    private void settings(){
-        window.setSize(620, 600);
-        window.setLocation(400, 80);
-        window.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        window.setLayout(new BorderLayout());
     }
     private void getSeriesList(int mode) throws SQLException {
         data.clear();
@@ -88,6 +84,14 @@ public class Series extends JFrame {
     }
     private void components() throws SQLException {
         empty = new JLabel("");
+        title_asc = new JCheckBox("Tytuł - rosnąco");
+        title_desc = new JCheckBox("Tytuł - malejąco");
+        tomes_asc = new JCheckBox("Liczba tomów - rosnąco");
+        tomes_desc = new JCheckBox("Liczba tomów - malejąco");
+        title_asc = windowMethods.setSortCheckBox(title_asc, title_desc);
+        title_desc = windowMethods.setSortCheckBox(title_desc, title_asc);
+        tomes_asc = windowMethods.setSortCheckBox(tomes_asc, tomes_desc);
+        tomes_desc = windowMethods.setSortCheckBox(tomes_desc, tomes_asc);
         back = new JButton("Powrót");
         back.addActionListener(new ActionListener() {
             @Override
@@ -149,7 +153,7 @@ public class Series extends JFrame {
                                         data.get(table.getSelectedRow()).get(0) + "'"
                         );
                         System.out.println("Usunięto "+ changes + " rekord");
-                        JOptionPane.showMessageDialog(window, "Seria usunięta pomyślnie!");
+                        JOptionPane.showMessageDialog(windowMethods.window, "Seria usunięta pomyślnie!");
                         dataBase.getStmt().close();
                         Series ss = new Series();
                         exit();
@@ -182,47 +186,10 @@ public class Series extends JFrame {
                 //printDebugData(table);
                 listScroller.revalidate();
                 listScroller.repaint();
-                window.repaint();
+                windowMethods.window.repaint();
 
             }
         });
-        title_asc = new JCheckBox("Tytuł - rosnąco");
-        title_asc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(title_asc.isSelected()){
-                    title_desc.setSelected(false);
-                }
-            }
-        });
-        title_desc = new JCheckBox("Tytuł - malejąco");
-        title_desc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(title_desc.isSelected()){
-                    title_asc.setSelected(false);
-                }
-            }
-        });
-        tomes_asc = new JCheckBox("Liczba tomów - rosnąco");
-        tomes_asc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(tomes_asc.isSelected()){
-                    title_desc.setSelected(false);
-                }
-            }
-        });
-        tomes_desc = new JCheckBox("Liczba tomów - malejąco");
-        tomes_desc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(tomes_desc.isSelected()){
-                    tomes_asc.setSelected(false);
-                }
-            }
-        });
-
         columnNames.add("Tytuł serii");
         columnNames.add("Liczba tomów");
         createTable(1);
@@ -253,12 +220,12 @@ public class Series extends JFrame {
     }
     private void add_components() throws SQLException {
         panels();
-        window.add(up, BorderLayout.NORTH);
-        window.add(center, BorderLayout.CENTER);
-        window.add(down, BorderLayout.SOUTH);
+        windowMethods.window.add(up, BorderLayout.NORTH);
+        windowMethods.window.add(center, BorderLayout.CENTER);
+        windowMethods.window.add(down, BorderLayout.SOUTH);
     }
     private void exit(){
-        window.setVisible(false);
-        window.dispose();
+        windowMethods.window.setVisible(false);
+        windowMethods.window.dispose();
     }
 }

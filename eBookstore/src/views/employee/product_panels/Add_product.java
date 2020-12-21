@@ -1,5 +1,6 @@
 package views.employee.product_panels;
 
+import models.WindowMethods;
 import models.dataBaseConnection;
 import views.employee.author_panels.Add_author;
 import views.employee.publisher_panels.Add_publisher;
@@ -12,15 +13,14 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Add_product extends JFrame {
-    private JFrame window;
+public class Add_product {
+    private WindowMethods windowMethods = new WindowMethods();
     private JButton add, back, add_publisher, add_author, add_series;
     private JLabel name, price, year, storage, publisher, author, cover_type, pages_amount, size, series_title, min_players, max_players, min_age, est_time;
-    private JTextField name2, price2, year2, storage2, publisher2, author2, cover_type2, pages_amount2, size2, series_title2, min_players2, max_players2, min_age2, est_time2;
+    private JTextField name2, price2, year2, storage2, publisher2, cover_type2, pages_amount2, size2, series_title2, min_players2, max_players2, min_age2, est_time2;
     private JPanel center, down, general_pane, book_pane, game_pane, name_pane, price_pane, year_pane,storage_pane, publisher_pane, author_pane, cover_type_pane, pages_amount_pane, size_pane, series_title_pane, min_players_pane, max_players_pane, min_age_pane, est_time_pane;
     private String user, message = "W następujących polach wykryto błędy: ";
     private JTabbedPane menu;
-    private Dimension dimension = new Dimension(250, 20);
     private dataBaseConnection dataBase = new dataBaseConnection();
     private DefaultListModel listModelPublisher = new DefaultListModel(), listModelAuthor = new DefaultListModel(), listModelSeries = new DefaultListModel();
     private JList publisherList, authorList, seriesList;
@@ -28,26 +28,13 @@ public class Add_product extends JFrame {
     private int error_counter;
     private boolean isManager;
 
-//    private JTextField[] tab_JTextField = {name2, price2, year2, storage2, publisher2, cover_type2, pages_amount2, size2, series_title2, min_players2, max_players2, min_age2, est_time2};
-//    private String[] tab_JTextFieldNames = {"NAZWA PRODUKTU", "CENA", "ROK WYDANIA", "STAN MAGAZYNU" ,"WYDAWNICTWO", "TYP OKŁADKI", "LICZBA STRON", "FORMAT KSIĄŻKI", "TYTUŁ SERII", "MINIMUM GRACZY", "MAKSIMUM GRACZY", "MINIMALNY WIEK GRACZA", "SZACOWANY CZAS GRY"};
-//    private JLabel[] tab_JLabel = {name, price, year, storage, publisher, cover_type, pages_amount, size, series_title, min_players, max_players, min_age, est_time};
-//    private String[] tab_JLabelNames = {"Nazwa produktu (max 30 znaków): ", "Cena produktu: ", "Rok wydania produktu (opcjonalnie): ", "Stan magazynu (max 999): " ,"Wydawnictwo (max 30 znaków): ", "Typ okładki: ", "Liczba stron: ", "Format książki: ", "Tytuł serii książek: ", "Minimalna liczba graczy: ", "Maksymalna liczba graczy: ", "Zalecany minimalny wiek (opcjonalnie): ", "Szacowany czas gry (opcjonalnie): "};
-//    private JPanel[] tab_JPanel = {name_pane, price_pane, year_pane, storage_pane ,publisher_pane, cover_type_pane, pages_amount_pane, size_pane, series_title_pane, min_players_pane, max_players_pane, min_age_pane, est_time_pane};
-//    private int[] game_iterator = {0,1,2,3,8,9,10,11};
-
     public void create(String data, boolean mode) throws SQLException {
-        window = new JFrame("Dodaj produkt");
-        settings();
+        windowMethods.window = new JFrame("Dodaj produkt");
+        windowMethods.settings();
         user = data;
         isManager = mode;
         add_components();
-        window.setVisible(true);
-    }
-    private void settings(){
-        window.setSize(600, 600);
-        window.setLocation(400, 80);
-        window.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        window.setLayout(new BorderLayout());
+        windowMethods.window.setVisible(true);
     }
     private void labels(){
         name = new JLabel("Nazwa produktu (max 50 znaków): ");
@@ -64,17 +51,30 @@ public class Add_product extends JFrame {
         max_players = new JLabel("Maksymalna liczba graczy: ");
         min_age = new JLabel("Zalecany minimalny wiek (opcjonalnie): ");
         est_time = new JLabel("Szacowany czas gry (opcjonalnie): ");
-//        for (int i = 0; i < tab_JLabel.length; i++){
-//            tab_JLabel[i] = new JLabel(tab_JLabelNames[i]);
-//        }
+
     }
     private void components() throws SQLException {
+        name2 = windowMethods.setJTextField(name2, "NAZWA");
+        price2 = windowMethods.setJTextField(price2, "CENA");
+        year2 = windowMethods.setJTextField(year2, "ROK WYDANIA");
+        storage2 = windowMethods.setJTextField(storage2, "STAN MAGAZYNU");
+        publisher2 = windowMethods.setJTextField(publisher2, "WYDAWNICTWO");
+        cover_type2 = windowMethods.setJTextField(cover_type2, "TYP OKŁADKI");
+        pages_amount2 = windowMethods.setJTextField(pages_amount2, "LICZBA STRON");
+        size2 = windowMethods.setJTextField(size2, "FORMAT KSIĄŻKI");
+        series_title2 = windowMethods.setJTextField(series_title2, "TYTUŁ SERII");
+        min_players2 = windowMethods.setJTextField(min_players2, "MINIMUM GRACZY");
+        max_players2 = windowMethods.setJTextField(max_players2, "MAKSIMUM GRACZY");
+        min_age2 = windowMethods.setJTextField(min_age2, "MINIMALNY WIEK GRACZA");
+        est_time2 = windowMethods.setJTextField(est_time2, "PRZEEWIDYWANY CZAS ROZGRYWKI");
+
+
         back = new JButton("Powrót");
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Products pr = new Products();
-                exit();
+                windowMethods.exit();
                 try {
                     pr.create(user, isManager);
                 } catch (SQLException throwables) {
@@ -87,7 +87,7 @@ public class Add_product extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(menu.getSelectedIndex() == 0){
-                    JOptionPane.showMessageDialog(window,"Aby dodać produkt, wybierz odpowiednią zakładkę, uzupełnij dane oraz kliknij przycisk 'Dodaj'", "Ostrzeżnie", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(windowMethods.window,"Aby dodać produkt, wybierz odpowiednią zakładkę, uzupełnij dane oraz kliknij przycisk 'Dodaj'", "Ostrzeżnie", JOptionPane.ERROR_MESSAGE);
                 }
                 else{
                     if(generalCheck()){
@@ -114,9 +114,9 @@ public class Add_product extends JFrame {
                                         rs.close();
                                         dataBase.getStmt().close();
                                     }
-                                    JOptionPane.showMessageDialog(window, "Książka dodana pomyślnie");
+                                    JOptionPane.showMessageDialog(windowMethods.window, "Książka dodana pomyślnie");
                                     Products pr = new Products();
-                                    exit();
+                                    windowMethods.exit();
                                     pr.create(user, isManager);
                                 } catch (SQLException throwables) {
                                     throwables.printStackTrace();
@@ -140,9 +140,9 @@ public class Add_product extends JFrame {
                                         rs.close();
                                         dataBase.getStmt().close();
                                     }
-                                    JOptionPane.showMessageDialog(window, "Gra planszowa dodana pomyślnie");
+                                    JOptionPane.showMessageDialog(windowMethods.window, "Gra planszowa dodana pomyślnie");
                                     Products pr = new Products();
-                                    exit();
+                                    windowMethods.exit();
                                     pr.create(user, isManager);
                                 } catch (SQLException throwables) {
                                     throwables.printStackTrace();
@@ -159,7 +159,7 @@ public class Add_product extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Add_publisher ap = new Add_publisher();
-                exit();
+                windowMethods.exit();
                 ap.create(user, isManager);
             }
         });
@@ -168,7 +168,7 @@ public class Add_product extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Add_author aa = new Add_author();
-                exit();
+                windowMethods.exit();
                 aa.create(user, isManager);
             }
         });
@@ -177,127 +177,11 @@ public class Add_product extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Add_series as = new Add_series();
-                exit();
+                windowMethods.exit();
                 as.create(user, isManager);
             }
         });
-        name2 = new JTextField();
-        name2.setName("NAZWA PRODUKTU");
-        name2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
 
-            }
-        });
-        name2.setPreferredSize(dimension);
-        price2 = new JTextField();
-        price2.setName("CENA");
-        price2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        price2.setPreferredSize(dimension);
-        year2 = new JTextField();
-        year2.setName("ROK WYDANIA");
-        year2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        year2.setPreferredSize(dimension);
-        storage2 = new JTextField();
-        storage2.setName("STAN MAGAZYNU");
-        storage2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        storage2.setPreferredSize(dimension);
-        publisher2 = new JTextField();
-        publisher2.setName("WYDAWNICTWO");
-        publisher2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        publisher2.setPreferredSize(dimension);
-        cover_type2 = new JTextField();
-        cover_type2.setName("TYP OKŁADKI");
-        cover_type2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        cover_type2.setPreferredSize(dimension);
-        pages_amount2 = new JTextField();
-        pages_amount2.setName("ILOŚĆ STRON");
-        pages_amount2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        pages_amount2.setPreferredSize(dimension);
-        size2 = new JTextField();
-        size2.setName("FORMAT KSIĄŻKI");
-        size2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        size2.setPreferredSize(dimension);
-        series_title2 = new JTextField();
-        series_title2.setName("TYTUŁ SERII");
-        series_title2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        series_title2.setPreferredSize(dimension);
-        min_players2 = new JTextField();
-        min_players2.setName("MINIMUM GRACZY");
-        min_players2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        min_players2.setPreferredSize(dimension);
-        max_players2 = new JTextField();
-        max_players2.setName("MAKSIMUM GRACZY");
-        max_players2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        max_players2.setPreferredSize(dimension);
-        min_age2 = new JTextField();
-        min_age2.setName("MINIMALNY WIEK GRACZA");
-        min_age2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        min_age2.setPreferredSize(dimension);
-        est_time2 = new JTextField();
-        est_time2.setName("PRZEWIDYWANY CZAS ROZGRYWKI");
-        est_time2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        est_time2.setPreferredSize(dimension);
         getPublisherList();
         publisherList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         publisherList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
@@ -319,18 +203,6 @@ public class Add_product extends JFrame {
         seriesListScroller = new JScrollPane(seriesList);
         seriesListScroller.setViewportView(seriesList);
 
-
-//        for (int i = 0; i < tab_JTextField.length; i++){
-//            tab_JTextField[i] = new JTextField();
-//            tab_JTextField[i].setName(tab_JTextFieldNames[i]);
-//            tab_JTextField[i].addActionListener(new ActionListener() {
-//                @Override
-//                public void actionPerformed(ActionEvent e) {
-//
-//                }
-//            });
-//            tab_JTextField[i].setPreferredSize(dimension);
-//        }
     }
     private void getPublisherList() throws SQLException {
         dataBase.setStmt();
@@ -392,9 +264,6 @@ public class Add_product extends JFrame {
         book_pane.add(pages_amount_pane);
         book_pane.add(size_pane);
         book_pane.add(series_title_pane);
-//        for (int i = 0; i < 8; i++){
-//            book_pane.add(tab_JPanel[i]);
-//        }
     }
     private void game_pane(){
         game_pane = new JPanel();
@@ -403,9 +272,6 @@ public class Add_product extends JFrame {
         game_pane.add(max_players_pane);
         game_pane.add(min_age_pane);
         game_pane.add(est_time_pane);
-//        for (int i = 0; i < 8; i++){
-//            game_pane.add(tab_JPanel[game_iterator[i]]);
-//        }
     }
     private void panels() throws SQLException {
         labels();
@@ -458,11 +324,7 @@ public class Add_product extends JFrame {
         est_time_pane = new JPanel();
         est_time_pane.add(est_time);
         est_time_pane.add(est_time2);
-//        for (int i = 0; i < tab_JPanel.length; i++){
-//            tab_JPanel[i] = new JPanel();
-//            tab_JPanel[i].add(tab_JLabel[i]);
-//            tab_JPanel[i].add(tab_JTextField[i]);
-//        }
+
         general_pane();
         book_pane();
         game_pane();
@@ -483,8 +345,8 @@ public class Add_product extends JFrame {
     }
     private void add_components() throws SQLException {
         panels();
-        window.add(center, BorderLayout.CENTER);
-        window.add(down, BorderLayout.SOUTH);
+        windowMethods.window.add(center, BorderLayout.CENTER);
+        windowMethods.window.add(down, BorderLayout.SOUTH);
     }
     private boolean generalCheck(){
         error_counter = 0;
@@ -493,7 +355,7 @@ public class Add_product extends JFrame {
         dateCheck(year2, 4, 4);
         numberCheck(storage2, 0, 3);
         if(error_counter != 0){
-            JOptionPane.showMessageDialog(window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(windowMethods.window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
             message = "W następujących polach wykryto błędy: ";
         }
         if (error_counter == 0) return true;
@@ -505,7 +367,7 @@ public class Add_product extends JFrame {
         numberCheck(pages_amount2, 0, 4);
         fieldCheck(size2, 0, 4, true, false);
         if(error_counter != 0){
-            JOptionPane.showMessageDialog(window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(windowMethods.window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
             message = "W następujących polach wykryto błędy: ";
         }
         if (error_counter == 0) return true;
@@ -518,7 +380,7 @@ public class Add_product extends JFrame {
         numberCheck(min_age2, 0, 2);
         numberCheck(est_time2, 0, 3);
         if(error_counter != 0){
-            JOptionPane.showMessageDialog(window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(windowMethods.window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
             message = "W następujących polach wykryto błędy: ";
         }
         if (error_counter == 0) return true;
@@ -599,9 +461,5 @@ public class Add_product extends JFrame {
                 error_counter++;
             }
         }
-    }
-    private void exit(){
-        window.setVisible(false);
-        window.dispose();
     }
 }

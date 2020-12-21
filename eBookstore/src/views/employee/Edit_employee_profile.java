@@ -1,5 +1,6 @@
 package views.employee;
 
+import models.WindowMethods;
 import models.dataBaseConnection;
 import views.employee.manager.Manager_panel;
 import views.employee.manager.employee_panels.Employees;
@@ -13,14 +14,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 
-public class Edit_employee_profile extends JFrame {
-    private JFrame window;
+public class Edit_employee_profile {
+    private WindowMethods windowMethods = new WindowMethods();
     private JLabel login, pass, pass_again, name, surname, phone;
     private JPasswordField pass2, pass_again2;
     private JTextField login2, name2, surname2, phone2;
     private JButton back, edit;
     private int error_counter;
-    private Dimension dimension = new Dimension(250, 20);
     private JCheckBox pass_box, pass_box2;
     private JPanel center, down, login_pane, pass_pane,pass_again_pane, name_pane, surname_pane, phone_pane;
     private dataBaseConnection dataBase = new dataBaseConnection();
@@ -28,19 +28,13 @@ public class Edit_employee_profile extends JFrame {
     private String message = "W następujących polach wykryto błędy: ", user;
 
     public void create(String data, boolean mode) throws SQLException {
-        window = new JFrame("Edytuj profil");
-        settings();
+        windowMethods.window = new JFrame("Edytuj profil");
+        windowMethods.settings();
         user = data;
         isManager = mode;
         add_components();
         setData(user);
-        window.setVisible(true);
-    }
-    private void settings(){
-        window.setSize(600, 600);
-        window.setLocation(400, 80);
-        window.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        window.setLayout(new BorderLayout());
+        windowMethods.window.setVisible(true);
     }
     private void setData(String data) throws SQLException {
         dataBase.setStmt();
@@ -66,13 +60,21 @@ public class Edit_employee_profile extends JFrame {
         phone = new JLabel("Numer telefonu: ");
     }
     private void components(){
+        login2 = windowMethods.setJTextField(login2, "LOGIN");
+        pass2 = windowMethods.setJPasswordField(pass2, "HASŁO");
+        pass_box = windowMethods.setPassCheckBox(pass_box, pass2, "Pokaż hasło");
+        pass_again2 = windowMethods.setJPasswordField(pass_again2, "POWTÓRZ HASŁO");
+        pass_box2 = windowMethods.setPassCheckBox(pass_box2, pass_again2, "Pokaż hasło");
+        name2 = windowMethods.setJTextField(name2, "IMIĘ");
+        surname2 = windowMethods.setJTextField(surname2, "NAZWISKO");
+        phone2 = windowMethods.setJTextField(phone2, "NUMER TELEFONU");
         back = new JButton("Powrót");
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(isManager){
                     Manager_panel mp = new Manager_panel();
-                    exit();
+                    windowMethods.exit();
                     try {
                         mp.create(user);
                     } catch (SQLException throwables) {
@@ -81,7 +83,7 @@ public class Edit_employee_profile extends JFrame {
                 }
                 else{
                     Employee_panel ep = new Employee_panel();
-                    exit();
+                    windowMethods.exit();
                     try {
                         ep.create(user);
                     } catch (SQLException throwables) {
@@ -104,10 +106,11 @@ public class Edit_employee_profile extends JFrame {
                                 + tmp + "', Imie = '" + name2.getText() + "', Nazwisko = '" + surname2.getText() + "'," +
                                         "Nr_kontaktowy = '" + phone2.getText() + "' WHERE Login = '" + user + "'"
                         );
-                        JOptionPane.showMessageDialog(window, "Pracownik " + name2.getText() + " " +
+                        JOptionPane.showMessageDialog(windowMethods.window, "Pracownik " + name2.getText() + " " +
                                 surname2.getText() + " edytowany pomyślnie!");
+                        System.out.println("Zaktualizowano " + changes + " rekord");
                         Manager_panel mp = new Manager_panel();
-                        exit();
+                        windowMethods.exit();
                         mp.create(user);
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
@@ -115,80 +118,7 @@ public class Edit_employee_profile extends JFrame {
                 }
             }
         });
-        login2 = new JTextField();
-        login2.setName("LOGIN");
-        login2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
 
-            }
-        });
-        login2.setPreferredSize(dimension);
-        pass2 = new JPasswordField();
-        pass2.setName("HASŁO");
-        pass2.setEchoChar('\u25CF');
-        pass2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            }
-        });
-        pass2.setPreferredSize(dimension);
-        pass_again2 = new JPasswordField();
-        pass_again2.setName("POWTÓRZ HASŁO");
-        pass_again2.setEchoChar('\u25CF');
-        pass_again2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            }
-        });
-        pass_again2.setPreferredSize(dimension);
-        name2 = new JTextField();
-        name2.setName("IMIĘ");
-        name2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        name2.setPreferredSize(dimension);
-        surname2 = new JTextField();
-        surname2.setName("NAZWISKO");
-        surname2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        surname2.setPreferredSize(dimension);
-        phone2 = new JTextField();
-        phone2.setName("NUMER TELEFONU");
-        phone2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        phone2.setPreferredSize(dimension);
-        pass_box = new JCheckBox("Pokaż hasło");
-        pass_box.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(pass_box.isSelected()){
-                    pass2.setEchoChar((char)0);
-                }
-                else pass2.setEchoChar('\u25CF');
-            }
-        });
-        pass_box2 = new JCheckBox("Pokaż hasło");
-        pass_box2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(pass_box2.isSelected()){
-                    pass_again2.setEchoChar((char)0);
-                }
-                else pass_again2.setEchoChar('\u25CF');
-            }
-        });
     }
     private void panels(){
         labels();
@@ -230,8 +160,8 @@ public class Edit_employee_profile extends JFrame {
     }
     private void add_components(){
         panels();
-        window.add(center, BorderLayout.CENTER);
-        window.add(down, BorderLayout.SOUTH);
+        windowMethods.window.add(center, BorderLayout.CENTER);
+        windowMethods.window.add(down, BorderLayout.SOUTH);
     }
     private boolean check(){
         error_counter = 0;
@@ -242,18 +172,18 @@ public class Edit_employee_profile extends JFrame {
         boolean number = phoneCheck(phone2);
         boolean correct_passwords = samePass();
         if(!number) {
-            JOptionPane.showMessageDialog(window, "Numer telefonu musi składać się z cyfr!",
+            JOptionPane.showMessageDialog(windowMethods.window, "Numer telefonu musi składać się z cyfr!",
                     "Nieprawidłowy numer telefonu!", JOptionPane.ERROR_MESSAGE);
             phone2.setText("");
         }
         if(!correct_passwords){
-            JOptionPane.showMessageDialog(window, "Hasła nie są identyczne!",
+            JOptionPane.showMessageDialog(windowMethods.window, "Hasła nie są identyczne!",
                     "Błąd hasła!", JOptionPane.ERROR_MESSAGE);
             pass2.setText("");
             pass_again2.setText("");
         }
         if(error_counter != 0){
-            JOptionPane.showMessageDialog(window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(windowMethods.window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
             message = "W następujących polach wykryto błędy: ";
         }
         if (number && correct_passwords && error_counter == 0) return true;
@@ -325,9 +255,5 @@ public class Edit_employee_profile extends JFrame {
     private boolean samePass(){
         if (Arrays.toString(pass2.getPassword()).equals(Arrays.toString(pass_again2.getPassword()))) return true;
         else return false;
-    }
-    private void exit(){
-        window.setVisible(false);
-        window.dispose();
     }
 }

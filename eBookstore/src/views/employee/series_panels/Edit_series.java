@@ -1,5 +1,6 @@
 package views.employee.series_panels;
 
+import models.WindowMethods;
 import models.dataBaseConnection;
 
 import javax.swing.*;
@@ -9,8 +10,8 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Edit_series extends JFrame {
-    private JFrame window;
+public class Edit_series {
+    private WindowMethods windowMethods = new WindowMethods();
     private JButton back, edit;
     private JLabel title, tomes;
     private JTextField tomes2;
@@ -22,30 +23,26 @@ public class Edit_series extends JFrame {
     private boolean isManager;
 
     public void create(String data, String titleToEdit, boolean mode){
-        window = new JFrame("Edytuj serię książek");
-        settings();
+        windowMethods.window = new JFrame("Edytuj serię książek");
+        windowMethods.settings();
+        windowMethods.window.setSize(600, 300);
         user = data;
         toEdit = titleToEdit;
         isManager = mode;
         add_components();
         title.setText(beginTitle + titleToEdit);
-        window.setVisible(true);
-    }
-    private void settings(){
-        window.setSize(600, 300);
-        window.setLocation(400, 80);
-        window.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        window.setLayout(new BorderLayout());
+        windowMethods.window.setVisible(true);
     }
     private void components(){
         title = new JLabel();
         tomes = new JLabel("Liczba tomów: ");
+        tomes2 = windowMethods.setJTextField(tomes2, "LICZBA TOMÓW");
         back = new JButton("Powrót");
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Series ss = new Series();
-                exit();
+                windowMethods.exit();
                 try {
                     ss.create(user, isManager);
                 } catch (SQLException throwables) {
@@ -67,25 +64,16 @@ public class Edit_series extends JFrame {
                         int changes = dataBase.getStmt().executeUpdate(
                                 "UPDATE Seria SET Liczba_tomow = " + tom
                         );
-                        JOptionPane.showMessageDialog(window, "Seria edytowana pomyślnie");
+                        JOptionPane.showMessageDialog(windowMethods.window, "Seria edytowana pomyślnie");
                         System.out.println("Edytowano " + changes + "krotkę");
                         dataBase.getStmt().close();
                         Series ss = new Series();
-                        exit();
+                        windowMethods.exit();
                         ss.create(user, isManager);
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }
                 }
-            }
-        });
-        tomes2 = new JTextField();
-        tomes2.setName("LICZBA TOMÓW");
-        tomes2.setPreferredSize(dimension);
-        tomes2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
             }
         });
     }
@@ -110,8 +98,8 @@ public class Edit_series extends JFrame {
     }
     private void add_components(){
         panels();
-        window.add(center, BorderLayout.CENTER);
-        window.add(down, BorderLayout.SOUTH);
+        windowMethods.window.add(center, BorderLayout.CENTER);
+        windowMethods.window.add(down, BorderLayout.SOUTH);
     }
     private boolean check(){
         error_counter = 0;
@@ -120,7 +108,7 @@ public class Edit_series extends JFrame {
         System.out.println(error_counter);
 
         if(error_counter != 0){
-            JOptionPane.showMessageDialog(window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(windowMethods.window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
             message = "W następujących polach wykryto błędy: ";
             return false;
         }
@@ -137,9 +125,5 @@ public class Edit_series extends JFrame {
                 error_counter++;
             }
         }
-    }
-    private void exit(){
-        window.setVisible(false);
-        window.dispose();
     }
 }

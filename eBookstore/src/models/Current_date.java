@@ -22,7 +22,7 @@ public class Current_date {
             @Override
             public void run() {
                 label.setText(getTime());
-                if(status == false){
+                if(!status){
                     timer.cancel();
                 }
             }

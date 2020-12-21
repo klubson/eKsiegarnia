@@ -1,5 +1,6 @@
 package views.employee.series_panels;
 
+import models.WindowMethods;
 import models.dataBaseConnection;
 
 import javax.swing.*;
@@ -9,8 +10,8 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Add_series extends JFrame {
-    private JFrame window;
+public class Add_series {
+    private WindowMethods windowMethods = new WindowMethods();
     private JButton back, add;
     private JLabel title, tomes;
     private JTextField title2, tomes2;
@@ -22,28 +23,25 @@ public class Add_series extends JFrame {
     private  boolean isManager;
 
     public void create(String data, boolean mode){
-        window = new JFrame("Dodaj serię książek");
-        settings();
+        windowMethods.window = new JFrame("Dodaj serię książek");
+        windowMethods.settings();
+        windowMethods.window.setSize(600, 300);
         user = data;
         isManager = mode;
         add_components();
-        window.setVisible(true);
-    }
-    private void settings(){
-        window.setSize(600, 300);
-        window.setLocation(400, 80);
-        window.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        window.setLayout(new BorderLayout());
+        windowMethods.window.setVisible(true);
     }
     private void components(){
         title = new JLabel("Tytuł serii (max 50 znaków): ");
         tomes = new JLabel("Liczba tomów: ");
+        title2 = windowMethods.setJTextField(title2, "TYTUŁ SERII");
+        tomes2 = windowMethods.setJTextField(tomes2, "LICZBA TOMÓW");
         back = new JButton("Powrót");
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Series ss = new Series();
-                exit();
+                windowMethods.exit();
                 try {
                     ss.create(user, isManager);
                 } catch (SQLException throwables) {
@@ -63,7 +61,7 @@ public class Add_series extends JFrame {
                                 "SELECT Tytul FROM Seria WHERE Tytul = '" + title2.getText() + "'"
                         );
                         if(rs.next()){
-                            JOptionPane.showMessageDialog(window, "Seria o takim tytule już istnieje!", "Błąd", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(windowMethods.window, "Seria o takim tytule już istnieje!", "Błąd", JOptionPane.ERROR_MESSAGE);
                             rs.close();
                             dataBase.getStmt().close();
                         }
@@ -74,36 +72,18 @@ public class Add_series extends JFrame {
                             int changes = dataBase.getStmt().executeUpdate(
                                     "INSERT INTO Seria VALUES('" + title2.getText() + "'," + tom + ")"
                             );
-                            JOptionPane.showMessageDialog(window, "Seria dodana pomyślnie");
+                            JOptionPane.showMessageDialog(windowMethods.window, "Seria dodana pomyślnie");
                             System.out.println("Dodano " + changes + "krotkę");
                             rs.close();
                             dataBase.getStmt().close();
                             Series ss = new Series();
-                            exit();
+                            windowMethods.exit();
                             ss.create(user, isManager);
                         }
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }
                 }
-            }
-        });
-        title2 = new JTextField();
-        title2.setName("TYTUŁ");
-        title2.setPreferredSize(dimension);
-        title2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        tomes2 = new JTextField();
-        tomes2.setName("LICZBA TOMÓW");
-        tomes2.setPreferredSize(dimension);
-        tomes2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
             }
         });
     }
@@ -129,8 +109,8 @@ public class Add_series extends JFrame {
     }
     private void add_components(){
         panels();
-        window.add(center, BorderLayout.CENTER);
-        window.add(down, BorderLayout.SOUTH);
+        windowMethods.window.add(center, BorderLayout.CENTER);
+        windowMethods.window.add(down, BorderLayout.SOUTH);
     }
     private boolean check(){
         error_counter = 0;
@@ -140,7 +120,7 @@ public class Add_series extends JFrame {
         System.out.println(error_counter);
 
         if(error_counter != 0){
-            JOptionPane.showMessageDialog(window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(windowMethods.window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
             message = "W następujących polach wykryto błędy: ";
             return false;
         }
@@ -201,9 +181,5 @@ public class Add_series extends JFrame {
                 error_counter++;
             }
         }
-    }
-    private void exit(){
-        window.setVisible(false);
-        window.dispose();
     }
 }

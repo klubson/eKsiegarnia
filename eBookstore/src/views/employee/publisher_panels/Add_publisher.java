@@ -1,5 +1,6 @@
 package views.employee.publisher_panels;
 
+import models.WindowMethods;
 import models.dataBaseConnection;
 
 import javax.swing.*;
@@ -7,43 +8,38 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
-public class Add_publisher extends JFrame {
-    private JFrame window;
+public class Add_publisher {
+    private WindowMethods windowMethods = new WindowMethods();
     private JLabel name, country;
     private JTextField name2, country2;
     private JButton back, add;
     private JPanel center, down, name_pane, country_pane;
     private String user, message = "W następujących polach wykryto błędy: ";
-    private Dimension dimension = new Dimension(250, 20);
     private dataBaseConnection dataBase = new dataBaseConnection();
     private int error_counter;
     private boolean isManager;
 
     public void create(String data, boolean mode){
-        window = new JFrame("Dodaj wydawnictwo");
-        settings();
+        windowMethods.window = new JFrame("Dodaj wydawnictwo");
+        windowMethods.settings();
+        windowMethods.window.setSize(600, 300);
         user = data;
         isManager = mode;
         add_components();
-        window.setVisible(true);
-    }
-    private void settings(){
-        window.setSize(600, 300);
-        window.setLocation(400, 80);
-        window.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        window.setLayout(new BorderLayout());
+        windowMethods.window.setVisible(true);
     }
     private void components(){
         name = new JLabel("Nazwa wydawnictwa (max 30 znaków): ");
         country = new JLabel("Kraj pochodzenia (max 30 znaków): ");
+        name2 = windowMethods.setJTextField(name2, "NAZWA");
+        country2 = windowMethods.setJTextField(country2, "KRAJ POCHODZENIA");
         back = new JButton("Powrót");
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Publishers pb = new Publishers();
-                exit();
+                windowMethods.exit();
                 try {
                     pb.create(user, isManager);
                 } catch (SQLException throwables) {
@@ -59,32 +55,14 @@ public class Add_publisher extends JFrame {
                 if(check()){
                     try {
                         dataBase.newPublisher(name2.getText(), country2.getText());
-                        JOptionPane.showMessageDialog(window, "Wydawca dodany pomyślnie");
+                        JOptionPane.showMessageDialog(windowMethods.window, "Wydawca dodany pomyślnie");
                         Publishers pb = new Publishers();
-                        exit();
+                        windowMethods.exit();
                         pb.create(user, isManager);
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }
                 }
-            }
-        });
-        name2 = new JTextField();
-        name2.setPreferredSize(dimension);
-        name2.setName("NAZWA");
-        name2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        country2 = new JTextField();
-        country2.setPreferredSize(dimension);
-        country2.setName("KRAJ POCHODZENIA");
-        country2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
             }
         });
     }
@@ -108,8 +86,8 @@ public class Add_publisher extends JFrame {
     }
     private void add_components(){
         panels();
-        window.add(center, BorderLayout.CENTER);
-        window.add(down, BorderLayout.SOUTH);
+        windowMethods.window.add(center, BorderLayout.CENTER);
+        windowMethods.window.add(down, BorderLayout.SOUTH);
     }
     private boolean check(){
         error_counter = 0;
@@ -118,7 +96,7 @@ public class Add_publisher extends JFrame {
         System.out.println(error_counter);
 
         if(error_counter != 0){
-            JOptionPane.showMessageDialog(window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(windowMethods.window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
             message = "W następujących polach wykryto błędy: ";
             return false;
         }
@@ -167,9 +145,5 @@ public class Add_publisher extends JFrame {
                 }
             }
         }
-    }
-    private void exit(){
-        window.setVisible(false);
-        window.dispose();
     }
 }

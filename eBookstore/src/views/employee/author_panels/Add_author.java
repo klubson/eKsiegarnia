@@ -1,5 +1,6 @@
 package views.employee.author_panels;
 
+import models.WindowMethods;
 import models.dataBaseConnection;
 import views.employee.publisher_panels.Publishers;
 
@@ -10,8 +11,8 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Add_author extends JFrame {
-    private JFrame window;
+public class Add_author {
+    private WindowMethods windowMethods = new WindowMethods();
     private JLabel name, surname, country;
     private JButton add, back;
     private JTextField name2, surname2, country2;
@@ -23,18 +24,13 @@ public class Add_author extends JFrame {
     private boolean isManager;
 
     public void create(String data, boolean mode){
-        window = new JFrame("Dodaj autora");
-        settings();
+        windowMethods.window = new JFrame("Dodaj autora");
+        windowMethods.settings();
+        windowMethods.window.setSize(600, 300);
         user = data;
         isManager = mode;
         add_components();
-        window.setVisible(true);
-    }
-    private void settings(){
-        window.setSize(600, 300);
-        window.setLocation(400, 80);
-        window.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        window.setLayout(new BorderLayout());
+        windowMethods.window.setVisible(true);
     }
     private void labels(){
         name = new JLabel("Imię (max 20 znaków): ");
@@ -42,12 +38,15 @@ public class Add_author extends JFrame {
         country = new JLabel("Kraj pochodzenia (max 30 znaków): ");
     }
     private void components(){
+        name2 = windowMethods.setJTextField(name2, "IMIĘ");
+        surname2 = windowMethods.setJTextField(surname2, "NAZWISKO");
+        country2 = windowMethods.setJTextField(country2, "KRAJ POCHODZENIA");
         back = new JButton("Powrót");
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Authors au = new Authors();
-                exit();
+                windowMethods.exit();
                 try {
                     au.create(user, isManager);
                 } catch (SQLException throwables) {
@@ -64,41 +63,14 @@ public class Add_author extends JFrame {
                     try {
                         dataBase.getConn().setAutoCommit(true);
                         dataBase.newAuthor(name2.getText(), surname2.getText(), country2.getText());
-                        JOptionPane.showMessageDialog(window, "Autor dodany pomyślnie");
+                        JOptionPane.showMessageDialog(windowMethods.window, "Autor dodany pomyślnie");
                         Authors au = new Authors();
-                        exit();
+                        windowMethods.exit();
                         au.create(user, isManager);
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }
                 }
-            }
-        });
-        name2 = new JTextField();
-        name2.setName("IMIĘ");
-        name2.setPreferredSize(dimension);
-        name2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        surname2 = new JTextField();
-        surname2.setName("NAZWISKO");
-        surname2.setPreferredSize(dimension);
-        surname2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        country2 = new JTextField();
-        country2.setName("KRAJ POCHODZENIA");
-        country2.setPreferredSize(dimension);
-        country2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
             }
         });
     }
@@ -130,8 +102,8 @@ public class Add_author extends JFrame {
     }
     private void add_components(){
         panels();
-        window.add(center, BorderLayout.CENTER);
-        window.add(down, BorderLayout.SOUTH);
+        windowMethods.window.add(center, BorderLayout.CENTER);
+        windowMethods.window.add(down, BorderLayout.SOUTH);
     }
     private boolean check(){
         error_counter = 0;
@@ -140,7 +112,7 @@ public class Add_author extends JFrame {
         fieldCheck(country2, 0, 30, true, true);
 
         if(error_counter != 0){
-            JOptionPane.showMessageDialog(window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(windowMethods.window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
             message = "W następujących polach wykryto błędy: ";
         }
         if (error_counter == 0) return true;
@@ -190,9 +162,5 @@ public class Add_author extends JFrame {
                 }
             }
         }
-    }
-    private void exit(){
-        window.setVisible(false);
-        window.dispose();
     }
 }
