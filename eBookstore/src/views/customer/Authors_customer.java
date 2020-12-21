@@ -1,5 +1,6 @@
 package views.customer;
 
+import models.CartInfo;
 import models.WindowMethods;
 import models.dataBaseConnection;
 
@@ -25,8 +26,10 @@ public class Authors_customer {
     private Vector<Vector<String>> data = new Vector<Vector<String>>();
     private Vector<String> columnNames = new Vector<String>();
     private JTable table;
+    private CartInfo cart;
 
-    public void create(String data) throws SQLException {
+    public void create(String data , CartInfo cart) throws SQLException {
+        this.cart = cart;
         windowMethods.window = new JFrame("Autorzy");
         windowMethods.settings();
         user = data;
@@ -100,7 +103,7 @@ public class Authors_customer {
                 Customer_panel cp = new Customer_panel();
                 windowMethods.exit();
                 try {
-                    cp.create(user);
+                    cp.createFromBack(user , dataBase , cart);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }

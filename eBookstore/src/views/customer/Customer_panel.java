@@ -6,6 +6,7 @@ import models.WindowMethods;
 import models.dataBaseConnection;
 import views.Start_window;
 import views.customer.Product_panels.Products_customer;
+import views.customer.cartsPanels.CurrentCartPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -45,8 +46,9 @@ public class Customer_panel {
 
     }
 
-    public void createFromBack(String data , dataBaseConnection dataBase) throws SQLException{
+    public void createFromBack(String data , dataBaseConnection dataBase,CartInfo cart) throws SQLException{
         this.dataBase = dataBase;
+        this.cart = cart;
         createCommon( data);
     }
     private void components() throws SQLException {
@@ -87,6 +89,9 @@ public class Customer_panel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //obecny koszyk zakupowy
+                new CurrentCartPanel(user , dataBase , cart);
+                time.stopClock();
+                windowMethods.exit();
             }
         });
         product_list = new JButton("Produkty w ofercie");
@@ -112,7 +117,7 @@ public class Customer_panel {
                 time.stopClock();
                 windowMethods.exit();
                 try {
-                    ac.create(user);
+                    ac.create(user,cart);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -126,7 +131,7 @@ public class Customer_panel {
                 time.stopClock();
                 windowMethods.exit();
                 try {
-                    sc.create(user);
+                    sc.create(user,cart);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }

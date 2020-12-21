@@ -117,7 +117,7 @@ public class Products_customer {
                 Customer_panel cp = new Customer_panel();
                 windowMethods.exit();
                 try {
-                    cp.createFromBack(user , dataBase);
+                    cp.createFromBack(user , dataBase , cart);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
