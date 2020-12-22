@@ -82,6 +82,9 @@ public class Customer_panel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //historia zamówień
+                new ShoppingHistoryPanel(user , dataBase , cart);
+                time.stopClock();
+                windowMethods.exit();
             }
         });
         current_cart = new JButton("Twój koszyk");
