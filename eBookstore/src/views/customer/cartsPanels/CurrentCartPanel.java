@@ -34,6 +34,28 @@ public class CurrentCartPanel extends CartInfoPanel {
         });
         details = new JButton("Szczegóły");
         buy = new JButton("Kup");
+        buy.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    dataBase.getConn().commit();
+                    cart = new CartInfo(dataBase.newCart(user));
+                    String message = "Dokonano pomyślnie transkcji";
+                    JOptionPane.showMessageDialog(new JFrame(), message);
+                } catch (SQLException ex) {
+                    System.out.println("Błąd przy finalizacji transakcji");
+                    ex.printStackTrace();
+                }
+
+                Customer_panel cp = new Customer_panel();
+                windowMethods.exit();
+                try {
+                    cp.createFromBack(user , dataBase , cart);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
