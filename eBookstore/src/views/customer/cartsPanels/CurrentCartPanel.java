@@ -3,11 +3,14 @@ package views.customer.cartsPanels;
 import models.CartInfo;
 import models.dataBaseConnection;
 import views.customer.Customer_panel;
+import views.customer.Product_panels.Book_details;
+import views.customer.Product_panels.Game_details;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CurrentCartPanel extends CartInfoPanel {
@@ -33,6 +36,29 @@ public class CurrentCartPanel extends CartInfoPanel {
             }
         });
         details = new JButton("Szczegóły");
+        details.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+
+                    int id = Integer.parseInt((String) table.getModel().getValueAt(table.getSelectedRow(), 6 ));
+                    String type = data.get(table.getSelectedRow()).get(5);
+                    if(type.equals("książka")){
+                        Book_details bd = new Book_details();
+                        bd.create(id , dataBase , cart);
+                    }
+                    else if(type.equals("gra planszowa")){
+                        Game_details gd = new Game_details();
+                        gd.create(id , dataBase , cart);
+                    }
+
+                } catch (SQLException throwables) {
+                    System.out.println("Błąd przy wyświetlaniu szczegółów o produkcie z obecnego koszyka");
+                    throwables.printStackTrace();
+                }
+            }
+        });
+
         buy = new JButton("Kup");
         buy.addActionListener(new ActionListener() {
             @Override
