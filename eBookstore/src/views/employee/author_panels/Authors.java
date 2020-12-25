@@ -3,7 +3,6 @@ package views.employee.author_panels;
 import models.WindowMethods;
 import models.dataBaseConnection;
 import views.employee.manager.Manager_panel;
-import views.employee.publisher_panels.Publishers;
 import views.employee.supplier.Employee_panel;
 
 import javax.swing.*;
@@ -11,7 +10,6 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;

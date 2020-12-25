@@ -1,5 +1,6 @@
 package views.employee.manager.employee_panels;
 
+import models.DataVerification;
 import models.WindowMethods;
 import models.dataBaseConnection;
 import org.jdatepicker.impl.DateComponentFormatter;
@@ -13,26 +14,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Properties;
 
 public class Edit_employee {
     private WindowMethods windowMethods = new WindowMethods();
     private JButton back, edit;
     private JLabel name, hired, salary, job_type, contract_type;
-    private JTextField hired2, salary2, job_type2, contract_type2;
+    private JTextField salary2, job_type2, contract_type2;
     private JPanel center, down, hired_pane, salary_pane, job_type_pane, contract_type_pane;
-    private String user, user_name, toEdit, message = "W następujących polach wykryto błędy: ";
-    private Dimension dimension = new Dimension(250, 20);
+    private String user, user_name, toEdit;
     private dataBaseConnection dataBase = new dataBaseConnection();
     private UtilDateModel model;
     private JDatePanelImpl datePanel;
     private JDatePickerImpl datePicker;
     private LocalDate now = LocalDate.now();
-    private int error_counter;
 
     public void create(String data, String loginToEdit) throws SQLException {
         windowMethods.window = new JFrame("Edytuj dane pracownika");
@@ -52,7 +48,6 @@ public class Edit_employee {
                         "JOIN Uzytkownik USING(Login) WHERE Login = '" + login + "'"
         );
         rs.next();
-        //DateFormat df = new SimpleDateFormat("yyyy/mm/dd");
         String date = rs.getDate(1).toString();
         datePicker.getModel().setDate(Integer.parseInt(date.substring(0,4)), Integer.parseInt(date.substring(5,7))-1, Integer.parseInt(date.substring(8,10)));
         salary2.setText(Float.toString(rs.getFloat(2)));
@@ -164,34 +159,12 @@ public class Edit_employee {
         windowMethods.window.add(down, BorderLayout.SOUTH);
     }
     private boolean check(){
-        error_counter = 0;
-        jobTypeCheck(job_type2);
-        salaryCheck(salary2);
-        contractCheck(contract_type2);
-        if(error_counter != 0){
-            JOptionPane.showMessageDialog(windowMethods.window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
-            message = "W następujących polach wykryto błędy: ";
-        }
-        if (error_counter == 0) return true;
+        DataVerification verify = new DataVerification();
+        verify.jobTypeCheck(job_type2);
+        verify.sumCheck(salary2);
+        verify.contractCheck(contract_type2);
+        verify.errorMessage();
+        if(verify.error_counter == 0) return true;
         else return false;
-
-    }
-    private void jobTypeCheck(JTextField field){
-        if(!(field.getText().equals("magazynier") || field.getText().equals("kierownik"))){
-            message += "\n" + field.getName();
-            error_counter++;
-        }
-    }
-    private void salaryCheck(JTextField field){
-        if (!field.getText().matches("[0-9]+[.]?[0-9]{1,2}")){
-            message += "\n" + field.getName();
-            error_counter++;
-        }
-    }
-    private void contractCheck(JTextField field){
-        if(!field.getText().equals("praca")){
-            message += "\n" + field.getName();
-            error_counter++;
-        }
     }
 }

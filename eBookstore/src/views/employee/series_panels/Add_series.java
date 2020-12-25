@@ -1,5 +1,6 @@
 package views.employee.series_panels;
 
+import models.DataVerification;
 import models.WindowMethods;
 import models.dataBaseConnection;
 
@@ -17,10 +18,11 @@ public class Add_series {
     private JTextField title2, tomes2;
     private JPanel title_pane, tomes_pane, center, down;
     private dataBaseConnection dataBase = new dataBaseConnection();
-    private String user, message = "W następujących polach wykryto błędy: ";
-    private Dimension dimension = new Dimension(250, 20);
-    private int error_counter;
+    private String user;
     private  boolean isManager;
+
+    public Add_series() {
+    }
 
     public void create(String data, boolean mode){
         windowMethods.window = new JFrame("Dodaj serię książek");
@@ -73,7 +75,7 @@ public class Add_series {
                                     "INSERT INTO Seria VALUES('" + title2.getText() + "'," + tom + ")"
                             );
                             JOptionPane.showMessageDialog(windowMethods.window, "Seria dodana pomyślnie");
-                            System.out.println("Dodano " + changes + "krotkę");
+                            System.out.println("Dodano " + changes + " rekord");
                             rs.close();
                             dataBase.getStmt().close();
                             Series ss = new Series();
@@ -113,73 +115,11 @@ public class Add_series {
         windowMethods.window.add(down, BorderLayout.SOUTH);
     }
     private boolean check(){
-        error_counter = 0;
-        fieldCheck(title2, 1, 50, true, true);
-        numberCheck(tomes2, 0, 3);
-
-        System.out.println(error_counter);
-
-        if(error_counter != 0){
-            JOptionPane.showMessageDialog(windowMethods.window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
-            message = "W następujących polach wykryto błędy: ";
-            return false;
-        }
-        else return true;
-    }
-    private void fieldCheck(JTextField field, int min_size, int max_size, boolean digitsEnabled, boolean spaceEnabled){
-        if(field.getText().length() < min_size || field.getText().length() > max_size){
-            message += "\n" + field.getName();
-            error_counter++;
-        }
-        else{
-            if(digitsEnabled && spaceEnabled){
-                for(int i = 0; i < field.getText().length(); i++){
-                    if(!Character.isLetterOrDigit(field.getText().charAt(i)) && !Character.isSpaceChar(field.getText().charAt(i))){
-                        message += "\n" + field.getName();
-                        error_counter++;
-                        break;
-                    }
-                }
-            }
-            else if(!digitsEnabled && spaceEnabled){
-                for(int i = 0; i < field.getText().length(); i++){
-                    if(!Character.isLetter(field.getText().charAt(i)) && !Character.isSpaceChar(field.getText().charAt(i))){
-                        message += "\n" + field.getName();
-                        error_counter++;
-                        break;
-                    }
-                }
-            }
-            else if(digitsEnabled && !spaceEnabled){
-                for(int i = 0; i < field.getText().length(); i++){
-                    if(!Character.isLetterOrDigit(field.getText().charAt(i))){
-                        message += "\n" + field.getName();
-                        error_counter++;
-                        break;
-                    }
-                }
-            }
-            else{
-                for(int i = 0; i < field.getText().length(); i++){
-                    if(!Character.isLetter(field.getText().charAt(i))){
-                        message += "\n" + field.getName();
-                        error_counter++;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    private void numberCheck(JTextField field, int min_size, int max_size){
-        if(field.getText().length() < min_size || field.getText().length() > max_size){
-            message += "\n" + field.getName();
-            error_counter++;
-        }
-        for (int i = 0; i < field.getText().length(); i++) {
-            if (!Character.isDigit(field.getText().charAt(i))) {
-                message += "\n" + field.getName();
-                error_counter++;
-            }
-        }
+        DataVerification verify = new DataVerification();
+        verify.fieldCheck(title2, 1, 50, true, true);
+        verify.numberCheck(tomes2, 0, 3);
+        verify.errorMessage();
+        if(verify.error_counter == 0) return true;
+        else return false;
     }
 }

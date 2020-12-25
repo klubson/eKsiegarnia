@@ -4,9 +4,6 @@ import models.CartInfo;
 import models.WindowMethods;
 import models.dataBaseConnection;
 import views.customer.Customer_panel;
-import views.employee.manager.Manager_panel;
-import views.employee.product_panels.Add_product;
-import views.employee.supplier.Employee_panel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

@@ -2,12 +2,10 @@ package views.customer.cartsPanels;
 
 import models.CartInfo;
 import models.dataBaseConnection;
-import views.customer.Customer_panel;
 import views.customer.ShoppingHistoryPanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
 
 public class PreviousCartPanel extends CartInfoPanel {
     private CartInfo currentCart;

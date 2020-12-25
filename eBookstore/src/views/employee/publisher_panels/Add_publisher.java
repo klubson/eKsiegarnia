@@ -1,5 +1,6 @@
 package views.employee.publisher_panels;
 
+import models.DataVerification;
 import models.WindowMethods;
 import models.dataBaseConnection;
 
@@ -15,9 +16,8 @@ public class Add_publisher {
     private JTextField name2, country2;
     private JButton back, add;
     private JPanel center, down, name_pane, country_pane;
-    private String user, message = "W następujących polach wykryto błędy: ";
+    private String user;
     private dataBaseConnection dataBase = new dataBaseConnection();
-    private int error_counter;
     private boolean isManager;
 
     public void create(String data, boolean mode){
@@ -90,60 +90,11 @@ public class Add_publisher {
         windowMethods.window.add(down, BorderLayout.SOUTH);
     }
     private boolean check(){
-        error_counter = 0;
-        fieldCheck(name2, 1, 30, true, true);
-        fieldCheck(country2, 0, 30, false, true);
-        System.out.println(error_counter);
-
-        if(error_counter != 0){
-            JOptionPane.showMessageDialog(windowMethods.window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
-            message = "W następujących polach wykryto błędy: ";
-            return false;
-        }
-        else return true;
-    }
-    private void fieldCheck(JTextField field, int min_size, int max_size, boolean digitsEnabled, boolean spaceEnabled){
-        if(field.getText().length() < min_size || field.getText().length() > max_size){
-            message += "\n" + field.getName();
-            error_counter++;
-        }
-        else{
-            if(digitsEnabled && spaceEnabled){
-                for(int i = 0; i < field.getText().length(); i++){
-                    if(!Character.isLetterOrDigit(field.getText().charAt(i)) && !Character.isSpaceChar(field.getText().charAt(i))){
-                        message += "\n" + field.getName();
-                        error_counter++;
-                        break;
-                    }
-                }
-            }
-            else if(!digitsEnabled && spaceEnabled){
-                for(int i = 0; i < field.getText().length(); i++){
-                    if(!Character.isLetter(field.getText().charAt(i)) && !Character.isSpaceChar(field.getText().charAt(i))){
-                        message += "\n" + field.getName();
-                        error_counter++;
-                        break;
-                    }
-                }
-            }
-            else if(digitsEnabled && !spaceEnabled){
-                for(int i = 0; i < field.getText().length(); i++){
-                    if(!Character.isLetterOrDigit(field.getText().charAt(i))){
-                        message += "\n" + field.getName();
-                        error_counter++;
-                        break;
-                    }
-                }
-            }
-            else{
-                for(int i = 0; i < field.getText().length(); i++){
-                    if(!Character.isLetter(field.getText().charAt(i))){
-                        message += "\n" + field.getName();
-                        error_counter++;
-                        break;
-                    }
-                }
-            }
-        }
+        DataVerification verify = new DataVerification();
+        verify.fieldCheck(name2, 1, 30, true, true);
+        verify.fieldCheck(country2, 0, 30, false, true);
+        verify.errorMessage();
+        if(verify.error_counter == 0) return true;
+        else return false;
     }
 }

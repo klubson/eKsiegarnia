@@ -1,5 +1,6 @@
 package views.employee.product_panels;
 
+import models.DataVerification;
 import models.WindowMethods;
 import models.dataBaseConnection;
 import views.employee.author_panels.Add_author;
@@ -19,13 +20,12 @@ public class Add_product {
     private JLabel name, price, year, storage, publisher, author, cover_type, pages_amount, size, series_title, min_players, max_players, min_age, est_time;
     private JTextField name2, price2, year2, storage2, publisher2, cover_type2, pages_amount2, size2, series_title2, min_players2, max_players2, min_age2, est_time2;
     private JPanel center, down, general_pane, book_pane, game_pane, name_pane, price_pane, year_pane,storage_pane, publisher_pane, author_pane, cover_type_pane, pages_amount_pane, size_pane, series_title_pane, min_players_pane, max_players_pane, min_age_pane, est_time_pane;
-    private String user, message = "W następujących polach wykryto błędy: ";
+    private String user;
     private JTabbedPane menu;
     private dataBaseConnection dataBase = new dataBaseConnection();
     private DefaultListModel listModelPublisher = new DefaultListModel(), listModelAuthor = new DefaultListModel(), listModelSeries = new DefaultListModel();
     private JList publisherList, authorList, seriesList;
     private JScrollPane publisherListScroller, authorListScroller, seriesListScroller;
-    private int error_counter;
     private boolean isManager;
 
     public void create(String data, boolean mode) throws SQLException {
@@ -66,7 +66,7 @@ public class Add_product {
         min_players2 = windowMethods.setJTextField(min_players2, "MINIMUM GRACZY");
         max_players2 = windowMethods.setJTextField(max_players2, "MAKSIMUM GRACZY");
         min_age2 = windowMethods.setJTextField(min_age2, "MINIMALNY WIEK GRACZA");
-        est_time2 = windowMethods.setJTextField(est_time2, "PRZEEWIDYWANY CZAS ROZGRYWKI");
+        est_time2 = windowMethods.setJTextField(est_time2, "PRZEWIDYWANY CZAS ROZGRYWKI");
 
 
         back = new JButton("Powrót");
@@ -99,8 +99,11 @@ public class Add_product {
                         if(menu.getSelectedIndex() == 1){
                             if(bookCheck()){
                                 try {
-                                    System.out.println(authorList.getSelectedValuesList());
-                                    dataBase.newBook(name2.getText(), Float.parseFloat(price2.getText()), year2.getText(), Integer.parseInt(storage2.getText()), publisherList.getSelectedValue().toString(), cover_type2.getText(), Integer.parseInt(pages_amount2.getText()), size2.getText(), series_title2.getText());
+                                    //System.out.println(authorList.getSelectedValuesList());
+                                    String tmp;
+                                    if(seriesList.isSelectionEmpty()) tmp = null;
+                                    else tmp = seriesList.getSelectedValue().toString();
+                                    dataBase.newBook(name2.getText(), Float.parseFloat(price2.getText()), year2.getText(), Integer.parseInt(storage2.getText()), publisherList.getSelectedValue().toString(), cover_type2.getText(), Integer.parseInt(pages_amount2.getText()), size2.getText(), tmp);
                                     for(int i = 0; i < authorList.getSelectedValuesList().size(); i++){
                                         dataBase.setStmt();
                                         ResultSet rs = dataBase.getStmt().executeQuery(
@@ -115,6 +118,7 @@ public class Add_product {
                                         dataBase.getStmt().close();
                                     }
                                     JOptionPane.showMessageDialog(windowMethods.window, "Książka dodana pomyślnie");
+                                    System.out.println("Dodano książkę");
                                     Products pr = new Products();
                                     windowMethods.exit();
                                     pr.create(user, isManager);
@@ -141,6 +145,7 @@ public class Add_product {
                                         dataBase.getStmt().close();
                                     }
                                     JOptionPane.showMessageDialog(windowMethods.window, "Gra planszowa dodana pomyślnie");
+                                    System.out.println("Dodano grę planszową");
                                     Products pr = new Products();
                                     windowMethods.exit();
                                     pr.create(user, isManager);
@@ -211,7 +216,6 @@ public class Add_product {
                 "SELECT Nazwa FROM Wydawnictwo"
         );
         while(rs.next()){
-            System.out.println(rs.getString(1));
             String pub = rs.getString(1);
             listModelPublisher.addElement(pub);
         }
@@ -349,117 +353,32 @@ public class Add_product {
         windowMethods.window.add(down, BorderLayout.SOUTH);
     }
     private boolean generalCheck(){
-        error_counter = 0;
-        fieldCheck(name2, 1, 50, true, true);
-        priceCheck(price2);
-        dateCheck(year2, 4, 4);
-        numberCheck(storage2, 0, 3);
-        if(error_counter != 0){
-            JOptionPane.showMessageDialog(windowMethods.window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
-            message = "W następujących polach wykryto błędy: ";
-        }
-        if (error_counter == 0) return true;
+        DataVerification verify = new DataVerification();
+        verify.fieldCheck(name2, 1 , 50, true, true);
+        verify.sumCheck(price2);
+        verify.dateCheck(year2, 0, 4);
+        verify.numberCheck(storage2, 1, 3);
+        verify.errorMessage();
+        if(verify.error_counter == 0) return true;
         else return false;
     }
     private boolean bookCheck(){
-        error_counter = 0;
-        fieldCheck(cover_type2, 0, 10, false, false);
-        numberCheck(pages_amount2, 0, 4);
-        fieldCheck(size2, 0, 4, true, false);
-        if(error_counter != 0){
-            JOptionPane.showMessageDialog(windowMethods.window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
-            message = "W następujących polach wykryto błędy: ";
-        }
-        if (error_counter == 0) return true;
+        DataVerification verify = new DataVerification();
+        verify.fieldCheck(cover_type2, 0, 10, false, false);
+        verify.numberCheck(pages_amount2, 0, 4);
+        verify.fieldCheck(size2, 0, 4, true, false);
+        verify.errorMessage();
+        if(verify.error_counter == 0) return true;
         else return false;
     }
     private boolean gameCheck(){
-        error_counter = 0;
-        numberCheck(min_players2, 1, 2);
-        numberCheck(max_players2, 1,2);
-        numberCheck(min_age2, 0, 2);
-        numberCheck(est_time2, 0, 3);
-        if(error_counter != 0){
-            JOptionPane.showMessageDialog(windowMethods.window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
-            message = "W następujących polach wykryto błędy: ";
-        }
-        if (error_counter == 0) return true;
+        DataVerification verify = new DataVerification();
+        verify.numberCheck(min_players2, 1, 2);
+        verify.numberCheck(max_players2, 1, 2);
+        verify.numberCheck(min_age2, 0, 2);
+        verify.numberCheck(est_time2, 0, 3);
+        verify.errorMessage();
+        if(verify.error_counter == 0) return true;
         else return false;
-    }
-    private void fieldCheck(JTextField field, int min_size, int max_size, boolean digitsEnabled, boolean spaceEnabled){
-        if(field.getText().length() < min_size || field.getText().length() > max_size){
-            message += "\n" + field.getName();
-            error_counter++;
-        }
-        else{
-            if(digitsEnabled && spaceEnabled){
-                for(int i = 0; i < field.getText().length(); i++){
-                    if(!Character.isLetterOrDigit(field.getText().charAt(i)) && !Character.isSpaceChar(field.getText().charAt(i))){
-                        message += "\n" + field.getName();
-                        error_counter++;
-                        break;
-                    }
-                }
-            }
-            else if(!digitsEnabled && spaceEnabled){
-                for(int i = 0; i < field.getText().length(); i++){
-                    if(!Character.isLetter(field.getText().charAt(i)) && !Character.isSpaceChar(field.getText().charAt(i))){
-                        message += "\n" + field.getName();
-                        error_counter++;
-                        break;
-                    }
-                }
-            }
-            else if(digitsEnabled && !spaceEnabled){
-                for(int i = 0; i < field.getText().length(); i++){
-                    if(!Character.isLetterOrDigit(field.getText().charAt(i))){
-                        message += "\n" + field.getName();
-                        error_counter++;
-                        break;
-                    }
-                }
-            }
-            else{
-                for(int i = 0; i < field.getText().length(); i++){
-                    if(!Character.isLetter(field.getText().charAt(i))){
-                        message += "\n" + field.getName();
-                        error_counter++;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    private void priceCheck(JTextField field){
-        if (!field.getText().matches("[0-9]+[.]?[0-9]{1,2}")){
-            message += "\n" + field.getName();
-            error_counter++;
-        }
-    }
-    private void dateCheck(JTextField field, int min_size, int max_size) {
-        if(field.getText().length() != min_size){
-            if(field.getText().length() != 0){
-                message += "\n" + field.getName();
-                error_counter++;
-            }
-        }
-        for (int i = 0; i < field.getText().length(); i++) {
-            if (!Character.isDigit(field.getText().charAt(i))) {
-                message += "\n" + field.getName();
-                error_counter++;
-            }
-        }
-    }
-    private void numberCheck(JTextField field, int min_size, int max_size){
-        if(field.getText().length() < min_size || field.getText().length() > max_size){
-            message += "\n" + field.getName();
-            error_counter++;
-        }
-        for (int i = 0; i < field.getText().length(); i++) {
-            if (!Character.isDigit(field.getText().charAt(i))) {
-                message += "\n" + field.getName();
-                error_counter++;
-            }
-        }
     }
 }

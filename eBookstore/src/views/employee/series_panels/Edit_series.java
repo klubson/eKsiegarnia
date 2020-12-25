@@ -1,5 +1,6 @@
 package views.employee.series_panels;
 
+import models.DataVerification;
 import models.WindowMethods;
 import models.dataBaseConnection;
 
@@ -7,7 +8,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Edit_series {
@@ -17,9 +17,7 @@ public class Edit_series {
     private JTextField tomes2;
     private JPanel title_pane, tomes_pane, center, down;
     private dataBaseConnection dataBase = new dataBaseConnection();
-    private String user, message = "W następujących polach wykryto błędy: ", beginTitle = "Tytuł serii: ", toEdit;
-    private Dimension dimension = new Dimension(250, 20);
-    private int error_counter;
+    private String user, beginTitle = "Tytuł serii: ", toEdit;
     private boolean isManager;
 
     public void create(String data, String titleToEdit, boolean mode){
@@ -50,7 +48,7 @@ public class Edit_series {
                 }
             }
         });
-        edit = new JButton("Dodaj");
+        edit = new JButton("Edytuj");
         edit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -62,7 +60,8 @@ public class Edit_series {
                         if(tomes2.getText().equals("")) tom = 0;
                         else tom = Integer.parseInt(tomes2.getText());
                         int changes = dataBase.getStmt().executeUpdate(
-                                "UPDATE Seria SET Liczba_tomow = " + tom
+                                "UPDATE Seria SET Liczba_tomow = " + tom + "WHERE Tytul = '"
+                                + toEdit + "'"
                         );
                         JOptionPane.showMessageDialog(windowMethods.window, "Seria edytowana pomyślnie");
                         System.out.println("Edytowano " + changes + "krotkę");
@@ -102,28 +101,10 @@ public class Edit_series {
         windowMethods.window.add(down, BorderLayout.SOUTH);
     }
     private boolean check(){
-        error_counter = 0;
-        numberCheck(tomes2, 0, 3);
-
-        System.out.println(error_counter);
-
-        if(error_counter != 0){
-            JOptionPane.showMessageDialog(windowMethods.window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
-            message = "W następujących polach wykryto błędy: ";
-            return false;
-        }
-        else return true;
-    }
-    private void numberCheck(JTextField field, int min_size, int max_size){
-        if(field.getText().length() < min_size || field.getText().length() > max_size){
-            message += "\n" + field.getName();
-            error_counter++;
-        }
-        for (int i = 0; i < field.getText().length(); i++) {
-            if (!Character.isDigit(field.getText().charAt(i))) {
-                message += "\n" + field.getName();
-                error_counter++;
-            }
-        }
+        DataVerification verify = new DataVerification();
+        verify.numberCheck(tomes2, 0, 3);
+        verify.errorMessage();
+        if(verify.error_counter == 0) return true;
+        else return false;
     }
 }

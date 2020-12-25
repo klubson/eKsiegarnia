@@ -1,4 +1,5 @@
 package views;
+import models.DataVerification;
 import models.WindowMethods;
 import models.dataBaseConnection;
 import javax.swing.*;
@@ -16,10 +17,6 @@ public class Reg_panel extends JFrame {
     private JCheckBox pass_box, pass_box2;
     private JButton back, sign_up;
     private JPanel center, down, login_pane, pass_pane, pass_pane2, name_pane, surname_pane, phone_pane, e_mail_pane, address_pane;
-    private int dim_wdt = 250, dim_ht = 20, error_counter;
-    private Dimension dimension = new Dimension(250, 20);
-    private String message = "W następujących polach wykryto błędy: ";
-    private boolean phone_correctness, email_correctness;
     private dataBaseConnection dataBase = new dataBaseConnection();
     private WindowMethods windowMethods = new WindowMethods();
 
@@ -138,20 +135,6 @@ public class Reg_panel extends JFrame {
         address_pane.add(address);
         address_pane.add(address2);
 
-//        for (int i = 0; i < tab_JPanel.length; i++){
-//            tab_JPanel[i] = new JPanel();
-//            tab_JPanel[i].add(tab_JLabel[i]);
-//            if(i == 1 || i == 2){
-//                tab_JPanel[i].add(tab_JPassField[i-1]);
-//            }
-//            else if (i == 0){
-//                tab_JPanel[i].add(tab_JTextField[i]);
-//            }
-//            else{
-//                tab_JPanel[i].add(tab_JTextField[i-2]);
-//            }
-//        }
-
         center = new JPanel();
         center.setLayout(new BoxLayout(center, BoxLayout.PAGE_AXIS));
         center.add(login_pane);
@@ -162,9 +145,6 @@ public class Reg_panel extends JFrame {
         center.add(phone_pane);
         center.add(e_mail_pane);
         center.add(address_pane);
-//        for (int i = 0; i < tab_JPanel.length; i++){
-//            center.add(tab_JPanel[i]);
-//        }
 
         down = new JPanel();
         down.setLayout(new BorderLayout());
@@ -176,124 +156,21 @@ public class Reg_panel extends JFrame {
         windowMethods.window.add(center, BorderLayout.CENTER);
         windowMethods.window.add(down, BorderLayout.SOUTH);
     }
-    private void fieldCheck(JTextField field, int size, boolean digitsEnabled, boolean spaceEnabled){
-        if(field.getText().length() == 0 || field.getText().length() > size){
-            message += "\n" + field.getName();
-            error_counter++;
-        }
-        else{
-            if(digitsEnabled && spaceEnabled){
-                for(int i = 0; i < field.getText().length(); i++){
-                    if(!Character.isLetterOrDigit(field.getText().charAt(i)) && !Character.isSpaceChar(field.getText().charAt(i))){
-                        message += "\n" + field.getName();
-                        error_counter++;
-                        break;
-                    }
-                }
-            }
-            else if(!digitsEnabled && spaceEnabled){
-                for(int i = 0; i < field.getText().length(); i++){
-                    if(!Character.isLetter(field.getText().charAt(i)) && !Character.isSpaceChar(field.getText().charAt(i))){
-                        message += "\n" + field.getName();
-                        error_counter++;
-                        break;
-                    }
-                }
-            }
-            else if(digitsEnabled && !spaceEnabled){
-                for(int i = 0; i < field.getText().length(); i++){
-                    if(!Character.isLetterOrDigit(field.getText().charAt(i))){
-                        message += "\n" + field.getName();
-                        error_counter++;
-                        break;
-                    }
-                }
-            }
-            else{
-                for(int i = 0; i < field.getText().length(); i++){
-                    if(!Character.isLetter(field.getText().charAt(i))){
-                        message += "\n" + field.getName();
-                        error_counter++;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    private void passFieldCheck(JPasswordField field, int size){
-        String tmp = String.copyValueOf(field.getPassword());
-        if(tmp.length() == 0 || tmp.length() > size){
-            message += "\n" + field.getName();
-            error_counter++;
-        }
-        else{
-            for(int i = 0; i < tmp.length(); i++){
-                if(!Character.isLetterOrDigit(tmp.charAt(i))){
-                    message += "\n" + field.getName();
-                    error_counter++;
-                    break;
-                }
-            }
-        }
-    }
-    private boolean samePass(){
-        if (Arrays.toString(pass2.getPassword()).equals(Arrays.toString(pass_again2.getPassword()))) return true;
-        else return false;
-    }
-    private boolean phoneCheck(JTextField field) {
-        phone_correctness = true;
-        if(field.getText().length() != 9){
-            if(field.getText().length() != 0) return false;
-        }
-        for (int i = 0; i < field.getText().length(); i++) {
-            if (!Character.isDigit(field.getText().charAt(i))) {
-                phone_correctness = false;
-            }
-        }
-        return phone_correctness;
-    }
-    private void emailCheck(JTextField field, int max_size){
-        if(field.getText().length() == 0 || field.getText().length() > max_size) {
-            message += "\n" + field.getName();
-            error_counter++;
-        }
-        else{
-            if(!field.getText().matches("[A-Za-z0-9]{1,}[@]{1}[a-z0-9]{1,5}[.]{1}[a-z]{2,3}")) {
-                message += "\n" + field.getName();
-                error_counter++;
-            }
-        }
-    }
     private boolean check(){
-        error_counter = 0;
-        fieldCheck(login2, 30, true, true);
-        passFieldCheck(pass2, 20);
-        passFieldCheck(pass_again2, 20);
-        fieldCheck(name2, 20, false, true);
-        fieldCheck(surname2, 20, false, true);
-        boolean number = phoneCheck(phone2);
-        emailCheck(e_mail2, 30);
-        fieldCheck(address2, 50, true, true);
-        boolean correct_passwords = samePass();
-
-        if(!number) {
-            JOptionPane.showMessageDialog(windowMethods.window, "Numer telefonu musi składać się z cyfr!",
-                    "Nieprawidłowy numer telefonu!", JOptionPane.ERROR_MESSAGE);
-            phone2.setText("");
-        }
-        if(!correct_passwords){
-            JOptionPane.showMessageDialog(windowMethods.window, "Hasła nie są identyczne!",
-                    "Błąd hasła!", JOptionPane.ERROR_MESSAGE);
-            pass2.setText("");
-            pass_again2.setText("");
-        }
-        if(error_counter != 0){
-            JOptionPane.showMessageDialog(windowMethods.window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
-            message = "W następujących polach wykryto błędy: ";
-        }
-        if (number && correct_passwords && error_counter == 0) return true;
+        DataVerification verify = new DataVerification();
+        verify.fieldCheck(login2, 1, 30, true, true);
+        verify.passFieldCheck(pass2, 20);
+        verify.passFieldCheck(pass_again2, 20);
+        verify.fieldCheck(name2, 1, 20, false, true);
+        verify.fieldCheck(surname2, 1,20, false, true);
+        verify.phoneCheck(phone2);
+        verify.emailCheck(e_mail2, 30);
+        verify.fieldCheck(address2,1, 50, true, true);
+        verify.errorPhone(verify.phone_correctness, phone2, windowMethods.window);
+        verify.samePass(pass2, pass_again2);
+        verify.errorMessage();
+        verify.errorPass(verify.pass_correctness, pass2, pass_again2);
+        if(verify.phone_correctness && verify.pass_correctness && verify.error_counter == 0) return true;
         else return false;
-
     }
-
 }

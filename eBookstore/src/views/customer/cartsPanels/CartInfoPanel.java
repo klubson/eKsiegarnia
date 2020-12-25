@@ -3,15 +3,10 @@ package views.customer.cartsPanels;
 import models.CartInfo;
 import models.WindowMethods;
 import models.dataBaseConnection;
-import views.customer.Customer_panel;
-import views.customer.Product_panels.Book_details;
-import views.customer.Product_panels.Game_details;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
@@ -30,7 +25,7 @@ public class CartInfoPanel {
     protected String user;
     protected JLabel paymentMethod , deliveryCost , totalCost ;
 
-    public CartInfoPanel(String user,dataBaseConnection dataBase , CartInfo cart){
+    public CartInfoPanel(String user, dataBaseConnection dataBase , CartInfo cart){
         this.dataBase = dataBase;
         this.cart = cart;
         this.user = user;

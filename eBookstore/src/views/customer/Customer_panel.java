@@ -46,7 +46,7 @@ public class Customer_panel {
 
     }
 
-    public void createFromBack(String data , dataBaseConnection dataBase,CartInfo cart) throws SQLException{
+    public void createFromBack(String data , dataBaseConnection dataBase, CartInfo cart) throws SQLException{
         this.dataBase = dataBase;
         this.cart = cart;
         createCommon( data);

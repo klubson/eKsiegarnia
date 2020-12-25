@@ -56,68 +56,68 @@ public class Log_panel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    dataBase.setStmt();
-                    ResultSet rs = dataBase.getStmt().executeQuery(
-                           "SELECT Login FROM Uzytkownik WHERE Login = " + "'" + log2.getText() + "'"
-                   );
-                    //if(dataBase.findUser(log2.getText())){
-                    if(rs.next()){
-                        rs.close();
-                        dataBase.setCstmt("{? = call checkPwd(?,?)}");
-                        dataBase.getCstmt().setString(2, log2.getText());
-                        String tmp = String.copyValueOf(pass2.getPassword());
-                        dataBase.getCstmt().setString(3, tmp);
-                        dataBase.getCstmt().registerOutParameter(1, Types.INTEGER);
-                        dataBase.getCstmt().execute();
-                        int pass_good = dataBase.getCstmt().getInt(1);
-                        dataBase.getCstmt().close();
-                        if(pass_good == 0){
-                            JOptionPane.showMessageDialog(windowMethods.window, "Niepoprawne hasło!",
-                                    "Błąd logowania!", JOptionPane.ERROR_MESSAGE);
-                        }
-                        else{
-                            String data = log2.getText();
-                            rs = dataBase.getStmt().executeQuery(
-                                    "SELECT kto FROM Uzytkownik WHERE Login = " +
-                                            "'" + log2.getText() + "'"
-                            );
-                            rs.next();
-                            String userType = rs.getString(1);
+                    if(check()){
+                        dataBase.setStmt();
+                        ResultSet rs = dataBase.getStmt().executeQuery(
+                                "SELECT Login FROM Uzytkownik WHERE Login = " + "'" + log2.getText() + "'"
+                        );
+                        if(rs.next()){
                             rs.close();
-                            if(userType.equals("k")){
-                                System.out.println("Zalogowano jako (login): " + data);
-                                Customer_panel cp = new Customer_panel();
-                                windowMethods.exit();
-                                cp.create(data);
+                            dataBase.setCstmt("{? = call checkPwd(?,?)}");
+                            dataBase.getCstmt().setString(2, log2.getText());
+                            String tmp = String.copyValueOf(pass2.getPassword());
+                            dataBase.getCstmt().setString(3, tmp);
+                            dataBase.getCstmt().registerOutParameter(1, Types.INTEGER);
+                            dataBase.getCstmt().execute();
+                            int pass_good = dataBase.getCstmt().getInt(1);
+                            dataBase.getCstmt().close();
+                            if(pass_good == 0){
+                                JOptionPane.showMessageDialog(windowMethods.window, "Niepoprawne hasło!",
+                                        "Błąd logowania!", JOptionPane.ERROR_MESSAGE);
                             }
-                            else if(userType.equals("p")){
+                            else{
+                                String data = log2.getText();
                                 rs = dataBase.getStmt().executeQuery(
-                                        "SELECT P_STANOWISKO FROM Pracownik WHERE Login = " +
+                                        "SELECT kto FROM Uzytkownik WHERE Login = " +
                                                 "'" + log2.getText() + "'"
                                 );
                                 rs.next();
-                                String jobType = rs.getString(1);
-                                System.out.println("Zalogowano jako (login): " + data);
+                                String userType = rs.getString(1);
                                 rs.close();
-                                dataBase.getStmt().close();
-                                if (jobType.equals("kierownik")){
-                                    Manager_panel new_wind = new Manager_panel();
+                                if(userType.equals("k")){
+                                    System.out.println("Zalogowano jako (login): " + data);
+                                    Customer_panel cp = new Customer_panel();
                                     windowMethods.exit();
-                                    new_wind.create(data);
+                                    cp.create(data);
                                 }
-                                else if(jobType.equals("magazynier")){
-                                    Employee_panel new_wind = new Employee_panel();
-                                    windowMethods.exit();
-                                    new_wind.create(data);
+                                else if(userType.equals("p")){
+                                    rs = dataBase.getStmt().executeQuery(
+                                            "SELECT P_STANOWISKO FROM Pracownik WHERE Login = " +
+                                                    "'" + log2.getText() + "'"
+                                    );
+                                    rs.next();
+                                    String jobType = rs.getString(1);
+                                    System.out.println("Zalogowano jako (login): " + data);
+                                    rs.close();
+                                    dataBase.getStmt().close();
+                                    if (jobType.equals("kierownik")){
+                                        Manager_panel new_wind = new Manager_panel();
+                                        windowMethods.exit();
+                                        new_wind.create(data);
+                                    }
+                                    else if(jobType.equals("magazynier")){
+                                        Employee_panel new_wind = new Employee_panel();
+                                        windowMethods.exit();
+                                        new_wind.create(data);
+                                    }
                                 }
                             }
                         }
+                        else{
+                            JOptionPane.showMessageDialog(windowMethods.window, "Brak użytkownika o podanym loginie!",
+                                    "Błąd logowania!", JOptionPane.ERROR_MESSAGE);
+                        }
                     }
-                    else{
-                        JOptionPane.showMessageDialog(windowMethods.window, "Brak użytkownika o podanym loginie!",
-                                "Błąd logowania!", JOptionPane.ERROR_MESSAGE);
-                    }
-
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -151,5 +151,16 @@ public class Log_panel {
         windowMethods.window.add(up, BorderLayout.NORTH);
         windowMethods.window.add(center, BorderLayout.CENTER);
         windowMethods.window.add(down, BorderLayout.SOUTH);
+    }
+    private boolean check(){
+        if(log2.getText().contains(";")){
+            JOptionPane.showMessageDialog(null, "Login nie może zawierać średnika!", "Błąd", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if(String.copyValueOf(pass2.getPassword()).contains(";")){
+            JOptionPane.showMessageDialog(null, "Hasło nie może zawierać średnika!", "Błąd", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
     }
 }

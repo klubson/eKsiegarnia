@@ -2,9 +2,7 @@ package views.employee.series_panels;
 
 import models.WindowMethods;
 import models.dataBaseConnection;
-import views.employee.author_panels.Edit_author;
 import views.employee.manager.Manager_panel;
-import views.employee.publisher_panels.Publishers;
 import views.employee.supplier.Employee_panel;
 
 import javax.swing.*;
@@ -170,12 +168,12 @@ public class Series {
             public void actionPerformed(ActionEvent e) {
                 sort_asc = "";
                 sort_desc = "";
-                if(title_asc.isSelected()) sort_asc += "ID_wydawnictwa, ";
-                if(tomes_asc.isSelected()) sort_asc += "Nazwa, ";
+                if(title_asc.isSelected()) sort_asc += "Tytul, ";
+                if(tomes_asc.isSelected()) sort_asc += "Liczba_tomow, ";
                 if(sort_asc.length() != 0) sort_asc = sort_asc.substring(0, sort_asc.length()-2);
                 //System.out.println(sort_asc);
-                if(title_desc.isSelected()) sort_desc += "ID_wydawnictwa, ";
-                if(tomes_desc.isSelected()) sort_desc += "Nazwa, ";
+                if(title_desc.isSelected()) sort_desc += "Tytul, ";
+                if(tomes_desc.isSelected()) sort_desc += "Liczba_tomow, ";
                 if(sort_desc.length() != 0) sort_desc = sort_desc.substring(0, sort_desc.length()-2);
                 //System.out.println(sort_desc);
                 try {

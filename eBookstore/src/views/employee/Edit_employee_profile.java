@@ -1,9 +1,9 @@
 package views.employee;
 
+import models.DataVerification;
 import models.WindowMethods;
 import models.dataBaseConnection;
 import views.employee.manager.Manager_panel;
-import views.employee.manager.employee_panels.Employees;
 import views.employee.supplier.Employee_panel;
 
 import javax.swing.*;
@@ -12,7 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
 
 public class Edit_employee_profile {
     private WindowMethods windowMethods = new WindowMethods();
@@ -20,12 +19,11 @@ public class Edit_employee_profile {
     private JPasswordField pass2, pass_again2;
     private JTextField login2, name2, surname2, phone2;
     private JButton back, edit;
-    private int error_counter;
     private JCheckBox pass_box, pass_box2;
     private JPanel center, down, login_pane, pass_pane,pass_again_pane, name_pane, surname_pane, phone_pane;
     private dataBaseConnection dataBase = new dataBaseConnection();
-    private boolean phone_correctness, isManager;
-    private String message = "W następujących polach wykryto błędy: ", user;
+    private boolean isManager;
+    private String user;
 
     public void create(String data, boolean mode) throws SQLException {
         windowMethods.window = new JFrame("Edytuj profil");
@@ -98,20 +96,26 @@ public class Edit_employee_profile {
             public void actionPerformed(ActionEvent e) {
                 if(check()){
                     try {
-                        dataBase.getConn().setAutoCommit(true);
-                        dataBase.setStmt();
-                        String tmp = String.copyValueOf(pass2.getPassword());
-                        int changes = dataBase.getStmt().executeUpdate(
-                                "UPDATE Uzytkownik SET Login = '" + login2.getText() + "', Haslo = '"
-                                + tmp + "', Imie = '" + name2.getText() + "', Nazwisko = '" + surname2.getText() + "'," +
-                                        "Nr_kontaktowy = '" + phone2.getText() + "' WHERE Login = '" + user + "'"
-                        );
-                        JOptionPane.showMessageDialog(windowMethods.window, "Pracownik " + name2.getText() + " " +
-                                surname2.getText() + " edytowany pomyślnie!");
-                        System.out.println("Zaktualizowano " + changes + " rekord");
-                        Manager_panel mp = new Manager_panel();
-                        windowMethods.exit();
-                        mp.create(user);
+                        //System.out.println(login2.getText());
+                        if(!dataBase.findLoggedUser(login2.getText(), user)){
+                            JOptionPane.showMessageDialog(windowMethods.window, "Podany login jest już zajęty! Wybierz inny login!", "Błąd", JOptionPane.ERROR_MESSAGE);
+                        }
+                        else{
+                            dataBase.setStmt();
+                            String tmp = String.copyValueOf(pass2.getPassword());
+                            int changes = dataBase.getStmt().executeUpdate(
+                                    "UPDATE Uzytkownik SET Login = '" + login2.getText() + "', Haslo = '"
+                                            + tmp + "', Imie = '" + name2.getText() + "', Nazwisko = '" + surname2.getText() + "'," +
+                                            "Nr_kontaktowy = '" + phone2.getText() + "' WHERE Login = '" + user + "'"
+                            );
+                            JOptionPane.showMessageDialog(windowMethods.window, "Pracownik " + name2.getText() + " " +
+                                    surname2.getText() + " edytowany pomyślnie!");
+                            System.out.println("Zaktualizowano " + changes + " rekord");
+                            dataBase.getStmt().close();
+                            Manager_panel mp = new Manager_panel();
+                            windowMethods.exit();
+                            mp.create(user);
+                        }
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }
@@ -164,96 +168,17 @@ public class Edit_employee_profile {
         windowMethods.window.add(down, BorderLayout.SOUTH);
     }
     private boolean check(){
-        error_counter = 0;
-        fieldCheck(login2, 1, 30, true, false);
-        passFieldCheck(pass2, 20);
-        fieldCheck(name2, 1, 20, true, true);
-        fieldCheck(surname2, 1, 30, true, true);
-        boolean number = phoneCheck(phone2);
-        boolean correct_passwords = samePass();
-        if(!number) {
-            JOptionPane.showMessageDialog(windowMethods.window, "Numer telefonu musi składać się z cyfr!",
-                    "Nieprawidłowy numer telefonu!", JOptionPane.ERROR_MESSAGE);
-            phone2.setText("");
-        }
-        if(!correct_passwords){
-            JOptionPane.showMessageDialog(windowMethods.window, "Hasła nie są identyczne!",
-                    "Błąd hasła!", JOptionPane.ERROR_MESSAGE);
-            pass2.setText("");
-            pass_again2.setText("");
-        }
-        if(error_counter != 0){
-            JOptionPane.showMessageDialog(windowMethods.window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
-            message = "W następujących polach wykryto błędy: ";
-        }
-        if (number && correct_passwords && error_counter == 0) return true;
-        else return false;
-
-    }
-    private void fieldCheck(JTextField field, int min_size, int max_size, boolean digitsEnabled, boolean spaceEnabled){
-        if(field.getText().length() < min_size || field.getText().length() > max_size){
-            message += "\n" + field.getName();
-            error_counter++;
-        }
-        else{
-            if(digitsEnabled && spaceEnabled){
-                for(int i = 0; i < field.getText().length(); i++){
-                    if(!Character.isLetterOrDigit(field.getText().charAt(i)) && !Character.isSpaceChar(field.getText().charAt(i))){
-                        message += "\n" + field.getName();
-                        error_counter++;
-                        break;
-                    }
-                }
-            }
-            else if(!digitsEnabled && spaceEnabled){
-                for(int i = 0; i < field.getText().length(); i++){
-                    if(!Character.isLetter(field.getText().charAt(i)) && !Character.isSpaceChar(field.getText().charAt(i))){
-                        message += "\n" + field.getName();
-                        error_counter++;
-                        break;
-                    }
-                }
-            }
-            else if(digitsEnabled && !spaceEnabled){
-                for(int i = 0; i < field.getText().length(); i++){
-                    if(!Character.isLetterOrDigit(field.getText().charAt(i))){
-                        message += "\n" + field.getName();
-                        error_counter++;
-                        break;
-                    }
-                }
-            }
-            else{
-                for(int i = 0; i < field.getText().length(); i++){
-                    if(!Character.isLetter(field.getText().charAt(i))){
-                        message += "\n" + field.getName();
-                        error_counter++;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    private void passFieldCheck(JPasswordField field, int size){
-        if(field.getPassword().length == 0 || field.getPassword().length > size){
-            message += "\n" + field.getName();
-            error_counter++;
-        }
-    }
-    private boolean phoneCheck(JTextField field) {
-        phone_correctness = true;
-        if(field.getText().length() != 9){
-            if(field.getText().length() != 0) return false;
-        }
-        for (int i = 0; i < field.getText().length(); i++) {
-            if (!Character.isDigit(field.getText().charAt(i))) {
-                phone_correctness = false;
-            }
-        }
-        return phone_correctness;
-    }
-    private boolean samePass(){
-        if (Arrays.toString(pass2.getPassword()).equals(Arrays.toString(pass_again2.getPassword()))) return true;
+        DataVerification verify = new DataVerification();
+        verify.fieldCheck(login2, 1 , 30, true, false);
+        verify.passFieldCheck(pass2, 20);
+        verify.fieldCheck(name2, 1, 20, false, true);
+        verify.fieldCheck(surname2, 1 ,30, false, true);
+        verify.phoneCheck(phone2);
+        verify.samePass(pass2, pass_again2);
+        verify.errorPhone(verify.phone_correctness, phone2, windowMethods.window);
+        verify.errorPass(verify.pass_correctness, pass2, pass_again2);
+        verify.errorMessage();
+        if(verify.phone_correctness && verify.pass_correctness && verify.error_counter == 0) return true;
         else return false;
     }
 }

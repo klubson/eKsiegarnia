@@ -3,11 +3,6 @@ package views.customer;
 import models.CartInfo;
 import models.WindowMethods;
 import models.dataBaseConnection;
-import views.employee.manager.Manager_panel;
-import views.employee.series_panels.Add_series;
-import views.employee.series_panels.Edit_series;
-import views.employee.series_panels.Series;
-import views.employee.supplier.Employee_panel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

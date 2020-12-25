@@ -1,7 +1,6 @@
 package views.employee.supplier;
 import models.Current_date;
 import models.WindowMethods;
-import models.dataBaseConnection;
 import views.Start_window;
 import views.employee.Edit_employee_profile;
 import views.employee.author_panels.Authors;

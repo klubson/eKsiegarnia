@@ -10,8 +10,6 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.Reader;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
@@ -25,7 +23,7 @@ public class Products {
     private dataBaseConnection dataBase = new dataBaseConnection();
     private DefaultTableModel tableModel = new DefaultTableModel();
     private JScrollPane listScroller;
-    private String sort_asc, sort_desc, user;
+    private String sort_asc, sort_desc, user, productType;
     private JTable table;
     private Vector<Vector<String>> data = new Vector<Vector<String>>();
     private Vector<String> columnNames = new Vector<String>();
@@ -81,7 +79,7 @@ public class Products {
         rs.close();
         dataBase.getStmt().close();
     }
-    public void createTable(int mode) throws SQLException {
+    private void createTable(int mode) throws SQLException {
         getProductList(mode);
         tableModel = new DefaultTableModel(data, columnNames);
         table = new JTable(tableModel);
@@ -152,7 +150,25 @@ public class Products {
         edit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //edycja produktu
+                productType = data.get(table.getSelectedRow()).get(5);
+                if(productType.equals("książka")){
+                    Edit_book eb = new Edit_book();
+                    windowMethods.exit();
+                    try {
+                        eb.create(user, isManager, Integer.parseInt(data.get(table.getSelectedRow()).get(0)));
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                }
+                else if(productType.equals("gra planszowa")){
+                    Edit_game eg = new Edit_game();
+                    windowMethods.exit();
+                    try {
+                        eg.create(user, isManager, Integer.parseInt(data.get(table.getSelectedRow()).get(0)));
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                }
             }
         });
         delete = new JButton("Usuń");

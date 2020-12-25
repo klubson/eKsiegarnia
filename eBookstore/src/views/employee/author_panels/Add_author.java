@@ -1,14 +1,13 @@
 package views.employee.author_panels;
 
+import models.DataVerification;
 import models.WindowMethods;
 import models.dataBaseConnection;
-import views.employee.publisher_panels.Publishers;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Add_author {
@@ -17,9 +16,7 @@ public class Add_author {
     private JButton add, back;
     private JTextField name2, surname2, country2;
     private JPanel center, down, name_pane, surname_pane, country_pane;
-    private String user, message = "W następujących polach wykryto błędy: ";
-    private Dimension dimension = new Dimension(250, 20);
-    private int error_counter = 0;
+    private String user;
     private dataBaseConnection dataBase = new dataBaseConnection();
     private boolean isManager;
 
@@ -106,61 +103,12 @@ public class Add_author {
         windowMethods.window.add(down, BorderLayout.SOUTH);
     }
     private boolean check(){
-        error_counter = 0;
-        fieldCheck(name2, 1, 20, true, false);
-        fieldCheck(surname2, 1, 30, true, true);
-        fieldCheck(country2, 0, 30, true, true);
-
-        if(error_counter != 0){
-            JOptionPane.showMessageDialog(windowMethods.window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
-            message = "W następujących polach wykryto błędy: ";
-        }
-        if (error_counter == 0) return true;
+        DataVerification verify = new DataVerification();
+        verify.fieldCheck(name2, 1, 20, false, true);
+        verify.fieldCheck(surname2, 1, 30, false, true);
+        verify.fieldCheck(country2, 0, 30, false, true);
+        verify.errorMessage();
+        if(verify.error_counter == 0) return true;
         else return false;
-
-    }
-    private void fieldCheck(JTextField field, int min_size, int max_size, boolean digitsEnabled, boolean spaceEnabled){
-        if(field.getText().length() < min_size || field.getText().length() > max_size){
-            message += "\n" + field.getName();
-            error_counter++;
-        }
-        else{
-            if(digitsEnabled && spaceEnabled){
-                for(int i = 0; i < field.getText().length(); i++){
-                    if(!Character.isLetterOrDigit(field.getText().charAt(i)) && !Character.isSpaceChar(field.getText().charAt(i))){
-                        message += "\n" + field.getName();
-                        error_counter++;
-                        break;
-                    }
-                }
-            }
-            else if(!digitsEnabled && spaceEnabled){
-                for(int i = 0; i < field.getText().length(); i++){
-                    if(!Character.isLetter(field.getText().charAt(i)) && !Character.isSpaceChar(field.getText().charAt(i))){
-                        message += "\n" + field.getName();
-                        error_counter++;
-                        break;
-                    }
-                }
-            }
-            else if(digitsEnabled && !spaceEnabled){
-                for(int i = 0; i < field.getText().length(); i++){
-                    if(!Character.isLetterOrDigit(field.getText().charAt(i))){
-                        message += "\n" + field.getName();
-                        error_counter++;
-                        break;
-                    }
-                }
-            }
-            else{
-                for(int i = 0; i < field.getText().length(); i++){
-                    if(!Character.isLetter(field.getText().charAt(i))){
-                        message += "\n" + field.getName();
-                        error_counter++;
-                        break;
-                    }
-                }
-            }
-        }
     }
 }

@@ -1,13 +1,12 @@
 package views.employee.manager.employee_panels;
 
+import models.DataVerification;
 import models.WindowMethods;
 import models.dataBaseConnection;
 import org.jdatepicker.impl.DateComponentFormatter;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
-import views.employee.manager.Manager_panel;
-import views.employee.manager.employee_panels.Employees;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +15,6 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Properties;
 
 public class Hire_employee_panel {
@@ -25,12 +23,10 @@ public class Hire_employee_panel {
     private JPasswordField pass2;
     private JTextField login2, name2, surname2, phone2, salary2, job_type2, contract_type2;
     private JButton back, add;
-    private int error_counter;
     private JCheckBox pass_box;
     private JPanel center, down, login_pane, pass_pane, name_pane, surname_pane, phone_pane,hired_pane, salary_pane, job_type_pane, contract_type_pane;
     private dataBaseConnection dataBase = new dataBaseConnection();
-    private boolean phone_correctness;
-    private String message = "W następujących polach wykryto błędy: ", user;
+    private String user;
     private UtilDateModel model;
     private JDatePanelImpl datePanel;
     private JDatePickerImpl datePicker;
@@ -135,7 +131,6 @@ public class Hire_employee_panel {
                 if(check()){
                     try {
                         dataBase.setStmt();
-                        dataBase.getConn().setAutoCommit(true);
                         ResultSet rs = dataBase.getStmt().executeQuery(
                                 "SELECT Login FROM Uzytkownik WHERE Login = " + "'" +login2.getText() + "'"
                         );
@@ -180,107 +175,18 @@ public class Hire_employee_panel {
         windowMethods.window.add(down, BorderLayout.SOUTH);
     }
     private boolean check(){
-        error_counter = 0;
-        fieldCheck(login2, 1, 30, true, false);
-        passFieldCheck(pass2, 20);
-        fieldCheck(name2, 1, 20, true, true);
-        fieldCheck(surname2, 1, 30, true, true);
-        boolean number = phoneCheck(phone2);
-        jobTypeCheck(job_type2);
-        salaryCheck(salary2);
-        contractCheck(contract_type2);
-
-        if(!number) {
-            JOptionPane.showMessageDialog(windowMethods.window, "Numer telefonu musi składać się z cyfr!",
-                    "Nieprawidłowy numer telefonu!", JOptionPane.ERROR_MESSAGE);
-            phone2.setText("");
-        }
-
-        if(error_counter != 0){
-            JOptionPane.showMessageDialog(windowMethods.window, message, "Błąd!", JOptionPane.ERROR_MESSAGE);
-            message = "W następujących polach wykryto błędy: ";
-        }
-        if (number && error_counter == 0) return true;
+        DataVerification verify = new DataVerification();
+        verify.fieldCheck(login2, 1, 30, true, false);
+        verify.passFieldCheck(pass2, 20);
+        verify.fieldCheck(name2, 1, 20, false, true);
+        verify.fieldCheck(surname2, 1, 30, false, true);
+        verify.phoneCheck(phone2);
+        verify.jobTypeCheck(job_type2);
+        verify.sumCheck(salary2);
+        verify.contractCheck(contract_type2);
+        verify.errorPhone(verify.phone_correctness, phone2, windowMethods.window);
+        verify.errorMessage();
+        if(verify.phone_correctness && verify.error_counter == 0) return true;
         else return false;
-    }
-    private void fieldCheck(JTextField field, int min_size, int max_size, boolean digitsEnabled, boolean spaceEnabled){
-        if(field.getText().length() < min_size || field.getText().length() > max_size){
-            message += "\n" + field.getName();
-            error_counter++;
-        }
-        else{
-            if(digitsEnabled && spaceEnabled){
-                for(int i = 0; i < field.getText().length(); i++){
-                    if(!Character.isLetterOrDigit(field.getText().charAt(i)) && !Character.isSpaceChar(field.getText().charAt(i))){
-                        message += "\n" + field.getName();
-                        error_counter++;
-                        break;
-                    }
-                }
-            }
-            else if(!digitsEnabled && spaceEnabled){
-                for(int i = 0; i < field.getText().length(); i++){
-                    if(!Character.isLetter(field.getText().charAt(i)) && !Character.isSpaceChar(field.getText().charAt(i))){
-                        message += "\n" + field.getName();
-                        error_counter++;
-                        break;
-                    }
-                }
-            }
-            else if(digitsEnabled && !spaceEnabled){
-                for(int i = 0; i < field.getText().length(); i++){
-                    if(!Character.isLetterOrDigit(field.getText().charAt(i))){
-                        message += "\n" + field.getName();
-                        error_counter++;
-                        break;
-                    }
-                }
-            }
-            else{
-                for(int i = 0; i < field.getText().length(); i++){
-                    if(!Character.isLetter(field.getText().charAt(i))){
-                        message += "\n" + field.getName();
-                        error_counter++;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    private void passFieldCheck(JPasswordField field, int size){
-        if(field.getPassword().length == 0 || field.getPassword().length > size){
-            message += "\n" + field.getName();
-            error_counter++;
-        }
-    }
-    private boolean phoneCheck(JTextField field) {
-        phone_correctness = true;
-        if(field.getText().length() != 9){
-            if(field.getText().length() != 0) return false;
-        }
-        for (int i = 0; i < field.getText().length(); i++) {
-            if (!Character.isDigit(field.getText().charAt(i))) {
-                phone_correctness = false;
-            }
-        }
-        return phone_correctness;
-    }
-    private void jobTypeCheck(JTextField field){
-        if(!(field.getText().equals("magazynier") || field.getText().equals("kierownik"))){
-            message += "\n" + field.getName();
-            error_counter++;
-        }
-    }
-    private void salaryCheck(JTextField field){
-        if (!field.getText().matches("[0-9]+[.]?[0-9]{1,2}")){
-            message += "\n" + field.getName();
-            error_counter++;
-        }
-    }
-    private void contractCheck(JTextField field){
-        if(!field.getText().equals("praca")){
-            message += "\n" + field.getName();
-            error_counter++;
-        }
     }
 }

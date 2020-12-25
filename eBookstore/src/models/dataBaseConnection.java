@@ -40,15 +40,27 @@ public class dataBaseConnection {
     public void setCstmt(String sql) throws SQLException { cstmt = conn.prepareCall(sql); }
     public CallableStatement getCstmt() {return cstmt;}
 
-    public boolean findUser(String login) throws SQLException {
+    public boolean findLoggedUser(String login, String user) throws SQLException {
         setStmt();
-        ResultSet rs = stmt.executeQuery("SELECT Login FROM Klient WHERE Login = " + "'" + login + "'");
+        ResultSet rs = stmt.executeQuery("SELECT Login FROM Uzytkownik WHERE Login = " + "'" + login + "'");
         if(rs.next()) {
-            rs.close();
-            return true;
+            //System.out.println("Znaleziono login: " + rs.getString(1));
+            if(rs.getString(1).equals(user)){
+                //System.out.println("taki sam login");
+                rs.close();
+                getStmt().close();
+                return true;
+            }
+            else{
+                rs.close();
+                getStmt().close();
+                return false;
+            }
         }
         else {
+            System.out.println("nie znaleziono");
             rs.close();
+            getStmt().close();
             return false;
         }
     }

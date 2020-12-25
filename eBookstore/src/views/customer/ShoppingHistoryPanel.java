@@ -27,7 +27,7 @@ public class ShoppingHistoryPanel {
     protected JPanel  down , center;
     protected String user;
 
-    public ShoppingHistoryPanel(String user,dataBaseConnection dataBase , CartInfo cart){
+    public ShoppingHistoryPanel(String user, dataBaseConnection dataBase , CartInfo cart){
         this.dataBase = dataBase;
         this.cart = cart;
         this.user = user;
