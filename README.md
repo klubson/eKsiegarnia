@@ -15,5 +15,5 @@ login: klient
 hasło: klient
 
 ## TODO
-w BuyPanel ustawić poprawnie maksymalną wartość spinnera, dodawanie zmniejsza stan w magazynie
+Sprawdzić co się dzieje z dziwnymi znakami przy filtrowaniu produktów
 

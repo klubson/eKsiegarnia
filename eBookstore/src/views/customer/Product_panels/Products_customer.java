@@ -44,6 +44,36 @@ public class Products_customer {
 
     }
 
+    public void showAuthorsProducts(String autor){
+        prepSorting();
+        filterText.setText(autor);
+        filtersNames.setSelectedIndex(1);
+        try {
+            createTable(2 ,3, filterText.getText());
+        } catch (SQLException e) {
+            System.out.println("Błąd przy wyświetlaniu produktów danego autora");
+            e.printStackTrace();
+        }
+        listScroller.revalidate();
+        listScroller.repaint();
+        windowMethods.window.repaint();
+    }
+
+    public void showSeriesProducts(String seria){
+        prepSorting();
+        filterText.setText(seria);
+        filtersNames.setSelectedIndex(2);
+        try {
+            createTable(2 ,2, filterText.getText());
+        } catch (SQLException e) {
+            System.out.println("Błąd przy wyświetlaniu produktów danej serii");
+            e.printStackTrace();
+        }
+        listScroller.revalidate();
+        listScroller.repaint();
+        windowMethods.window.repaint();
+    }
+
     private void getProductList(int mode,int filterType, String filterText) throws SQLException {
         data.clear();
         dataBase.setStmt();

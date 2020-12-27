@@ -120,7 +120,7 @@ public class Customer_panel {
                 time.stopClock();
                 windowMethods.exit();
                 try {
-                    ac.create(user,cart);
+                    ac.create(user,cart,dataBase);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -134,7 +134,7 @@ public class Customer_panel {
                 time.stopClock();
                 windowMethods.exit();
                 try {
-                    sc.create(user,cart);
+                    sc.create(user,cart,dataBase);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }

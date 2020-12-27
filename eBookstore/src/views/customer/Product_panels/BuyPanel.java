@@ -51,7 +51,7 @@ public class BuyPanel {
         }
 
     }
-    //TODO ustawić poprawnie maksymalną wartość spinnera, dodawanie zmniejsza stan w magazynie
+
     private void addComponents() {
         prepButtons();
         prepLabels();

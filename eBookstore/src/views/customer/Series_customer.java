@@ -3,6 +3,7 @@ package views.customer;
 import models.CartInfo;
 import models.WindowMethods;
 import models.dataBaseConnection;
+import views.customer.Product_panels.Products_customer;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -15,11 +16,11 @@ import java.util.Vector;
 
 public class Series_customer {
     private WindowMethods windowMethods = new WindowMethods();
-    private JButton back, filter;
+    private JButton back, filter , products;
     private JCheckBox title_asc, title_desc, tomes_asc, tomes_desc;
     private JPanel up, center, down;
     private JLabel empty;
-    private dataBaseConnection dataBase = new dataBaseConnection();
+    private dataBaseConnection dataBase = null;//new dataBaseConnection();
     private DefaultTableModel tableModel = new DefaultTableModel();
     private JScrollPane listScroller;
     private String sort_asc, sort_desc, user;
@@ -28,8 +29,9 @@ public class Series_customer {
     private JTable table;
     private CartInfo cart;
 
-    public void create(String data , CartInfo cart) throws SQLException {
+    public void create(String data , CartInfo cart,dataBaseConnection dataBase) throws SQLException {
         this.cart = cart;
+        this.dataBase = dataBase;
         windowMethods.window = new JFrame("Serie książek");
         windowMethods.settings();
         windowMethods.window.setSize(620, 600);
@@ -118,6 +120,23 @@ public class Series_customer {
 
             }
         });
+        products = new JButton("Zobacz produkty");
+        products.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String seria = data.get(table.getSelectedRow()).get(0);
+                Products_customer pc = new Products_customer();
+
+                try {
+                    pc.create(user , dataBase , cart);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+                pc.showSeriesProducts(seria);
+                windowMethods.exit();
+
+            }
+        });
         title_asc = new JCheckBox("Tytuł - rosnąco");
         title_desc = new JCheckBox("Tytuł - malejąco");
         tomes_asc = new JCheckBox("Liczba tomów - rosnąco");
@@ -182,6 +201,7 @@ public class Series_customer {
         down = new JPanel();
         down.setLayout(new BorderLayout());
         down.add(back, BorderLayout.WEST);
+        down.add(products, BorderLayout.EAST);
     }
     private void add_components() throws SQLException {
         panels();
