@@ -17,9 +17,11 @@ import java.util.Vector;
 public class Products_customer {
     private WindowMethods windowMethods = new WindowMethods();
     private JLabel empty;
+    private JComboBox filtersNames;
+    private JTextField filterText;
     private JCheckBox name_asc, name_desc, price_asc, price_desc, year_asc, year_desc;
-    private JPanel up, center, down;
-    private JButton details, back, filter, addToCart;
+    private JPanel up, center, down , filterPanel , sortPanel;
+    private JButton details, back, sort, addToCart , filter;
     private dataBaseConnection dataBase = null;//new dataBaseConnection();
     private DefaultTableModel tableModel = new DefaultTableModel();
     private JScrollPane listScroller;
@@ -41,18 +43,42 @@ public class Products_customer {
         windowMethods.window.setVisible(true);
 
     }
-    private void getProductList(int mode) throws SQLException {
+
+    private void getProductList(int mode,int filterType, String filterText) throws SQLException {
         data.clear();
         dataBase.setStmt();
         ResultSet rs = null;
+        String query="";
+        if(filterType==0 || filterText =="")
+        {
+            query = "SELECT Nazwa, Cena, Rok_wydania, Stan_magazyn, co ,id_produktu  FROM Produkt";
+        }
+        else {
+            if(filterType==1){
+                query = "SELECT Nazwa, Cena, Rok_wydania, Stan_magazyn, co ,id_produktu  FROM Produkt " +
+                        "WHERE nazwa LIKE '%"+filterText+"%'";
+            }
+            else if(filterType==2)
+            {
+                query = "SELECT Nazwa, Cena, Rok_wydania, Stan_magazyn, co ,id_produktu  FROM Produkt JOIN ksiazka USING(id_produktu)"+
+                "WHERE seria_tytul LIKE '%"+ filterText + "%'";
+            }
+            else if(filterType==3)
+            {
+                query = "SELECT Nazwa, Cena, Rok_wydania, Stan_magazyn, co ,id_produktu,imie,nazwisko  FROM Produkt"+
+                " JOIN autor_produktu ON id_produktu=produkt_id_produktu JOIN autor ON autor_id_autora = id_autora"+
+                " WHERE CONCAT(CONCAT(imie,' '),nazwisko) LIKE '%"+filterText+"%'";
+            }
+
+        }
         if(sort_asc == "" && sort_desc == "") mode = 1;
         if(mode == 1) {
             rs = dataBase.getStmt().executeQuery(
-                    "SELECT Nazwa, Cena, Rok_wydania, Stan_magazyn, co ,id_produktu  FROM Produkt ORDER BY ID_Produktu"
+                    query+" ORDER BY ID_Produktu"
             );
         }
         if(mode == 2){
-            String query = "SELECT Nazwa, Cena, Rok_wydania, Stan_magazyn, co,id_produktu FROM Produkt ORDER BY ";
+            query = query+ " ORDER BY ";
             if(sort_asc != "" && sort_desc != ""){
                 query += sort_asc + " ASC, ";
                 query += sort_desc + " DESC";
@@ -82,8 +108,13 @@ public class Products_customer {
         rs.close();
         dataBase.getStmt().close();
     }
+
     public void createTable(int mode) throws SQLException {
-        getProductList(mode);
+        createTable(mode ,0, "");
+    }
+
+    public void createTable(int mode ,int filterType , String filterText) throws SQLException {
+        getProductList(mode ,filterType, filterText);
         tableModel = new DefaultTableModel(data, columnNames);
         table = new JTable(tableModel);
         table.removeColumn(table.getColumnModel().getColumn(5));
@@ -162,22 +193,11 @@ public class Products_customer {
                 new BuyPanelProductTable(dataBase,id,price,cart , customer);
             }
         });
-        filter = new JButton("Sortuj");
-        filter.addActionListener(new ActionListener() {
+        sort = new JButton("Sortuj");
+        sort.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //sortowanie
-                sort_asc = "";
-                sort_desc = "";
-                if(name_asc.isSelected()) sort_asc += "Nazwa, ";
-                if(price_asc.isSelected()) sort_asc += "Cena, ";
-                if(year_asc.isSelected()) sort_asc += "Rok_wydania, ";
-                if(sort_asc.length() != 0) sort_asc = sort_asc.substring(0, sort_asc.length()-2);
-                //System.out.println(sort_asc);
-                if(name_desc.isSelected()) sort_desc += "Nazwa, ";
-                if(price_desc.isSelected()) sort_desc += "Cena, ";
-                if(year_desc.isSelected()) sort_desc += "Rok_wydania, ";
-                if(sort_desc.length() != 0) sort_desc = sort_desc.substring(0, sort_desc.length()-2);
+                prepSorting();
                 //System.out.println(sort_desc);
                 try {
                     createTable(2);
@@ -200,19 +220,98 @@ public class Products_customer {
 
         createTable(1);
     }
+
+    private void prepSorting(){
+        //sortowanie
+        sort_asc = "";
+        sort_desc = "";
+        if(name_asc.isSelected()) sort_asc += "Nazwa, ";
+        if(price_asc.isSelected()) sort_asc += "Cena, ";
+        if(year_asc.isSelected()) sort_asc += "Rok_wydania, ";
+        if(sort_asc.length() != 0) sort_asc = sort_asc.substring(0, sort_asc.length()-2);
+        //System.out.println(sort_asc);
+        if(name_desc.isSelected()) sort_desc += "Nazwa, ";
+        if(price_desc.isSelected()) sort_desc += "Cena, ";
+        if(year_desc.isSelected()) sort_desc += "Rok_wydania, ";
+        if(sort_desc.length() != 0) sort_desc = sort_desc.substring(0, sort_desc.length()-2);
+    }
+
+    private void setUpFiltering(){
+        String[] pom = {"nazwa" , "autor" , "seria"};
+        filtersNames = new JComboBox(pom);
+        filtersNames.setSelectedIndex(0);
+
+        filterText = new JTextField();
+
+        filter = new JButton("Filtruj");
+        filter.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(!filterText.getText().isEmpty())
+                {
+                    prepSorting();
+                    //System.out.println(sort_desc);
+                    try {
+                        if(filtersNames.getSelectedIndex() == 0){
+                            createTable(2 ,1, filterText.getText());
+                        }
+                        else if(filtersNames.getSelectedIndex() == 2){
+                            createTable(2 ,2, filterText.getText());
+                        }
+                        else if(filtersNames.getSelectedIndex() == 1){
+                            createTable(2 ,3, filterText.getText());
+                        }
+
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                    //printDebugData(table);
+                    listScroller.revalidate();
+                    listScroller.repaint();
+                    windowMethods.window.repaint();
+                }
+                else{
+                    prepSorting();
+                    //System.out.println(sort_desc);
+                    try {
+                        createTable(2 );
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                    //printDebugData(table);
+                    listScroller.revalidate();
+                    listScroller.repaint();
+                    windowMethods.window.repaint();
+                }
+            }
+
+        });
+
+        filterPanel = new JPanel();
+        filterPanel.setLayout(new GridLayout(1,3));
+        filterPanel.add(filtersNames);
+        filterPanel.add(filterText);
+        filterPanel.add(filter);
+
+    }
+
     private void panels() throws SQLException {
         components();
-
+        setUpFiltering();
         up = new JPanel();
-        up.setLayout(new GridLayout(2,4));
-        up.add(name_asc);
-        up.add(name_desc);
-        up.add(price_asc);
-        up.add(price_desc);
-        up.add(year_asc);
-        up.add(year_desc);
-        up.add(empty);
-        up.add(filter);
+        up.setLayout(new BorderLayout());
+        sortPanel = new JPanel();
+        sortPanel.setLayout(new GridLayout(2,4));
+        sortPanel.add(name_asc);
+        sortPanel.add(name_desc);
+        sortPanel.add(price_asc);
+        sortPanel.add(price_desc);
+        sortPanel.add(year_asc);
+        sortPanel.add(year_desc);
+        sortPanel.add(empty);
+        sortPanel.add(sort);
+        up.add(sortPanel,BorderLayout.CENTER);
+        up.add(filterPanel,BorderLayout.SOUTH);
 
         center = new JPanel();
         center.setLayout(new BoxLayout(center, BoxLayout.PAGE_AXIS));
