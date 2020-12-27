@@ -137,12 +137,13 @@ public class Products_customer {
                     dataBase.getStmt().close();
                     if(type.equals("k")){
                         Book_details bd = new Book_details();
-                        bd.create(id , dataBase , cart);
+                        bd.create(id , dataBase , cart , user);
                     }
                     else if(type.equals("g")){
                         Game_details gd = new Game_details();
-                        gd.create(id , dataBase , cart);
+                        gd.create(id , dataBase , cart,user);
                     }
+                    windowMethods.exit();
 
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
@@ -150,6 +151,7 @@ public class Products_customer {
             }
         });
         addToCart = new JButton("Dodaj do koszyka");
+        Products_customer customer = this;
         addToCart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -157,7 +159,7 @@ public class Products_customer {
                 int id = Integer.parseInt((String) table.getModel().getValueAt(table.getSelectedRow(), 5 ));
                 double price = Double.parseDouble(data.get(table.getSelectedRow()).get(1));
                 //dataBase.newCartItem(cart, id, price);
-                new BuyPanel(dataBase,id,price,cart  );
+                new BuyPanelProductTable(dataBase,id,price,cart , customer);
             }
         });
         filter = new JButton("Sortuj");
@@ -227,5 +229,14 @@ public class Products_customer {
         windowMethods.window.add(up, BorderLayout.NORTH);
         windowMethods.window.add(center, BorderLayout.CENTER);
         windowMethods.window.add(down, BorderLayout.SOUTH);
+    }
+
+    public void decreaseAmount(int amount){
+        int currentAmount = Integer.parseInt((String) table.getModel().getValueAt(table.getSelectedRow(), 3 ));
+        table.getModel().setValueAt(currentAmount-amount , table.getSelectedRow(),3);
+        listScroller.revalidate();
+        listScroller.repaint();
+        windowMethods.window.repaint();
+
     }
 }

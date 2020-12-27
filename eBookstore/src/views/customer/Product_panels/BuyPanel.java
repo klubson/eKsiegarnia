@@ -8,35 +8,54 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class BuyPanel {
-    private WindowMethods windowMethods = new WindowMethods();
+    protected WindowMethods windowMethods = new WindowMethods();
     private dataBaseConnection dataBase;
-    private JButton back , buy;
+    protected JButton back , buy;
     private JLabel info;
-    private JSpinner amountSpinner;
-    private SpinnerNumberModel amountSpinnerModel;
+    protected JSpinner amountSpinner;
+    protected SpinnerNumberModel amountSpinnerModel;
     private JPanel center, down;
     private  int produktId ;
     private double productPrice;
     private CartInfo cart;
+    private int maxAmount;
     public BuyPanel(dataBaseConnection dataBase, int produktId , double productPrice , CartInfo cart) {
         this.dataBase = dataBase;
         this.productPrice = productPrice;
         this.produktId = produktId;
         this.cart = cart;
-        windowMethods.window = new JFrame("Kupowanie");
-        windowMethods.settings();
-        windowMethods.window.setSize(400, 250);
-        windowMethods.window.setLocation(800, 80);
-        addComponents();
-        windowMethods.window.setVisible(true);
+        try {
+            dataBase.setStmt();
+            ResultSet rs = dataBase.getStmt().executeQuery(
+                    "Select stan_magazyn from produkt where id_produktu = " + produktId
+            );
+            rs.next();
+            maxAmount = rs.getInt(1);
+            rs.close();
+            dataBase.getStmt().close();
+        } catch (SQLException e) {
+            System.out.println("Błąd przy ustalaniu mak wartości spinnera");
+            e.printStackTrace();
+        }
+        if(maxAmount > 0){
+            windowMethods.window = new JFrame("Kupowanie");
+            windowMethods.settings();
+            windowMethods.window.setSize(400, 250);
+            windowMethods.window.setLocation(800, 80);
+            addComponents();
+            windowMethods.window.setVisible(true);
+        }
+
     }
     //TODO ustawić poprawnie maksymalną wartość spinnera, dodawanie zmniejsza stan w magazynie
     private void addComponents() {
         prepButtons();
         prepLabels();
-        amountSpinnerModel = new SpinnerNumberModel(1 , 1, 100 , 1);
+        amountSpinnerModel = new SpinnerNumberModel(1 , 1, maxAmount , 1);
         amountSpinner = new JSpinner(amountSpinnerModel);
         center = new JPanel();
         center.add(info);

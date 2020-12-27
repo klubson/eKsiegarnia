@@ -237,6 +237,11 @@ public class dataBaseConnection {
 
             );
             System.out.println("Zmodyfikowano " + changes + " krotkę");
+            changes = stmt.executeUpdate(
+                    "Update produkt SET stan_magazyn = stan_magazyn - " + amount  + " WHERE id_produktu = "+ produktId
+
+            );
+            System.out.println("Zmodyfikowano " + changes + " krotkę");
         }
         catch (SQLException e)
         {

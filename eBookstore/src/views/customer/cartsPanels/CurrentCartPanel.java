@@ -44,12 +44,13 @@ public class CurrentCartPanel extends CartInfoPanel {
                     String type = data.get(table.getSelectedRow()).get(5);
                     if(type.equals("książka")){
                         Book_details bd = new Book_details();
-                        bd.create(id , dataBase , cart);
+                        bd.create(id , dataBase , cart,user);
                     }
                     else if(type.equals("gra planszowa")){
                         Game_details gd = new Game_details();
-                        gd.create(id , dataBase , cart);
+                        gd.create(id , dataBase , cart,user);
                     }
+                    windowMethods.exit();
 
                 } catch (SQLException throwables) {
                     System.out.println("Błąd przy wyświetlaniu szczegółów o produkcie z obecnego koszyka");

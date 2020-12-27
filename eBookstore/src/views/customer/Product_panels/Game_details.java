@@ -20,10 +20,12 @@ public class Game_details {
     private  int produktId ;
     private double productPrice;
     private CartInfo cart;
+    private String user;
 
-    public void create(int product_id , dataBaseConnection dataBase , CartInfo cart) throws SQLException {
+    public void create(int product_id , dataBaseConnection dataBase , CartInfo cart,String user) throws SQLException {
         this.dataBase = dataBase;
         this.cart = cart;
+        this.user = user;
         windowMethods.window = new JFrame("Szczegóły produktu");
         windowMethods.settings();
         windowMethods.window.setSize(400, 250);
@@ -127,6 +129,13 @@ public class Game_details {
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Products_customer pc = new Products_customer();
+                try {
+                    pc.create(user , dataBase , cart);
+                } catch (SQLException ex) {
+                    System.out.println("Błąd przy pworcie z szczegółów produktu");
+                    ex.printStackTrace();
+                }
                 windowMethods.exit();
             }
         });
