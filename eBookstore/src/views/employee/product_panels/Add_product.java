@@ -91,11 +91,6 @@ public class Add_product {
                 }
                 else{
                     if(generalCheck()){
-                        try {
-                            dataBase.getConn().setAutoCommit(true);
-                        } catch (SQLException throwables) {
-                            throwables.printStackTrace();
-                        }
                         if(menu.getSelectedIndex() == 1){
                             if(bookCheck()){
                                 try {

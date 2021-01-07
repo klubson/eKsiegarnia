@@ -153,6 +153,7 @@ public class Series {
                         System.out.println("Usunięto "+ changes + " rekord");
                         JOptionPane.showMessageDialog(windowMethods.window, "Seria usunięta pomyślnie!");
                         dataBase.getStmt().close();
+                        dataBase.getConn().setAutoCommit(true);
                         Series ss = new Series();
                         exit();
                         ss.create(user, isManager);

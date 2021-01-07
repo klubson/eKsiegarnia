@@ -107,6 +107,7 @@ public class Edit_customer_profile {
                                             "Nr_kontaktowy = '" + phone2.getText() + "' WHERE Login = '" + user + "'"
                             );
                             System.out.println("Edytowano " + changes + " rekord");
+                            dataBase.getStmt().close();
                             JOptionPane.showMessageDialog(windowMethods.window, "Klient " + name2.getText() + " " +
                                     surname2.getText() + " edytowany pomyślnie!");
                             Manager_panel mp = new Manager_panel();

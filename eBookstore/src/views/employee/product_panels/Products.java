@@ -40,7 +40,6 @@ public class Products {
     private void getProductList(int mode) throws SQLException {
         data.clear();
         dataBase.setStmt();
-        dataBase.getConn().setAutoCommit(true);
         ResultSet rs = null;
         if(sort_asc == "" && sort_desc == "") mode = 1;
         if(mode == 1) {
@@ -176,6 +175,61 @@ public class Products {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //usuwanie produktu
+                boolean ReadyToDelete = true;
+                int id = Integer.parseInt(data.get(table.getSelectedRow()).get(0));
+                String co = data.get(table.getSelectedRow()).get(5);
+                int dialogButton = JOptionPane.YES_NO_OPTION;
+                int dialogResult = JOptionPane.showConfirmDialog (null,
+                        "Czy na pewno chcesz usunąć produkt " +
+                                data.get(table.getSelectedRow()).get(1) +"?",
+                        "Ostrzeżenie!",dialogButton);
+                if(dialogResult == JOptionPane.YES_OPTION){
+                    try {
+                        dataBase.setStmt();
+                        ResultSet rs = dataBase.getStmt().executeQuery(
+                                "SELECT DISTINCT PRODUKT_ID_PRODUKTU FROM Element_koszyka ORDER BY produkt_id_produktu"
+                        );
+                        while (rs.next()){
+                            if(rs.getInt(1) == id) ReadyToDelete = false;
+                        }
+                        rs.close();
+                        if(ReadyToDelete){
+                            dataBase.getStmt().executeUpdate(
+                                    "DELETE FROM Autor_produktu WHERE Produkt_ID_produktu = " + id
+                            );
+                            if (co.equals("książka")){
+                                dataBase.getStmt().executeUpdate(
+                                        "DELETE FROM Ksiazka WHERE ID_produktu = " + id
+                                );
+                            }
+                            else if(co.equals("gra planszowa")){
+                                dataBase.getStmt().executeUpdate(
+                                        "DELETE FROM Gra_planszowa WHERE ID_produktu = " + id
+                                );
+                            }
+                            dataBase.getStmt().executeUpdate(
+                                    "DELETE FROM Produkt WHERE ID_produktu = " + id
+                            );
+                            System.out.println("Usunięto 1 rekord");
+                        }
+                        else{
+                            dataBase.getStmt().executeUpdate(
+                                    "DELETE FROM Autor_produktu WHERE Produkt_ID_produktu = " + id
+                            );
+                            dataBase.getStmt().executeUpdate(
+                                    "UPDATE Produkt SET Stan_magazyn = 0 WHERE ID_produktu = " + id
+                            );
+                            System.out.println("Usunięto 1 rekord");
+                        }
+                        dataBase.getStmt().close();
+                        Products ps = new Products();
+                        windowMethods.exit();
+                        ps.create(user, isManager);
+
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                }
             }
         });
         filter = new JButton("Sortuj");
