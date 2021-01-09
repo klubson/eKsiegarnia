@@ -280,16 +280,18 @@ public class Products_customer {
                 if(!filterText.getText().isEmpty())
                 {
                     prepSorting();
+                    String filterQuery = filterText.getText().replace("'","''");
+                    System.out.println(filterQuery);
                     //System.out.println(sort_desc);
                     try {
                         if(filtersNames.getSelectedIndex() == 0){
-                            createTable(2 ,1, filterText.getText());
+                            createTable(2 ,1, filterQuery);
                         }
                         else if(filtersNames.getSelectedIndex() == 2){
-                            createTable(2 ,2, filterText.getText());
+                            createTable(2 ,2, filterQuery);
                         }
                         else if(filtersNames.getSelectedIndex() == 1){
-                            createTable(2 ,3, filterText.getText());
+                            createTable(2 ,3, filterQuery);
                         }
 
                     } catch (SQLException throwables) {
