@@ -49,7 +49,8 @@ public class Products_customer {
         filterText.setText(autor);
         filtersNames.setSelectedIndex(1);
         try {
-            createTable(2 ,3, filterText.getText());
+            getProductList(2 ,3, filterText.getText());
+            tableModel.setDataVector(data,columnNames);
         } catch (SQLException e) {
             System.out.println("Błąd przy wyświetlaniu produktów danego autora");
             e.printStackTrace();
@@ -64,7 +65,8 @@ public class Products_customer {
         filterText.setText(seria);
         filtersNames.setSelectedIndex(2);
         try {
-            createTable(2 ,2, filterText.getText());
+            getProductList(2 ,2, filterText.getText());
+            tableModel.setDataVector(data,columnNames);
         } catch (SQLException e) {
             System.out.println("Błąd przy wyświetlaniu produktów danej serii");
             e.printStackTrace();
@@ -217,7 +219,9 @@ public class Products_customer {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                int id = Integer.parseInt((String) table.getModel().getValueAt(table.getSelectedRow(), 5 ));
+                //int id = Integer.parseInt((String) table.getModel().getValueAt(table.getSelectedRow(), 5 ));
+                System.out.println("Wybrany wiersz " + table.getSelectedRow() );
+                int id = Integer.parseInt(data.get(table.getSelectedRow()).get(5));
                 double price = Double.parseDouble(data.get(table.getSelectedRow()).get(1));
                 //dataBase.newCartItem(cart, id, price);
                 new BuyPanelProductTable(dataBase,id,price,cart , customer);
@@ -230,7 +234,10 @@ public class Products_customer {
                 prepSorting();
                 //System.out.println(sort_desc);
                 try {
-                    createTable(2);
+
+
+                    getProductList(2 ,0, "");
+                    tableModel.setDataVector(data,columnNames);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -285,13 +292,16 @@ public class Products_customer {
                     //System.out.println(sort_desc);
                     try {
                         if(filtersNames.getSelectedIndex() == 0){
-                            createTable(2 ,1, filterQuery);
+                            getProductList(2 ,1, filterQuery);
+                            tableModel.setDataVector(data,columnNames);
                         }
                         else if(filtersNames.getSelectedIndex() == 2){
-                            createTable(2 ,2, filterQuery);
+                            getProductList(2 ,2, filterQuery);
+                            tableModel.setDataVector(data,columnNames);
                         }
                         else if(filtersNames.getSelectedIndex() == 1){
-                            createTable(2 ,3, filterQuery);
+                            getProductList(2 ,3, filterQuery);
+                            tableModel.setDataVector(data,columnNames);
                         }
 
                     } catch (SQLException throwables) {
@@ -306,7 +316,8 @@ public class Products_customer {
                     prepSorting();
                     //System.out.println(sort_desc);
                     try {
-                        createTable(2 );
+                        getProductList(2,0,"" );
+                        tableModel.setDataVector(data,columnNames);
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }
@@ -364,7 +375,8 @@ public class Products_customer {
 
     public void decreaseAmount(int amount){
         int currentAmount = Integer.parseInt((String) table.getModel().getValueAt(table.getSelectedRow(), 3 ));
-        table.getModel().setValueAt(currentAmount-amount , table.getSelectedRow(),3);
+        String newAmount = String.valueOf(currentAmount-amount);
+        table.getModel().setValueAt(newAmount , table.getSelectedRow(),3);
         listScroller.revalidate();
         listScroller.repaint();
         windowMethods.window.repaint();

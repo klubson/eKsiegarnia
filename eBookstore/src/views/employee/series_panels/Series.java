@@ -178,7 +178,8 @@ public class Series {
                 if(sort_desc.length() != 0) sort_desc = sort_desc.substring(0, sort_desc.length()-2);
                 //System.out.println(sort_desc);
                 try {
-                    createTable(2);
+                    getSeriesList(2);
+                    tableModel.setDataVector(data,columnNames);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
