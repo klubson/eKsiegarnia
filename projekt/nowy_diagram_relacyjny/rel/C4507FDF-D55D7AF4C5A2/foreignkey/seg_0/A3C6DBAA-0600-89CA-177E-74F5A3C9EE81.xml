@@ -5,7 +5,7 @@
 <generatorID>E78B609D-00E6-BF8C-3D48-9EC5039BBC9F</generatorID>
 <ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
 <referredTableLongName>Seria</referredTableLongName>
-<deleteRule>CASCADE</deleteRule>
+<deleteRule>SET NULL</deleteRule>
 <referredTableID>4BFDBD48-CEA1-03B4-1AB3-A799AEE57561</referredTableID>
 <keyObject>24D6B670-80BD-B3A4-EFBC-133D5145AE12</keyObject>
 <referredKeyID>24D6B670-80BD-B3A4-EFBC-133D5145AE12</referredKeyID>

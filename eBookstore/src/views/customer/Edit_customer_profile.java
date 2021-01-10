@@ -110,9 +110,9 @@ public class Edit_customer_profile {
                             dataBase.getStmt().close();
                             JOptionPane.showMessageDialog(windowMethods.window, "Klient " + name2.getText() + " " +
                                     surname2.getText() + " edytowany pomyślnie!");
-                            Manager_panel mp = new Manager_panel();
+                            Customer_panel cp = new Customer_panel();
                             windowMethods.exit();
-                            mp.create(user);
+                            cp.create(user);
                         }
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
