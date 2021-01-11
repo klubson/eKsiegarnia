@@ -21,18 +21,19 @@ public class Hire_employee_panel {
     private WindowMethods windowMethods = new WindowMethods();
     private JLabel login, pass, name, surname, phone, hired, salary, job_type, contract_type;
     private JPasswordField pass2;
-    private JTextField login2, name2, surname2, phone2, salary2, contract_type2;
+    private JTextField login2, name2, surname2, phone2, salary2;
     private JButton back, add;
     private JCheckBox pass_box;
     private JPanel center, down, login_pane, pass_pane, name_pane, surname_pane, phone_pane,hired_pane, salary_pane, job_type_pane, contract_type_pane;
     private dataBaseConnection dataBase = new dataBaseConnection();
     private String user;
-    private JComboBox job_type2;
+    private JComboBox job_type2, contract_type2;
     private UtilDateModel model;
     private JDatePanelImpl datePanel;
     private JDatePickerImpl datePicker;
     private LocalDate now = LocalDate.now();
     private String[] jobTypes = {"magazynier", "kierownik"};
+    private String[] contractTypes = {"umowa o pracę", "umowa zlecenie"};
 
     public void create(String data){
         windowMethods.window = new JFrame("Dodaj pracownika");
@@ -110,8 +111,15 @@ public class Hire_employee_panel {
         surname2 = windowMethods.setJTextField(surname2, "NAZWISKO");
         phone2 = windowMethods.setJTextField(phone2, "NUMER TELEFONU");
         salary2 = windowMethods.setJTextField(salary2, "PENSJA");
-        contract_type2 = windowMethods.setJTextField(contract_type2, "TYP UMOWY");
         job_type2 = new JComboBox(jobTypes);
+        job_type2.setSelectedIndex(0);
+        job_type2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        contract_type2 = new JComboBox(contractTypes);
         job_type2.setSelectedIndex(0);
         job_type2.addActionListener(new ActionListener() {
             @Override
@@ -153,7 +161,7 @@ public class Hire_employee_panel {
                             String selectedDate = datePicker.getModel().getYear() + "-" + Integer.toString(month) + "-" + datePicker.getModel().getDay();
                             float salary = Float.parseFloat(salary2.getText());
                             System.out.println(salary);
-                            dataBase.newEmployee(login2.getText(), tmp, name2.getText(), surname2.getText(), phone2.getText(), selectedDate, salary, job_type2.getSelectedItem().toString(), contract_type2.getText());
+                            dataBase.newEmployee(login2.getText(), tmp, name2.getText(), surname2.getText(), phone2.getText(), selectedDate, salary, job_type2.getSelectedItem().toString(), contract_type2.getSelectedItem().toString());
                             JOptionPane.showMessageDialog(windowMethods.window, "Rejestracja przebiegła pomyślnie!");
                             //przejście do okna logowania
                             Employees ee = new Employees();
@@ -190,7 +198,6 @@ public class Hire_employee_panel {
         verify.fieldCheck(surname2, 1, 30, false, true);
         verify.phoneCheck(phone2);
         verify.sumCheck(salary2);
-        verify.contractCheck(contract_type2);
         verify.errorPhone(verify.phone_correctness, phone2, windowMethods.window);
         verify.errorMessage();
         if(verify.phone_correctness && verify.error_counter == 0) return true;

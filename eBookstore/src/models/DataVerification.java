@@ -120,6 +120,8 @@ public class DataVerification {
                 break;
             }
         }
+        if(field.getText().length() == 0) dig1 = false;
+        if(field2.getText().length() == 0) dig2 = false;
         if(dig1 && dig2){
             if(Integer.parseInt(field.getText()) > Integer.parseInt(field2.getText())){
                 isSecondHigher = false;

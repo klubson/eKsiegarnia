@@ -163,7 +163,7 @@ public class Edit_game {
                                     );
                                     rs.close();
                                 }
-                                int age, time;
+                                int age, time, min_play, max_play;
                                 if(min_age2.getText().equals("")){
                                     age = 0;
                                 }
@@ -172,9 +172,17 @@ public class Edit_game {
                                     time = 0;
                                 }
                                 else time = Integer.parseInt(est_time2.getText());
+                                if(min_players2.getText().equals("")){
+                                    min_play = 0;
+                                }
+                                else min_play = Integer.parseInt(min_players2.getText());
+                                if(max_players2.getText().equals("")){
+                                    max_play = 0;
+                                }
+                                else max_play = Integer.parseInt(max_players2.getText());
                                 dataBase.getStmt().executeUpdate(
-                                        "UPDATE Gra_planszowa SET g_Min_gracze = " + Integer.parseInt(min_players2.getText()) +
-                                                ", g_Max_gracze = " + Integer.parseInt(max_players2.getText()) +
+                                        "UPDATE Gra_planszowa SET g_Min_gracze = " + min_play +
+                                                ", g_Max_gracze = " + max_play +
                                                 ", g_Min_wiek = " + age +
                                                 ", g_Czas_gry = " + time +
                                                 " WHERE ID_produktu = " + IDToEdit
@@ -333,7 +341,7 @@ public class Edit_game {
         verify.dateCheck(year2, 0, 4);
         verify.numberCheck(storage2, 1, 3);
         verify.numberCheck(min_players2, 1, 2);
-        verify.numberCheck(min_players2, 1, 2);
+        verify.numberCheck(max_players2, 1, 2);
         verify.checkTwoNumbers(min_players2, max_players2);
         verify.numberCheck(min_age2, 0, 2);
         verify.numberCheck(est_time2, 0, 3);
