@@ -163,11 +163,20 @@ public class Edit_game {
                                     );
                                     rs.close();
                                 }
+                                int age, time;
+                                if(min_age2.getText().equals("")){
+                                    age = 0;
+                                }
+                                else age = Integer.parseInt(min_age2.getText());
+                                if(est_time2.getText().equals("")){
+                                    time = 0;
+                                }
+                                else time = Integer.parseInt(est_time2.getText());
                                 dataBase.getStmt().executeUpdate(
                                         "UPDATE Gra_planszowa SET g_Min_gracze = " + Integer.parseInt(min_players2.getText()) +
                                                 ", g_Max_gracze = " + Integer.parseInt(max_players2.getText()) +
-                                                ", g_Min_wiek = " + Integer.parseInt(min_age2.getText()) +
-                                                ", g_Czas_gry = " + Integer.parseInt(est_time2.getText()) +
+                                                ", g_Min_wiek = " + age +
+                                                ", g_Czas_gry = " + time +
                                                 " WHERE ID_produktu = " + IDToEdit
                                 );
                                 System.out.println("Edytowano 1 rekord");
@@ -325,8 +334,10 @@ public class Edit_game {
         verify.numberCheck(storage2, 1, 3);
         verify.numberCheck(min_players2, 1, 2);
         verify.numberCheck(min_players2, 1, 2);
+        verify.checkTwoNumbers(min_players2, max_players2);
         verify.numberCheck(min_age2, 0, 2);
         verify.numberCheck(est_time2, 0, 3);
+        verify.errorTwoNumbers();
         verify.errorMessage();
         if (verify.error_counter == 0) return true;
         else return false;

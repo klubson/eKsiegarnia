@@ -6,6 +6,7 @@ import java.util.Arrays;
 public class DataVerification {
     private dataBaseConnection dataBase = new dataBaseConnection();
     public String message = "W następujących polach wykryto błędy: ";
+    public boolean isSecondHigher = true;
     public int error_counter = 0;
     public boolean phone_correctness, pass_correctness;
 
@@ -105,6 +106,28 @@ public class DataVerification {
             }
         }
     }
+    public void checkTwoNumbers(JTextField field, JTextField field2){
+        boolean dig1 = true, dig2 = true;
+        for (int i = 0; i < field.getText().length(); i++) {
+            if (!Character.isDigit(field.getText().charAt(i))) {
+                dig1 = false;
+                break;
+            }
+        }
+        for (int i = 0; i < field.getText().length(); i++) {
+            if (!Character.isDigit(field.getText().charAt(i))) {
+                dig2 = false;
+                break;
+            }
+        }
+        if(dig1 && dig2){
+            if(Integer.parseInt(field.getText()) > Integer.parseInt(field2.getText())){
+                isSecondHigher = false;
+                error_counter++;
+                message += "\n" + "MIN. GRACZY > MAX. GRACZY";
+            }
+        }
+    }
     public void sumCheck(JTextField field){
         if (!field.getText().matches("[0-9]+[.]?[0-9]{1,2}")){
             message += "\n" + field.getName();
@@ -171,6 +194,12 @@ public class DataVerification {
                     "Błąd hasła!", JOptionPane.ERROR_MESSAGE);
             pass1.setText("");
             pass2.setText("");
+        }
+    }
+    public void errorTwoNumbers(){
+        if(!isSecondHigher){
+            JOptionPane.showMessageDialog(null, "Minimalna liczba graczy musi być mniejsza/równa maksymalnej liczbie graczy!",
+                    "Błąd hasła!", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

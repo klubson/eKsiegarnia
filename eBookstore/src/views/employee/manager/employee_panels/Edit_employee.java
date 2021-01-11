@@ -91,8 +91,8 @@ public class Edit_employee {
                 if(check()){
                     try {
                         dataBase.setStmt();
-                        dataBase.getConn().setAutoCommit(true);
-                        String selectedDate = datePicker.getModel().getYear() + "-" + datePicker.getModel().getMonth() + "-" + datePicker.getModel().getDay();
+                        int month = datePicker.getModel().getMonth() + 1;
+                        String selectedDate = datePicker.getModel().getYear() + "-" + Integer.toString(month) + "-" + datePicker.getModel().getDay();
                         float salary = Float.parseFloat(salary2.getText());
                         System.out.println(salary);
                         int changes = dataBase.getStmt().executeUpdate(
