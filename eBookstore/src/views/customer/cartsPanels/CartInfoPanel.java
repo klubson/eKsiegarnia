@@ -146,7 +146,8 @@ public class CartInfoPanel {
 
             vString.add(rs.getString(1));
             vString.add(rs.getString(2));
-            vString.add(rs.getString(3));
+            //vString.add(rs.getString(3));
+            vString.add(String.valueOf(rs.getDouble(5)/rs.getDouble(4)));
             vString.add(rs.getString(4));
             vString.add(rs.getString(5));
             String tmp = rs.getString(6);
