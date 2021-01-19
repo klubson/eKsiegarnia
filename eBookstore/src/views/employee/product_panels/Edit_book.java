@@ -52,7 +52,7 @@ public class Edit_book {
         storage2.setText(Integer.toString(rs.getInt(4)));
         int publisherID = rs.getInt(5);
         cover_type2.setText(rs.getString(6));
-        pages_amount2.setText(Integer.toString(rs.getInt(7)));
+        pages_amount2.setText(rs.getString(7));
         size2.setText(rs.getString(8));
         String title = rs.getString(9);
         rs.close();
@@ -186,8 +186,8 @@ public class Edit_book {
                                 else tmp = seriesList.getSelectedValue().toString();
                                 dataBase.getStmt().executeUpdate(
                                         "UPDATE Ksiazka SET k_Typ_okladki = '" + cover_type2.getText() +
-                                                "', k_Liczba_stron = " + Integer.parseInt(pages_amount2.getText()) +
-                                                ", k_Format = '" + size2.getText() + "', Seria_Tytul = '" + tmp +
+                                                "', k_Liczba_stron = '" + pages_amount2.getText() +
+                                                "', k_Format = '" + size2.getText() + "', Seria_Tytul = '" + tmp +
                                                 "' WHERE ID_produktu = " + IDToEdit
                                 );
                                 System.out.println("Edytowano 1 rekord");

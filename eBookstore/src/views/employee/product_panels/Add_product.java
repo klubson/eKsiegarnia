@@ -110,7 +110,7 @@ public class Add_product {
                                         int pages_tmp;
                                         if(seriesList.isSelectionEmpty()) tmp = "";
                                         else tmp = seriesList.getSelectedValue().toString();
-                                        if(size2.getText().equals("")) pages_tmp = 0;
+                                        if(size2.getText().equals("")) pages_tmp = -1;
                                         else pages_tmp = Integer.parseInt(size2.getText());
                                         if(publisherList.isSelectionEmpty())
                                         {

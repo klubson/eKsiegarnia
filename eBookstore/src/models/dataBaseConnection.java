@@ -142,7 +142,8 @@ public class dataBaseConnection {
         cstmt.setInt(4, storage);
         cstmt.setString(5, publisher);
         cstmt.setString(6, cover);
-        cstmt.setInt(7, pages);
+        if(pages == -1) cstmt.setNull(7,java.sql.Types.INTEGER);
+        else cstmt.setInt(7, pages);
         cstmt.setString(8, size);
         cstmt.setString(9, seriesTitle);
         cstmt.execute();

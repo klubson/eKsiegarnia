@@ -53,8 +53,8 @@ public class Edit_game {
         int publisherID = rs.getInt(5);
         min_players2.setText(Integer.toString(rs.getInt(6)));
         max_players2.setText(Integer.toString(rs.getInt(7)));
-        min_age2.setText(Integer.toString(rs.getInt(8)));
-        est_time2.setText(Integer.toString(rs.getInt(9)));
+        min_age2.setText(rs.getString(8));
+        est_time2.setText(rs.getString(9));
         rs.close();
         ArrayList<Integer> tmpArray = new ArrayList<Integer>();
         rs = dataBase.getStmt().executeQuery(
@@ -176,14 +176,14 @@ public class Edit_game {
                                     rs.close();
                                 }
                                 int age, time, min_play, max_play;
-                                if(min_age2.getText().equals("")){
+                                /*if(min_age2.getText().equals("")){
                                     age = 0;
                                 }
                                 else age = Integer.parseInt(min_age2.getText());
                                 if(est_time2.getText().equals("")){
                                     time = 0;
                                 }
-                                else time = Integer.parseInt(est_time2.getText());
+                                else time = Integer.parseInt(est_time2.getText());*/
                                 if(min_players2.getText().equals("")){
                                     min_play = 0;
                                 }
@@ -195,9 +195,9 @@ public class Edit_game {
                                 dataBase.getStmt().executeUpdate(
                                         "UPDATE Gra_planszowa SET g_Min_gracze = " + min_play +
                                                 ", g_Max_gracze = " + max_play +
-                                                ", g_Min_wiek = " + age +
-                                                ", g_Czas_gry = " + time +
-                                                " WHERE ID_produktu = " + IDToEdit
+                                                ", g_Min_wiek = '" + min_age2.getText() +
+                                                "', g_Czas_gry = '" + est_time2.getText() +
+                                                "' WHERE ID_produktu = " + IDToEdit
                                 );
                                 System.out.println("Edytowano 1 rekord");
                                 JOptionPane.showMessageDialog(windowMethods.window, "Produkt edytowany pomyślnie!");
