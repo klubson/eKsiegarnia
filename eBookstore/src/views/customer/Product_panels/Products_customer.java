@@ -238,6 +238,7 @@ public class Products_customer {
 
                     getProductList(2 ,0, "");
                     tableModel.setDataVector(data,columnNames);
+                    table.removeColumn(table.getColumnModel().getColumn(5));
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -293,16 +294,18 @@ public class Products_customer {
                     try {
                         if(filtersNames.getSelectedIndex() == 0){
                             getProductList(2 ,1, filterQuery);
-                            tableModel.setDataVector(data,columnNames);
+
                         }
                         else if(filtersNames.getSelectedIndex() == 2){
                             getProductList(2 ,2, filterQuery);
-                            tableModel.setDataVector(data,columnNames);
+
                         }
                         else if(filtersNames.getSelectedIndex() == 1){
                             getProductList(2 ,3, filterQuery);
-                            tableModel.setDataVector(data,columnNames);
+
                         }
+                        tableModel.setDataVector(data,columnNames);
+                        table.removeColumn(table.getColumnModel().getColumn(5));
 
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();

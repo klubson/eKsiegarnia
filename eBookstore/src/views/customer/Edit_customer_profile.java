@@ -9,8 +9,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Edit_customer_profile {
     private WindowMethods windowMethods = new WindowMethods();
@@ -21,19 +23,39 @@ public class Edit_customer_profile {
     private JCheckBox pass_box, pass_box2;
     private JPanel center, down, login_pane, pass_pane,pass_again_pane, name_pane, surname_pane, phone_pane,email_pane, address_pane;
     private dataBaseConnection dataBase = new dataBaseConnection();
+    private Connection conn;
+    private Statement stmt ;
     private String user;
 
     public void create(String data) throws SQLException {
         windowMethods.window = new JFrame("Edytuj profil");
         windowMethods.settings();
+        Properties connectionProps = new Properties();
+        connectionProps.put("user", "inf141246");
+        connectionProps.put("password", "inf141246");
+        String connectionString = "jdbc:oracle:thin:@//admlab2.cs.put.poznan.pl:1521/"+
+                "dblab02_students.cs.put.poznan.pl";
+        try {
+            conn = DriverManager.getConnection(connectionString,
+                    connectionProps);
+            //System.out.println("Połączono z bazą danych");
+        } catch (SQLException ex) {
+            Logger.getLogger(dataBaseConnection.class.getName()).log(Level.SEVERE,
+                    "Nie udało się połączyć z bazą danych", ex);
+            //System.exit(-1);
+        }
         user = data;
         add_components();
         setData(user);
+
+
+
         windowMethods.window.setVisible(true);
+
     }
     private void setData(String data) throws SQLException {
-        dataBase.setStmt();
-        ResultSet rs = dataBase.getStmt().executeQuery(
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(
                 "SELECT Login, Haslo, Imie, Nazwisko, Nr_kontaktowy FROM Uzytkownik WHERE Login = '" + user + "'"
         );
         rs.next();
@@ -44,15 +66,15 @@ public class Edit_customer_profile {
         surname2.setText(rs.getString(4));
         phone2.setText(rs.getString(5));
         rs.close();
-        rs = dataBase.getStmt().executeQuery(
+        rs = stmt.executeQuery(
                 "SELECT k_Adres_e_mail, k_Adres FROM Klient WHERE Login = '" + user + "'"
         );
         rs.next();
         email2.setText(rs.getString(1));
         address2.setText(rs.getString(2));
-        dataBase.getStmt().close();
+        stmt.close();
         rs.close();
-        dataBase.getStmt().close();
+        stmt.close();
     }
     private void labels(){
         login = new JLabel("Wybierz swój login (max 30 znaków): ");
@@ -99,15 +121,20 @@ public class Edit_customer_profile {
                             JOptionPane.showMessageDialog(windowMethods.window, "Podany login jest już zajęty! Wybierz inny login!", "Błąd", JOptionPane.ERROR_MESSAGE);
                         }
                         else{
-                            dataBase.setStmt();
+                            stmt = conn.createStatement();
                             String tmp = String.copyValueOf(pass2.getPassword());
-                            int changes = dataBase.getStmt().executeUpdate(
+                            int changes = stmt.executeUpdate(
                                     "UPDATE Uzytkownik SET Login = '" + login2.getText() + "', Haslo = '"
                                             + tmp + "', Imie = '" + name2.getText() + "', Nazwisko = '" + surname2.getText() + "'," +
                                             "Nr_kontaktowy = '" + phone2.getText() + "' WHERE Login = '" + user + "'"
                             );
                             System.out.println("Edytowano " + changes + " rekord");
-                            dataBase.getStmt().close();
+                            changes = stmt.executeUpdate(
+                                    "UPDATE Klient SET k_adres_e_mail = '" + email2.getText() + "', k_adres = '"
+                                            + address2.getText() + "' WHERE Login = '" + user + "'"
+                            );
+                            System.out.println("Edytowano " + changes + " rekord");
+                            stmt.close();
                             JOptionPane.showMessageDialog(windowMethods.window, "Klient " + name2.getText() + " " +
                                     surname2.getText() + " edytowany pomyślnie!");
                             Customer_panel cp = new Customer_panel();

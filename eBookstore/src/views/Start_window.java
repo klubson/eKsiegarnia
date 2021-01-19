@@ -51,6 +51,7 @@ public class Start_window {
                     System.out.println("Do widzenia!");
                     //exit();
                     windowMethods.exit();
+                    System.exit(0);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }

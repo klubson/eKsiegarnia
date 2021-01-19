@@ -176,7 +176,7 @@ public class dataBaseConnection {
             setStmt();
             int changes = stmt.executeUpdate(
                     "INSERT INTO Koszyk_zakupowy(Klient_login, Nr_koszyka, Wartosc_zakupow , Sposob_platnosci , Koszt_wysylki , Calkowita_wartosc_zamowienia) " +
-                            "VALUES('" + login + "', KOSZYK_ZAKUPOWY_NR_KOSZYKA_SEQ.nextval , 0 , 'BLIK' , 0, 0 )"
+                            "VALUES('" + login + "', KOSZYK_ZAKUPOWY_NR_KOSZYKA_SEQ.nextval , 0 , 'BLIK' , 10.00, 10.00 )"
             );
             System.out.println("Wstawiono " + changes + " krotkę");
         }

@@ -39,18 +39,20 @@ public class CurrentCartPanel extends CartInfoPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    if(table.getModel().getRowCount() > 0){
+                        int id = Integer.parseInt((String) table.getModel().getValueAt(table.getSelectedRow(), 6 ));
+                        String type = data.get(table.getSelectedRow()).get(5);
+                        if(type.equals("książka")){
+                            Book_details bd = new Book_details();
+                            bd.create(id , dataBase , cart,user);
+                        }
+                        else if(type.equals("gra planszowa")){
+                            Game_details gd = new Game_details();
+                            gd.create(id , dataBase , cart,user);
+                        }
+                        windowMethods.exit();
+                    }
 
-                    int id = Integer.parseInt((String) table.getModel().getValueAt(table.getSelectedRow(), 6 ));
-                    String type = data.get(table.getSelectedRow()).get(5);
-                    if(type.equals("książka")){
-                        Book_details bd = new Book_details();
-                        bd.create(id , dataBase , cart,user);
-                    }
-                    else if(type.equals("gra planszowa")){
-                        Game_details gd = new Game_details();
-                        gd.create(id , dataBase , cart,user);
-                    }
-                    windowMethods.exit();
 
                 } catch (SQLException throwables) {
                     System.out.println("Błąd przy wyświetlaniu szczegółów o produkcie z obecnego koszyka");
@@ -64,22 +66,26 @@ public class CurrentCartPanel extends CartInfoPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    dataBase.getConn().commit();
-                    cart = new CartInfo(dataBase.newCart(user));
-                    String message = "Dokonano pomyślnie transkcji";
-                    JOptionPane.showMessageDialog(new JFrame(), message);
+                    if(cart.getLP() > 0){
+                        dataBase.getConn().commit();
+                        cart = new CartInfo(dataBase.newCart(user));
+                        String message = "Dokonano pomyślnie transkcji";
+                        JOptionPane.showMessageDialog(new JFrame(), message);
+                        Customer_panel cp = new Customer_panel();
+                        windowMethods.exit();
+                        try {
+                            cp.createFromBack(user , dataBase , cart);
+                        } catch (SQLException throwables) {
+                            throwables.printStackTrace();
+                        }
+                    }
+
                 } catch (SQLException ex) {
                     System.out.println("Błąd przy finalizacji transakcji");
                     ex.printStackTrace();
                 }
 
-                Customer_panel cp = new Customer_panel();
-                windowMethods.exit();
-                try {
-                    cp.createFromBack(user , dataBase , cart);
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
+
             }
         });
     }

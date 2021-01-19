@@ -108,6 +108,8 @@ public class Edit_employee_profile {
                                             + tmp + "', Imie = '" + name2.getText() + "', Nazwisko = '" + surname2.getText() + "'," +
                                             "Nr_kontaktowy = '" + phone2.getText() + "' WHERE Login = '" + user + "'"
                             );
+                            
+
                             JOptionPane.showMessageDialog(windowMethods.window, "Pracownik " + name2.getText() + " " +
                                     surname2.getText() + " edytowany pomyślnie!");
                             System.out.println("Zaktualizowano " + changes + " rekord");

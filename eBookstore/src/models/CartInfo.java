@@ -16,4 +16,5 @@ public class CartInfo {
     public int getNextLP(){
         return productCount++;
     }
+    public int getLP(){return productCount;}
 }
