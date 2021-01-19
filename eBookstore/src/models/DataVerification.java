@@ -8,7 +8,7 @@ public class DataVerification {
     public String message = "W następujących polach wykryto błędy: ";
     public boolean isSecondHigher = true;
     public int error_counter = 0;
-    public boolean phone_correctness, pass_correctness;
+    public boolean phone_correctness, pass_correctness, address_correctness;
 
     public void fieldCheck(JTextField field, int min_size, int max_size, boolean digitsEnabled, boolean spaceEnabled){
         if(field.getText().length() < min_size || field.getText().length() > max_size){
@@ -159,9 +159,20 @@ public class DataVerification {
             error_counter++;
         }
         else{
-            if(!field.getText().matches("[A-Za-z0-9]{1,}[@]{1}[a-z0-9]{1,5}[.]{1}[a-z]{2,3}")) {
+            if(!field.getText().matches("[A-Za-z0-9]+[@][a-z0-9]{1,5}[.][a-z]{2,3}")) {
                 message += "\n" + field.getName();
                 error_counter++;
+            }
+        }
+    }
+    public void addressCheck(JTextField field, int max_size){
+        address_correctness = true;
+        if(field.getText().length() == 0 || field.getText().length() > max_size){
+            address_correctness = false;
+        }
+        else{
+            if(!field.getText().matches("[A-Za-z]{2,}[,][ ][A-Za-z0-9]{2,}[ ][0-9]{1,3}[/]?[0-9]{0,2}")){
+                address_correctness = false;
             }
         }
     }
@@ -202,6 +213,11 @@ public class DataVerification {
         if(!isSecondHigher){
             JOptionPane.showMessageDialog(null, "Minimalna liczba graczy musi być mniejsza/równa maksymalnej liczbie graczy!",
                     "Błąd hasła!", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    public void errorAddress(){
+        if(!address_correctness){
+            JOptionPane.showMessageDialog(null, "Błąd w polu Adres! Liczba znaków musi być większa od 0 i nie większa od 50!\nPoprawny wzór to: <Nazwa miejscowości>, <ulica> <numer domu>(max. 3 cyfry)/<numer mieszkania>(max. 2 cyfry).\nNiedozwolone są znaki takie jak '.', '-'.", "Błąd", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

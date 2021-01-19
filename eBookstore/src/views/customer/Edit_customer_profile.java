@@ -117,7 +117,7 @@ public class Edit_customer_profile {
             public void actionPerformed(ActionEvent e) {
                 if(check()){
                     try {
-                        if(!dataBase.findLoggedUser(login2.getText(), user)){
+                        if(dataBase.findLoggedUser(login2.getText(), user)){
                             JOptionPane.showMessageDialog(windowMethods.window, "Podany login jest już zajęty! Wybierz inny login!", "Błąd", JOptionPane.ERROR_MESSAGE);
                         }
                         else{
@@ -203,14 +203,18 @@ public class Edit_customer_profile {
         DataVerification verify = new DataVerification();
         verify.fieldCheck(login2, 1, 30, true, false);
         verify.passFieldCheck(pass2, 20);
+        verify.passFieldCheck(pass_again2, 20);
         verify.fieldCheck(name2, 1, 20, false, true);
         verify.fieldCheck(surname2, 1 ,20, false, true);
         verify.phoneCheck(phone2);
-        verify.samePass(pass2, pass_again2);
+        verify.emailCheck(email2, 30);
+        verify.addressCheck(address2, 50);
         verify.errorPhone(verify.phone_correctness, phone2, windowMethods.window);
-        verify.errorPass(verify.pass_correctness, pass2, pass_again2);
+        verify.samePass(pass2, pass_again2);
         verify.errorMessage();
-        if(verify.phone_correctness && verify.pass_correctness && verify.error_counter == 0) return true;
+        verify.errorPass(verify.pass_correctness, pass2, pass_again2);
+        verify.errorAddress();
+        if(verify.phone_correctness && verify.pass_correctness && verify.address_correctness && verify.error_counter == 0) return true;
         else return false;
     }
 }

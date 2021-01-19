@@ -115,6 +115,16 @@
 <colUsage columnID="EFDDA0C8-EB27-699F-CECD-4271E02CF02D"/>
 </indexColumnUsage>
 </ind_PK_UK>
+<ind_PK_UK id="77845A36-34EB-3E61-7823-0712AF1337B3" name="Produkt__UN">
+<createdBy>Mateusz</createdBy>
+<createdTime>2021-01-19 11:04:16 UTC</createdTime>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<indexState>Unique Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="26DBDDE3-FBE7-FD74-1454-7D8F6A96446D"/>
+</indexColumnUsage>
+</ind_PK_UK>
 <ind_PK_UK id="9A330723-6807-1B73-C421-D33CC750F96C" name="Produkt__IDX">
 <createdBy>Kacpe</createdBy>
 <createdTime>2020-11-20 13:00:07 UTC</createdTime>

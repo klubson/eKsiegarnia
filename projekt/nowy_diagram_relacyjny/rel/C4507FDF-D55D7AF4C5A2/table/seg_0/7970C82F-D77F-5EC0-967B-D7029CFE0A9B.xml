@@ -60,5 +60,15 @@
 <colUsage columnID="9932C673-C077-8ED2-C382-BD2C86EC9176"/>
 </indexColumnUsage>
 </ind_PK_UK>
+<ind_PK_UK id="1F02C21F-8DB1-72A2-D326-06D474575AD6" name="Wydawnictwo__UNv1">
+<createdBy>Mateusz</createdBy>
+<createdTime>2021-01-19 10:48:09 UTC</createdTime>
+<ownerDesignName>nowy_diagram_relacyjny</ownerDesignName>
+<indexState>Unique Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="8E610324-0ED9-D3FC-D3D3-94C29E29FAC2"/>
+</indexColumnUsage>
+</ind_PK_UK>
 </indexes>
 </Table>

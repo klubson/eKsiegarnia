@@ -85,6 +85,7 @@ public class Products {
         table.setPreferredScrollableViewportSize(new Dimension(600, 300));
         table.setFillsViewportHeight(true);
         table.changeSelection(0,0, false, false);
+        table.removeColumn(table.getColumnModel().getColumn(0));
         listScroller = new JScrollPane(table);
         listScroller.setViewportView(table);
     }
@@ -254,6 +255,8 @@ public class Products {
                 try {
                     getProductList(2);
                     tableModel.setDataVector(data,columnNames);
+                    table.removeColumn(table.getColumnModel().getColumn(0));
+                    //createTable(2);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -277,15 +280,15 @@ public class Products {
 
         up = new JPanel();
         up.setLayout(new GridLayout(4,4));
-        up.add(id_asc);
-        up.add(id_desc);
+        //up.add(id_asc);
+        //up.add(id_desc);
         up.add(name_asc);
         up.add(name_desc);
         up.add(price_asc);
         up.add(price_desc);
         up.add(year_asc);
         up.add(year_desc);
-        //up.add(empty);
+        up.add(empty);
         up.add(filter);
 
         center = new JPanel();

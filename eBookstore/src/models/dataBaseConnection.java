@@ -42,7 +42,7 @@ public class dataBaseConnection {
 
     public boolean findLoggedUser(String login, String user) throws SQLException {
         setStmt();
-        ResultSet rs = stmt.executeQuery("SELECT Login FROM Uzytkownik WHERE Login = " + "'" + login + "'");
+        ResultSet rs = stmt.executeQuery("SELECT Login FROM Uzytkownik WHERE Login = '" + login + "'");
         if(rs.next()) {
             //System.out.println("Znaleziono login: " + rs.getString(1));
             if(rs.getString(1).equals(user)){

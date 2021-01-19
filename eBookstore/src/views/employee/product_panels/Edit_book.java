@@ -171,15 +171,17 @@ public class Edit_book {
                                         "DELETE FROM Autor_produktu WHERE Produkt_ID_produktu = " + IDToEdit
                                 );
                                 for(int i = 0; i <authorList.getSelectedValuesList().size(); i++){
-                                    rs = dataBase.getStmt().executeQuery(
-                                            "SELECT a.ID_Autora FROM (SELECT s.Imie || ' ' || s.Nazwisko as Dane, " +
-                                                    "s.ID_autora FROM Autor s) a WHERE a.Dane = '" + authorList.getSelectedValuesList().get(i) + "'"
-                                    );
-                                    rs.next();
+                                    String currentAuthor = authorList.getSelectedValuesList().get(i).toString();
+                                    int id = Integer.parseInt(currentAuthor.substring(currentAuthor.indexOf(',') + 2));
+//                                    rs = dataBase.getStmt().executeQuery(
+//                                            "SELECT a.ID_Autora FROM (SELECT s.Imie || ' ' || s.Nazwisko as Dane, " +
+//                                                    "s.ID_autora FROM Autor s) a WHERE a.Dane = '" + authorList.getSelectedValuesList().get(i) + "'"
+//                                    );
+//                                    rs.next();
                                     dataBase.getStmt().executeUpdate(
-                                            "INSERT INTO Autor_produktu VALUES(" + rs.getInt(1) + "," + IDToEdit + ")"
+                                            "INSERT INTO Autor_produktu VALUES(" + id + "," + IDToEdit + ")"
                                     );
-                                    rs.close();
+                                    //rs.close();
                                 }
                                 String tmp;
                                 if(seriesList.isSelectionEmpty()) tmp = "";
@@ -237,28 +239,27 @@ public class Edit_book {
 
         getPublisherList();
         publisherList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        publisherList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-        publisherList.setVisibleRowCount(-1);
+        publisherList.setLayoutOrientation(JList.VERTICAL);
+        publisherList.setVisibleRowCount(6);
         publisherListScroller = new JScrollPane(publisherList);
         publisherListScroller.setViewportView(publisherList);
 
         getAuthorList();
         authorList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        authorList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-        authorList.setVisibleRowCount(-1);
+        authorList.setLayoutOrientation(JList.VERTICAL);
+        authorList.setVisibleRowCount(6);
         authorListScroller = new JScrollPane(authorList);
         authorListScroller.setViewportView(authorList);
 
         getSeriesList();
         seriesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        seriesList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-        seriesList.setVisibleRowCount(-1);
+        seriesList.setLayoutOrientation(JList.VERTICAL);
+        seriesList.setVisibleRowCount(4);
         seriesListScroller = new JScrollPane(seriesList);
         seriesListScroller.setViewportView(seriesList);
     }
     private void getPublisherList() throws SQLException {
         dataBase.setStmt();
-        dataBase.getConn().setAutoCommit(true);
         ResultSet rs = dataBase.getStmt().executeQuery(
                 "SELECT Nazwa FROM Wydawnictwo"
         );
@@ -274,10 +275,10 @@ public class Edit_book {
         dataBase.setStmt();
         dataBase.getConn().setAutoCommit(true);
         ResultSet rs = dataBase.getStmt().executeQuery(
-                "SELECT Imie, Nazwisko FROM Autor"
+                "SELECT Imie, Nazwisko, ID_autora FROM Autor"
         );
         while (rs.next()){
-            String aut = rs.getString(1) + " " + rs.getString(2);
+            String aut = rs.getString(1) + " " + rs.getString(2) + ", " + Integer.toString(rs.getInt(3));
             listModelAuthor.addElement(aut);
         }
         rs.close();

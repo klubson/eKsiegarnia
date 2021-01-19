@@ -77,6 +77,7 @@ public class Publishers {
         table.setPreferredScrollableViewportSize(new Dimension(600, 300));
         table.setFillsViewportHeight(true);
         table.changeSelection(0,0, false, false);
+        table.removeColumn(table.getColumnModel().getColumn(0));
         listScroller = new JScrollPane(table);
         listScroller.setViewportView(table);
     }

@@ -127,6 +127,8 @@ CREATE INDEX produkt__idx_cena ON
 
 ALTER TABLE produkt ADD CONSTRAINT produkt_pk PRIMARY KEY ( id_produktu );
 
+ALTER TABLE produkt ADD CONSTRAINT produkt__un UNIQUE ( nazwa );
+
 CREATE TABLE seria (
     tytul         VARCHAR2(50) NOT NULL,
     liczba_tomow  INTEGER

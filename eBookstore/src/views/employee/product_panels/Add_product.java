@@ -3,6 +3,7 @@ package views.employee.product_panels;
 import models.DataVerification;
 import models.WindowMethods;
 import models.dataBaseConnection;
+import models.SharedListSelectionHandler;
 import views.employee.author_panels.Add_author;
 import views.employee.publisher_panels.Add_publisher;
 import views.employee.series_panels.Add_series;
@@ -13,6 +14,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Vector;
 
 public class Add_product {
     private WindowMethods windowMethods = new WindowMethods();
@@ -43,7 +46,7 @@ public class Add_product {
         year = new JLabel("Rok wydania produktu (opcjonalnie): ");
         storage = new JLabel("Stan magazynu (max 999): ");
         publisher = new JLabel("Wydawnictwo: ");
-        author = new JLabel("Autorzy: ");
+        author = new JLabel("Autor, ID Autora: ");
         cover_type = new JLabel("Typ okładki: ");
         pages_amount = new JLabel("Liczba stron: ");
         size = new JLabel("Format książki: ");
@@ -51,7 +54,7 @@ public class Add_product {
         min_players = new JLabel("Minimalna liczba graczy: ");
         max_players = new JLabel("Maksymalna liczba graczy: ");
         min_age = new JLabel("Zalecany minimalny wiek (opcjonalnie): ");
-        est_time = new JLabel("Szacowany czas gry (opcjonalnie): ");
+        est_time = new JLabel("Szacowany czas gry [minuty] (opcjonalnie): ");
 
     }
     private void components() throws SQLException {
@@ -121,16 +124,21 @@ public class Add_product {
                                             dataBase.newBook(name2.getText(), Float.parseFloat(price2.getText()), year2.getText(), Integer.parseInt(storage2.getText()), publisherList.getSelectedValue().toString(), cover_type2.getText(), pages_tmp, size2.getText(), tmp);
                                             //if(authorList.isSelectionEmpty()) authorList.setSelectedIndex(nullAuthorID);
                                             for(int i = 0; i < authorList.getSelectedValuesList().size(); i++){
+                                                //Vector<String> tmpVector = (Vector<String>) authorList.getSelectedValuesList().get(i);
+                                                //System.out.println(tmpVector.get(1));
+                                                String currentAuthor = authorList.getSelectedValuesList().get(i).toString();
+                                                int id = Integer.parseInt(currentAuthor.substring(currentAuthor.indexOf(',') + 2));
                                                 dataBase.setStmt();
-                                                ResultSet rs2 = dataBase.getStmt().executeQuery(
-                                                        "SELECT a.ID_Autora FROM (SELECT s.Imie || ' ' || s.Nazwisko as Dane, " +
-                                                                "s.ID_autora FROM Autor s) a WHERE a.Dane = '" + authorList.getSelectedValuesList().get(i) + "'"
-                                                );
-                                                rs2.next();
+//                                                ResultSet rs2 = dataBase.getStmt().executeQuery(
+//                                                        "SELECT a.ID_Autora FROM (SELECT s.Imie || ' ' || s.Nazwisko as Dane, " +
+//                                                                "s.ID_autora FROM Autor s) a WHERE a.Dane = '" + tmpVector.get(0) + "'"
+//                                                );
+//                                                rs2.next();
+                                                //System.out.println(rs2.getInt(1));
                                                 dataBase.getStmt().executeUpdate(
-                                                        "INSERT INTO Autor_produktu VALUES(" + rs.getInt(1) + ",PRODUKT_ID_PRODUKTU_SEQ.currval)"
+                                                        "INSERT INTO Autor_produktu VALUES(" + id + ",PRODUKT_ID_PRODUKTU_SEQ.currval)"
                                                 );
-                                                rs2.close();
+                                                //rs2.close();
                                                 dataBase.getStmt().close();
                                             }
 
@@ -151,16 +159,18 @@ public class Add_product {
                                 try {
                                     dataBase.newGame(name2.getText(), Float.parseFloat(price2.getText()), year2.getText(), Integer.parseInt(storage2.getText()), publisherList.getSelectedValue().toString(), Integer.parseInt(min_players2.getText()), Integer.parseInt(max_players2.getText()), min_age2.getText(), est_time2.getText());
                                     for(int i = 0; i < authorList.getSelectedValuesList().size(); i++){
+                                        String currentAuthor = authorList.getSelectedValuesList().get(i).toString();
+                                        int id = Integer.parseInt(currentAuthor.substring(currentAuthor.indexOf(',') + 2));
                                         dataBase.setStmt();
-                                        ResultSet rs = dataBase.getStmt().executeQuery(
-                                                "SELECT a.ID_Autora FROM (SELECT s.Imie || ' ' || s.Nazwisko as Dane, " +
-                                                        "s.ID_autora FROM Autor s) a WHERE a.Dane = '" + authorList.getSelectedValuesList().get(i) + "'"
-                                        );
-                                        rs.next();
+//                                        ResultSet rs = dataBase.getStmt().executeQuery(
+//                                                "SELECT a.ID_Autora FROM (SELECT s.Imie || ' ' || s.Nazwisko as Dane, " +
+//                                                        "s.ID_autora FROM Autor s) a WHERE a.Dane = '" + authorList.getSelectedValuesList().get(i) + "'"
+//                                        );
+                                        //rs.next();
                                         dataBase.getStmt().executeUpdate(
-                                                "INSERT INTO Autor_produktu VALUES(" + rs.getInt(1) + ",PRODUKT_ID_PRODUKTU_SEQ.currval)"
+                                                "INSERT INTO Autor_produktu VALUES(" + id + ",PRODUKT_ID_PRODUKTU_SEQ.currval)"
                                         );
-                                        rs.close();
+                                        //rs.close();
                                         dataBase.getStmt().close();
                                     }
                                     JOptionPane.showMessageDialog(windowMethods.window, "Gra planszowa dodana pomyślnie");
@@ -208,22 +218,24 @@ public class Add_product {
 
         getPublisherList();
         publisherList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        publisherList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-        publisherList.setVisibleRowCount(-1);
+        publisherList.setLayoutOrientation(JList.VERTICAL);
+        publisherList.setVisibleRowCount(6);
         publisherListScroller = new JScrollPane(publisherList);
         publisherListScroller.setViewportView(publisherList);
 
         getAuthorList();
         authorList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        authorList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-        authorList.setVisibleRowCount(-1);
+//        ListSelectionModel model = authorList.getSelectionModel();
+//        model.addListSelectionListener(new SharedListSelectionHandler());
+        authorList.setLayoutOrientation(JList.VERTICAL);
+        authorList.setVisibleRowCount(6);
         authorListScroller = new JScrollPane(authorList);
         authorListScroller.setViewportView(authorList);
 
         getSeriesList();
         seriesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        seriesList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-        seriesList.setVisibleRowCount(-1);
+        seriesList.setLayoutOrientation(JList.VERTICAL);
+        seriesList.setVisibleRowCount(4);
         seriesListScroller = new JScrollPane(seriesList);
         seriesListScroller.setViewportView(seriesList);
 
@@ -250,11 +262,16 @@ public class Add_product {
         dataBase.setStmt();
         dataBase.getConn().setAutoCommit(true);
         ResultSet rs = dataBase.getStmt().executeQuery(
-                "SELECT Imie, Nazwisko FROM Autor"
+                "SELECT Imie, Nazwisko, ID_autora FROM Autor ORDER BY Nazwisko"
         );
         int counter = 0;
         while (rs.next()){
-            String aut = rs.getString(1) + " " + rs.getString(2);
+            String aut = rs.getString(1) + " " + rs.getString(2) + ", " + Integer.toString(rs.getInt(3));
+            //String id = Integer.toString(rs.getInt(3));
+            //Vector<String> el = new Vector<>();
+            //el.add(aut);
+            //el.add(id);
+            //listModelAuthor.addElement(el);
             listModelAuthor.addElement(aut);
             if(aut.equals("brak autora")) nullAuthorID = counter;
             counter++;
