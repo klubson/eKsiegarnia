@@ -27,6 +27,7 @@ public class Add_product {
     private JList publisherList, authorList, seriesList;
     private JScrollPane publisherListScroller, authorListScroller, seriesListScroller;
     private boolean isManager;
+    private int nullPublisherID, nullAuthorID;
 
     public void create(String data, boolean mode) throws SQLException {
         windowMethods.window = new JFrame("Dodaj produkt");
@@ -95,28 +96,51 @@ public class Add_product {
                             if(bookCheck()){
                                 try {
                                     //System.out.println(authorList.getSelectedValuesList());
-                                    String tmp;
-                                    if(seriesList.isSelectionEmpty()) tmp = null;
-                                    else tmp = seriesList.getSelectedValue().toString();
-                                    dataBase.newBook(name2.getText(), Float.parseFloat(price2.getText()), year2.getText(), Integer.parseInt(storage2.getText()), publisherList.getSelectedValue().toString(), cover_type2.getText(), Integer.parseInt(pages_amount2.getText()), size2.getText(), tmp);
-                                    for(int i = 0; i < authorList.getSelectedValuesList().size(); i++){
-                                        dataBase.setStmt();
-                                        ResultSet rs = dataBase.getStmt().executeQuery(
-                                                "SELECT a.ID_Autora FROM (SELECT s.Imie || ' ' || s.Nazwisko as Dane, " +
-                                                        "s.ID_autora FROM Autor s) a WHERE a.Dane = '" + authorList.getSelectedValuesList().get(i) + "'"
-                                        );
-                                        rs.next();
-                                        dataBase.getStmt().executeUpdate(
-                                                "INSERT INTO Autor_produktu VALUES(" + rs.getInt(1) + ",PRODUKT_ID_PRODUKTU_SEQ.currval)"
-                                        );
+                                    dataBase.setStmt();
+                                    ResultSet rs = dataBase.getStmt().executeQuery(
+                                            "SELECT Nazwa FROM Produkt WHERE Nazwa = '" + name2.getText() + "'"
+                                    );
+                                    if(rs.next()){
+                                        JOptionPane.showMessageDialog(windowMethods.window, "Produkt o podanej nazwie już istnieje!", "Błąd!", JOptionPane.ERROR_MESSAGE);
+                                    }
+                                    else{
                                         rs.close();
                                         dataBase.getStmt().close();
+                                        String tmp;
+                                        int pages_tmp;
+                                        if(seriesList.isSelectionEmpty()) tmp = "";
+                                        else tmp = seriesList.getSelectedValue().toString();
+                                        if(size2.getText().equals("")) pages_tmp = 0;
+                                        else pages_tmp = Integer.parseInt(size2.getText());
+                                        if(publisherList.isSelectionEmpty())
+                                        {
+                                            JOptionPane.showMessageDialog(windowMethods.window, "Nie wybrano wydawnictwa!", "Błąd", JOptionPane.ERROR_MESSAGE);
+                                        }
+                                        else
+                                        {
+                                            dataBase.newBook(name2.getText(), Float.parseFloat(price2.getText()), year2.getText(), Integer.parseInt(storage2.getText()), publisherList.getSelectedValue().toString(), cover_type2.getText(), pages_tmp, size2.getText(), tmp);
+                                            //if(authorList.isSelectionEmpty()) authorList.setSelectedIndex(nullAuthorID);
+                                            for(int i = 0; i < authorList.getSelectedValuesList().size(); i++){
+                                                dataBase.setStmt();
+                                                ResultSet rs2 = dataBase.getStmt().executeQuery(
+                                                        "SELECT a.ID_Autora FROM (SELECT s.Imie || ' ' || s.Nazwisko as Dane, " +
+                                                                "s.ID_autora FROM Autor s) a WHERE a.Dane = '" + authorList.getSelectedValuesList().get(i) + "'"
+                                                );
+                                                rs2.next();
+                                                dataBase.getStmt().executeUpdate(
+                                                        "INSERT INTO Autor_produktu VALUES(" + rs.getInt(1) + ",PRODUKT_ID_PRODUKTU_SEQ.currval)"
+                                                );
+                                                rs2.close();
+                                                dataBase.getStmt().close();
+                                            }
+
+                                            JOptionPane.showMessageDialog(windowMethods.window, "Książka dodana pomyślnie");
+                                            System.out.println("Dodano książkę");
+                                            Products pr = new Products();
+                                            windowMethods.exit();
+                                            pr.create(user, isManager);
+                                        }
                                     }
-                                    JOptionPane.showMessageDialog(windowMethods.window, "Książka dodana pomyślnie");
-                                    System.out.println("Dodano książkę");
-                                    Products pr = new Products();
-                                    windowMethods.exit();
-                                    pr.create(user, isManager);
                                 } catch (SQLException throwables) {
                                     throwables.printStackTrace();
                                 }
@@ -210,9 +234,12 @@ public class Add_product {
         ResultSet rs = dataBase.getStmt().executeQuery(
                 "SELECT Nazwa FROM Wydawnictwo"
         );
+        int counter = 0;
         while(rs.next()){
             String pub = rs.getString(1);
             listModelPublisher.addElement(pub);
+            if(pub.equals("brak wydawnictwa")) nullPublisherID = counter;
+            counter++;
         }
         rs.close();
         dataBase.getStmt().close();
@@ -225,9 +252,12 @@ public class Add_product {
         ResultSet rs = dataBase.getStmt().executeQuery(
                 "SELECT Imie, Nazwisko FROM Autor"
         );
+        int counter = 0;
         while (rs.next()){
             String aut = rs.getString(1) + " " + rs.getString(2);
             listModelAuthor.addElement(aut);
+            if(aut.equals("brak autora")) nullAuthorID = counter;
+            counter++;
         }
         rs.close();
         dataBase.getStmt().close();

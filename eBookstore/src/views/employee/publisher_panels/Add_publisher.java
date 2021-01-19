@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Add_publisher {
@@ -54,11 +55,24 @@ public class Add_publisher {
                 //sprawdzenie i dodanie
                 if(check()){
                     try {
-                        dataBase.newPublisher(name2.getText(), country2.getText());
-                        JOptionPane.showMessageDialog(windowMethods.window, "Wydawca dodany pomyślnie");
-                        Publishers pb = new Publishers();
-                        windowMethods.exit();
-                        pb.create(user, isManager);
+                        dataBase.setStmt();
+                        ResultSet rs = dataBase.getStmt().executeQuery(
+                                "SELECT Nazwa FROM Wydawnictwo WHERE Nazwa = '" + name2.getText() + "'"
+                        );
+                        if(rs.next()){
+                            JOptionPane.showMessageDialog(windowMethods.window, "Wydawnictwo o podanej nazwie już istnieje!", "Błąd!", JOptionPane.ERROR_MESSAGE);
+                            rs.close();
+                            dataBase.getStmt().close();
+                        }
+                        else{
+                            rs.close();
+                            dataBase.getStmt().close();
+                            dataBase.newPublisher(name2.getText(), country2.getText());
+                            JOptionPane.showMessageDialog(windowMethods.window, "Wydawca dodany pomyślnie");
+                            Publishers pb = new Publishers();
+                            windowMethods.exit();
+                            pb.create(user, isManager);
+                        }
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }

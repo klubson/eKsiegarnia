@@ -27,7 +27,7 @@ public class Edit_book {
     private DefaultListModel listModelPublisher = new DefaultListModel(), listModelAuthor = new DefaultListModel(), listModelSeries = new DefaultListModel();
     private JList publisherList, authorList, seriesList;
     private JScrollPane publisherListScroller, authorListScroller, seriesListScroller;
-    private boolean isManager;
+    private boolean isManager, ableToEdit = true;
 
     public void create(String data, boolean mode, int product_ID) throws SQLException {
         windowMethods.window = new JFrame("Edytuj produkt");
@@ -137,23 +137,36 @@ public class Edit_book {
                             JOptionPane.showMessageDialog(windowMethods.window, "Nie wybrano wydawnictwa!", "Błąd", JOptionPane.ERROR_MESSAGE);
                         }
                         else{
-                            ResultSet rs = dataBase.getStmt().executeQuery(
-                                    "SELECT ID_wydawnictwa FROM Wydawnictwo WHERE Nazwa = '" +
-                                            publisherList.getSelectedValue().toString() + "'"
+                            ResultSet rs2 = dataBase.getStmt().executeQuery(
+                                    "SELECT ID_produktu, Nazwa FROM Produkt WHERE Nazwa = '" + name2.getText() + "'"
                             );
-                            rs.next();
-                            dataBase.getStmt().executeUpdate(
-                                    "UPDATE Produkt SET Nazwa = '" + name2.getText() + "', " +
-                                            "Cena = " + Float.parseFloat(price2.getText()) + ", Rok_wydania = '" + year2.getText() +
-                                            "', Stan_magazyn = " + Integer.parseInt(storage2.getText())
-                                            + ", Wydawnictwo_ID_wydawnictwa = " + rs.getInt(1)
-                                            + " WHERE ID_produktu = " + IDToEdit
-                            );
-                            rs.close();
-                            if(authorList.isSelectionEmpty()){
-                                JOptionPane.showMessageDialog(windowMethods.window, "Nie wybrano autorów!", "Błąd", JOptionPane.ERROR_MESSAGE);
+                            if(rs2.next()){
+
+                                if(rs2.getInt(1) != IDToEdit){
+                                    JOptionPane.showMessageDialog(windowMethods.window, "Produkt o podanej nazwie już istnieje!", "Błąd!", JOptionPane.ERROR_MESSAGE);
+                                    ableToEdit = false;
+                                }
+                                else ableToEdit = true;
                             }
-                            else{
+                            rs2.close();
+                            if(ableToEdit){
+                                ResultSet rs = dataBase.getStmt().executeQuery(
+                                        "SELECT ID_wydawnictwa FROM Wydawnictwo WHERE Nazwa = '" +
+                                                publisherList.getSelectedValue().toString() + "'"
+                                );
+                                rs.next();
+                                dataBase.getStmt().executeUpdate(
+                                        "UPDATE Produkt SET Nazwa = '" + name2.getText() + "', " +
+                                                "Cena = " + Float.parseFloat(price2.getText()) + ", Rok_wydania = '" + year2.getText() +
+                                                "', Stan_magazyn = " + Integer.parseInt(storage2.getText())
+                                                + ", Wydawnictwo_ID_wydawnictwa = " + rs.getInt(1)
+                                                + " WHERE ID_produktu = " + IDToEdit
+                                );
+                                rs.close();
+//                            if(authorList.isSelectionEmpty()){
+//                                JOptionPane.showMessageDialog(windowMethods.window, "Nie wybrano autorów!", "Błąd", JOptionPane.ERROR_MESSAGE);
+//                            }
+                                //else{
                                 dataBase.getStmt().executeUpdate(
                                         "DELETE FROM Autor_produktu WHERE Produkt_ID_produktu = " + IDToEdit
                                 );
@@ -184,7 +197,9 @@ public class Edit_book {
                                 windowMethods.exit();
                                 pr.create(user, isManager);
                             }
-                        }
+                            //}
+                            }
+
 
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();

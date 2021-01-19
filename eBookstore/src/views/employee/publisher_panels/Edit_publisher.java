@@ -15,7 +15,7 @@ public class Edit_publisher {
     private WindowMethods windowMethods = new WindowMethods();
     private JLabel name, country;
     private JTextField name2, country2;
-    private JButton back, add;
+    private JButton back, edit;
     private JPanel center, down, name_pane, country_pane;
     private String user;
     private dataBaseConnection dataBase = new dataBaseConnection();
@@ -63,26 +63,36 @@ public class Edit_publisher {
                 }
             }
         });
-        add = new JButton("Edytuj");
-        add.addActionListener(new ActionListener() {
+        edit = new JButton("Edytuj");
+        edit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //sprawdzenie i edycja
                 if(check()){
                     try {
                         dataBase.setStmt();
-                        dataBase.getConn().setAutoCommit(true);
-                        int changes = dataBase.getStmt().executeUpdate(
-                                "UPDATE Wydawnictwo SET Nazwa = '" + name2.getText() +
-                                        "', Kraj_pochodzenia = '" + country2.getText() +
-                                        "' WHERE ID_wydawnictwa = " + ID
+                        ResultSet rs = dataBase.getStmt().executeQuery(
+                                "SELECT Nazwa FROM Wydawnictwo WHERE Nazwa = '" + name2.getText() + "'"
                         );
-                        JOptionPane.showMessageDialog(windowMethods.window, "Wydawnictwo edytowane pomyślnie");
-                        System.out.println("Zaktualizowano " + changes + " rekord");
-                        dataBase.getStmt().close();
-                        Publishers pb = new Publishers();
-                        windowMethods.exit();
-                        pb.create(user, isManager);
+                        if(rs.next()){
+                            JOptionPane.showMessageDialog(windowMethods.window, "Wydawnictwo o podanej nazwie już istnieje!", "Błąd!", JOptionPane.ERROR_MESSAGE);
+                            rs.close();
+                            dataBase.getStmt().close();
+                        }
+                        else{
+                            rs.close();
+                            int changes = dataBase.getStmt().executeUpdate(
+                                    "UPDATE Wydawnictwo SET Nazwa = '" + name2.getText() +
+                                            "', Kraj_pochodzenia = '" + country2.getText() +
+                                            "' WHERE ID_wydawnictwa = " + ID
+                            );
+                            JOptionPane.showMessageDialog(windowMethods.window, "Wydawnictwo edytowane pomyślnie");
+                            System.out.println("Zaktualizowano " + changes + " rekord");
+                            dataBase.getStmt().close();
+                            Publishers pb = new Publishers();
+                            windowMethods.exit();
+                            pb.create(user, isManager);
+                        }
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }
@@ -106,7 +116,7 @@ public class Edit_publisher {
         down = new JPanel();
         down.setLayout(new BorderLayout());
         down.add(back, BorderLayout.WEST);
-        down.add(add, BorderLayout.EAST);
+        down.add(edit, BorderLayout.EAST);
     }
     private void add_components(){
         panels();
