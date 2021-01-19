@@ -1,5 +1,6 @@
 package views.customer;
 
+import models.CartInfo;
 import models.DataVerification;
 import models.WindowMethods;
 import models.dataBaseConnection;
@@ -26,8 +27,10 @@ public class Edit_customer_profile {
     private Connection conn;
     private Statement stmt ;
     private String user;
+    private dataBaseConnection tempDataBase;
+    private CartInfo cartInfo;
 
-    public void create(String data) throws SQLException {
+    public void create(String data , dataBaseConnection dataBase , CartInfo cartInfo) throws SQLException {
         windowMethods.window = new JFrame("Edytuj profil");
         windowMethods.settings();
         Properties connectionProps = new Properties();
@@ -45,6 +48,8 @@ public class Edit_customer_profile {
             //System.exit(-1);
         }
         user = data;
+        tempDataBase = dataBase;
+        this.cartInfo = cartInfo;
         add_components();
         setData(user);
 
@@ -105,7 +110,7 @@ public class Edit_customer_profile {
                 Customer_panel cp = new Customer_panel();
                 windowMethods.exit();
                 try {
-                    cp.create(user);
+                    cp.createFromBack(user,tempDataBase,cartInfo);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -117,7 +122,7 @@ public class Edit_customer_profile {
             public void actionPerformed(ActionEvent e) {
                 if(check()){
                     try {
-                        if(dataBase.findLoggedUser(login2.getText(), user)){
+                        if(findLoggedUser(login2.getText(), user)){
                             JOptionPane.showMessageDialog(windowMethods.window, "Podany login jest już zajęty! Wybierz inny login!", "Błąd", JOptionPane.ERROR_MESSAGE);
                         }
                         else{
@@ -216,5 +221,30 @@ public class Edit_customer_profile {
         verify.errorAddress();
         if(verify.phone_correctness && verify.pass_correctness && verify.address_correctness && verify.error_counter == 0) return true;
         else return false;
+    }
+
+    private boolean findLoggedUser(String login , String user) throws SQLException {
+        stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT Login FROM Uzytkownik WHERE Login = " + "'" + login + "'");
+        if(rs.next()) {
+            //System.out.println("Znaleziono login: " + rs.getString(1));
+            if(rs.getString(1).equals(user)){
+                //System.out.println("taki sam login");
+                rs.close();
+                stmt.close();
+                return false;
+            }
+            else{
+                rs.close();
+                stmt.close();
+                return true;
+            }
+        }
+        else {
+            System.out.println("nie znaleziono");
+            rs.close();
+            stmt.close();
+            return false;
+        }
     }
 }

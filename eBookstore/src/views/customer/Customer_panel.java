@@ -148,7 +148,7 @@ public class Customer_panel {
                 time.stopClock();
                 windowMethods.exit();
                 try {
-                    ecp.create(user);
+                    ecp.create(user,dataBase,cart);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
