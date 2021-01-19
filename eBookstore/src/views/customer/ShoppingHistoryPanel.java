@@ -63,7 +63,7 @@ public class ShoppingHistoryPanel {
         columnNames.add("Id koszyka");
         columnNames.add("Zapłacono");
         columnNames.add("Ilość przedmiotów");
-
+        columnNames.add("Sposób płątności");
         createTable();
 
     }
@@ -106,6 +106,7 @@ public class ShoppingHistoryPanel {
         }
         tableModel = new DefaultTableModel(data, columnNames);
         table = new JTable(tableModel);
+        table.removeColumn(table.getColumnModel().getColumn(0));
         table.setPreferredScrollableViewportSize(new Dimension(600, 300));
         table.setFillsViewportHeight(true);
         table.changeSelection(0,0, false, false);
@@ -121,7 +122,7 @@ public class ShoppingHistoryPanel {
         ResultSet rs ;
 
         rs = dataBase.getStmt().executeQuery(
-                "SELECT nr_koszyka , calkowita_wartosc_zamowienia, suma FROM koszyk_zakupowy " +
+                "SELECT nr_koszyka , calkowita_wartosc_zamowienia, suma, sposob_platnosci  FROM koszyk_zakupowy " +
                         "JOIN (SELECT sum(liczba) as suma, koszyk_zakupowy_nr_koszyka  FROM element_koszyka GROUP BY koszyk_zakupowy_nr_koszyka) " +
                         "ON nr_koszyka = koszyk_zakupowy_nr_koszyka " +
                         "WHERE klient_login = '"+ user +"'"
@@ -133,6 +134,7 @@ public class ShoppingHistoryPanel {
             vString.add(rs.getString(1));
             vString.add(rs.getString(2));
             vString.add(rs.getString(3));
+            vString.add(rs.getString(4));
 
             data.add(vString);
         }

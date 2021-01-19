@@ -120,6 +120,7 @@ public class CartInfoPanel {
         tableModel = new DefaultTableModel(data, columnNames);
         table = new JTable(tableModel);
         table.removeColumn(table.getColumnModel().getColumn(6));
+        table.removeColumn(table.getColumnModel().getColumn(0));
         table.setPreferredScrollableViewportSize(new Dimension(600, 300));
         table.setFillsViewportHeight(true);
         table.changeSelection(0,0, false, false);
