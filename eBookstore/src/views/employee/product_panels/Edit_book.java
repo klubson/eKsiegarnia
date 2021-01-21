@@ -373,6 +373,9 @@ public class Edit_book {
     }
     private boolean check(){
         DataVerification verify = new DataVerification();
+        name2.setText(name2.getText().trim().replaceAll("\\s{2,}", " "));
+        cover_type2.setText(cover_type2.getText().trim().replaceAll("\\s{2,}", " "));
+        size2.setText(size2.getText().trim().replaceAll("\\s{2,}", " "));
         verify.fieldCheck(name2, 1, 50, true, true);
         verify.sumCheck(price2);
         verify.dateCheck(year2, 0, 4);

@@ -116,6 +116,7 @@ public class Add_series {
     }
     private boolean check(){
         DataVerification verify = new DataVerification();
+        title2.setText(title2.getText().trim().replaceAll("\\s{2,}", " "));
         verify.fieldCheck(title2, 1, 50, true, true);
         verify.numberCheck(tomes2, 0, 3);
         verify.errorMessage();

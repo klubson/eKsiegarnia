@@ -396,6 +396,7 @@ public class Add_product {
     }
     private boolean generalCheck(){
         DataVerification verify = new DataVerification();
+        name2.setText(name2.getText().trim().replaceAll("\\s{2,}", " "));
         verify.fieldCheck(name2, 1 , 50, true, true);
         verify.sumCheck(price2);
         verify.dateCheck(year2, 0, 4);
@@ -406,6 +407,8 @@ public class Add_product {
     }
     private boolean bookCheck(){
         DataVerification verify = new DataVerification();
+        cover_type2.setText(cover_type2.getText().trim().replaceAll("\\s{2,}", " "));
+        size2.setText(size2.getText().trim().replaceAll("\\s{2,}", " "));
         verify.fieldCheck(cover_type2, 0, 10, false, false);
         verify.numberCheck(pages_amount2, 0, 4);
         verify.fieldCheck(size2, 0, 4, true, false);

@@ -197,6 +197,7 @@ public class Publishers {
                 try {
                     getPublisherList(2);
                     tableModel.setDataVector(data,columnNames);
+                    table.removeColumn(table.getColumnModel().getColumn(0));
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -216,8 +217,8 @@ public class Publishers {
 
         up = new JPanel();
         up.setLayout(new GridLayout(2,4));
-        up.add(id_asc);
-        up.add(id_desc);
+        //up.add(id_asc);
+        //up.add(id_desc);
         up.add(name_asc);
         up.add(name_desc);
         up.add(country_asc);

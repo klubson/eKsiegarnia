@@ -64,7 +64,8 @@ public class Edit_customer_profile {
                 "SELECT Login, Haslo, Imie, Nazwisko, Nr_kontaktowy FROM Uzytkownik WHERE Login = '" + user + "'"
         );
         rs.next();
-        login2.setText(rs.getString(1));
+        //login2.setText(rs.getString(1));
+        login.setText(login.getText() + rs.getString(1));
         pass2.setText(rs.getString(2));
         pass_again2.setText(rs.getString(2));
         name2.setText(rs.getString(3));
@@ -82,7 +83,7 @@ public class Edit_customer_profile {
         stmt.close();
     }
     private void labels(){
-        login = new JLabel("Wybierz swój login (max 30 znaków): ");
+        login = new JLabel("Twój login: ");
         pass = new JLabel("Wybierz swoje hasło (max 20 znaków): ");
         pass_again = new JLabel("Wpisz hasło ponownie: ");
         name = new JLabel("Imię (max 20 znaków): ");
@@ -123,10 +124,10 @@ public class Edit_customer_profile {
                 if(check()){
                     try {
                         int type = findLoggedUser(login2.getText(), user);
-                        if(type == 0){
-                            JOptionPane.showMessageDialog(windowMethods.window, "Podany login jest już zajęty! Wybierz inny login!", "Błąd", JOptionPane.ERROR_MESSAGE);
-                        }
-                        else{
+//                        if(type == 0){
+//                            JOptionPane.showMessageDialog(windowMethods.window, "Podany login jest już zajęty! Wybierz inny login!", "Błąd", JOptionPane.ERROR_MESSAGE);
+//                        }
+//                        else{
                             stmt = conn.createStatement();
                             String tmp = String.copyValueOf(pass2.getPassword());
                             int changes;
@@ -146,26 +147,24 @@ public class Edit_customer_profile {
                             else if(type == 2){//to miała być obsługa edycji profilu z zmianą loginu ala nie działa :(
                                 conn.setAutoCommit(false);
                                 changes = stmt.executeUpdate(
-                                        "UPDATE Uzytkownik SET Login = '" + login2.getText() + "', Haslo = '"
+                                        "UPDATE Uzytkownik SET Haslo = '"
                                                 + tmp + "', Imie = '" + name2.getText() + "', Nazwisko = '" + surname2.getText() + "'," +
                                                 "Nr_kontaktowy = '" + phone2.getText() + "' WHERE Login = '" + user + "'"
                                 );
                                 System.out.println("Edytowano " + changes + " rekord");
                                 changes = stmt.executeUpdate(
-                                        "UPDATE Klient SET Login = '" + login2.getText() + "', k_adres_e_mail = '" + email2.getText() + "', k_adres = '"
+                                        "UPDATE Klient SET k_adres_e_mail = '" + email2.getText() + "', k_adres = '"
                                                 + address2.getText() + "' WHERE Login = '" + user + "'"
                                 );
                                 System.out.println("Edytowano " + changes + " rekord");
 
-                                changes = stmt.executeUpdate(
-                                        "UPDATE koszyk_zakupowy SET Klient_Login = '" + login2.getText() + "' WHERE Klient_Login = '" + user + "'"
-                                );
+//                                changes = stmt.executeUpdate(
+//                                        "UPDATE koszyk_zakupowy SET Klient_Login = '" + login2.getText() + "' WHERE Klient_Login = '" + user + "'"
+//                                );
                                 System.out.println("Edytowano " + changes + " rekordów");
                                 conn.commit();
                                 conn.setAutoCommit(true);
-
-
-                                user = login2.getText();
+                                //user = login2.getText();
                             }
 
 
@@ -175,7 +174,7 @@ public class Edit_customer_profile {
                             Customer_panel cp = new Customer_panel();
                             windowMethods.exit();
                             cp.createFromBack(user,tempDataBase,cartInfo);
-                        }
+                        //}
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }
@@ -190,7 +189,7 @@ public class Edit_customer_profile {
         center.setLayout(new BoxLayout(center, BoxLayout.PAGE_AXIS));
         login_pane = new JPanel();
         login_pane.add(login);
-        login_pane.add(login2);
+        //login_pane.add(login2);
         pass_pane = new JPanel();
         pass_pane.add(pass);
         pass_pane.add(pass2);
@@ -236,9 +235,11 @@ public class Edit_customer_profile {
     }
     private boolean check(){
         DataVerification verify = new DataVerification();
-        verify.fieldCheck(login2, 1, 30, true, false);
+        //verify.fieldCheck(login2, 1, 30, true, false);
         verify.passFieldCheck(pass2, 20);
         verify.passFieldCheck(pass_again2, 20);
+        name2.setText(name2.getText().trim().replaceAll("\\s{2,}", " "));
+        surname2.setText(surname2.getText().trim().replaceAll("\\s{2,}", " "));
         verify.fieldCheck(name2, 1, 20, false, true);
         verify.fieldCheck(surname2, 1 ,20, false, true);
         verify.phoneCheck(phone2);

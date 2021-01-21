@@ -104,6 +104,9 @@ public class Add_author {
     }
     private boolean check(){
         DataVerification verify = new DataVerification();
+        name2.setText(name2.getText().trim().replaceAll("\\s{2,}", " "));
+        surname2.setText(surname2.getText().trim().replaceAll("\\s{2,}", " "));
+        country2.setText(country2.getText().trim().replaceAll("\\s{2,}", " "));
         verify.fieldCheck(name2, 1, 20, false, true);
         verify.fieldCheck(surname2, 1, 30, false, true);
         verify.fieldCheck(country2, 0, 30, false, true);

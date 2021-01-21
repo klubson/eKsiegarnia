@@ -20,7 +20,7 @@ public class Edit_publisher {
     private String user;
     private dataBaseConnection dataBase = new dataBaseConnection();
     private int ID;
-    private boolean isManager;
+    private boolean isManager, ableToProceed;
 
     public void create(String data, int publisherID, boolean mode) throws SQLException {
         windowMethods.window = new JFrame("Edytuj wydawnictwo");
@@ -72,15 +72,25 @@ public class Edit_publisher {
                     try {
                         dataBase.setStmt();
                         ResultSet rs = dataBase.getStmt().executeQuery(
-                                "SELECT Nazwa FROM Wydawnictwo WHERE Nazwa = '" + name2.getText() + "'"
+                                "SELECT Nazwa, ID_wydawnictwa FROM Wydawnictwo WHERE Nazwa = '" + name2.getText() + "'"
                         );
                         if(rs.next()){
-                            JOptionPane.showMessageDialog(windowMethods.window, "Wydawnictwo o podanej nazwie już istnieje!", "Błąd!", JOptionPane.ERROR_MESSAGE);
-                            rs.close();
-                            dataBase.getStmt().close();
+                            if(ID != rs.getInt(2)){
+                                JOptionPane.showMessageDialog(windowMethods.window, "Wydawnictwo o podanej nazwie już istnieje!", "Błąd!", JOptionPane.ERROR_MESSAGE);
+                                rs.close();
+                                dataBase.getStmt().close();
+                                ableToProceed = false;
+                            }
+                            else{
+                                rs.close();
+                                ableToProceed = true;
+                            }
                         }
                         else{
                             rs.close();
+                            ableToProceed = true;
+                        }
+                        if(ableToProceed){
                             int changes = dataBase.getStmt().executeUpdate(
                                     "UPDATE Wydawnictwo SET Nazwa = '" + name2.getText() +
                                             "', Kraj_pochodzenia = '" + country2.getText() +
@@ -125,6 +135,8 @@ public class Edit_publisher {
     }
     private boolean check(){
         DataVerification verify = new DataVerification();
+        name2.setText(name2.getText().trim().replaceAll("\\s{2,}", " "));
+        country2.setText(country2.getText().trim().replaceAll("\\s{2,}", " "));
         verify.fieldCheck(name2, 1, 30, true, true);
         verify.fieldCheck(country2, 0, 30, false, true);
         verify.errorMessage();

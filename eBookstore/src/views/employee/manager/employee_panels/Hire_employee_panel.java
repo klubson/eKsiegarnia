@@ -194,6 +194,8 @@ public class Hire_employee_panel {
         DataVerification verify = new DataVerification();
         verify.fieldCheck(login2, 1, 30, true, false);
         verify.passFieldCheck(pass2, 20);
+        name2.setText(name2.getText().trim().replaceAll("\\s{2,}", " "));
+        surname2.setText(surname2.getText().trim().replaceAll("\\s{2,}", " "));
         verify.fieldCheck(name2, 1, 20, false, true);
         verify.fieldCheck(surname2, 1, 30, false, true);
         verify.phoneCheck(phone2);
