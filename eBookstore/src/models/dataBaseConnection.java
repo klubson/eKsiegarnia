@@ -226,26 +226,31 @@ public class dataBaseConnection {
     public void newCartItem(CartInfo cart , int produktId , double productPrice , int amount)
     {
         try{
-            setStmt();
-            int changes = stmt.executeUpdate(
-                    "INSERT INTO Element_koszyka " +
-                            "VALUES("+ cart.getNextLP() + ", "+ produktId + ", " + cart.getCartId() + ", " + amount+", " +productPrice +" )"
-            );
-            System.out.println("Wstawiono " + changes + " krotkę");
-            changes = stmt.executeUpdate(
-                    "Update koszyk_zakupowy SET Wartosc_zakupow = Wartosc_zakupow + " + productPrice + ", Calkowita_wartosc_zamowienia = Calkowita_wartosc_zamowienia + " +
-                            productPrice + " WHERE Nr_koszyka = "+ cart.getCartId()
 
-            );
-            System.out.println("Zmodyfikowano " + changes + " krotkę");
-            changes = stmt.executeUpdate(
-                    "Update produkt SET stan_magazyn = stan_magazyn - " + amount  + " WHERE id_produktu = "+ produktId
 
-            );
-            System.out.println("Zmodyfikowano " + changes + " krotkę");
+                setStmt();
+                int changes = stmt.executeUpdate(
+                        "INSERT INTO Element_koszyka " +
+                                "VALUES("+ cart.getNextLP() + ", "+ produktId + ", " + cart.getCartId() + ", " + amount+", " +productPrice +" )"
+                );
+                System.out.println("Wstawiono " + changes + " krotkę");
+                changes = stmt.executeUpdate(
+                        "Update koszyk_zakupowy SET Wartosc_zakupow = Wartosc_zakupow + " + productPrice + ", Calkowita_wartosc_zamowienia = Calkowita_wartosc_zamowienia + " +
+                                productPrice + " WHERE Nr_koszyka = "+ cart.getCartId()
+
+                );
+                System.out.println("Zmodyfikowano " + changes + " krotkę");
+                changes = stmt.executeUpdate(
+                        "Update produkt SET stan_magazyn = stan_magazyn - " + amount  + " WHERE id_produktu = "+ produktId
+
+                );
+                System.out.println("Zmodyfikowano " + changes + " krotkę");
+
+
         }
         catch (SQLException e)
         {
+            e.printStackTrace();
             System.out.println("Błąd przy dodawaniu pozycji do koszyka");
         }
         finally {
@@ -259,5 +264,19 @@ public class dataBaseConnection {
                 }
             }
         }
+    }
+
+    public boolean checkIfInCart(CartInfo cart , int produktId) throws SQLException {
+            setStmt();
+            ResultSet rs = stmt.executeQuery(
+                    "SELECT * FROM element_koszyka WHERE koszyk_zakupowy_nr_koszyka = " + cart.getCartId() +
+                            " AND produkt_id_produktu = "+produktId
+            );
+            boolean ret = rs.next();
+            rs.close();
+            getStmt().close();
+            return  ret;
+
+
     }
 }

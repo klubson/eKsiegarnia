@@ -19,6 +19,7 @@ public class BuyPanelProductTable extends BuyPanel {
                 public void actionPerformed(ActionEvent e) {
                     //FOO
                     int amount = (int) amountSpinnerModel.getNumber();
+
                     dataBase.newCartItem(cart, produktId, productPrice *amount , amount);
                     customer.decreaseAmount(amount);
                     windowMethods.exit();

@@ -122,29 +122,59 @@ public class Edit_customer_profile {
             public void actionPerformed(ActionEvent e) {
                 if(check()){
                     try {
-                        if(findLoggedUser(login2.getText(), user)){
+                        int type = findLoggedUser(login2.getText(), user);
+                        if(type == 0){
                             JOptionPane.showMessageDialog(windowMethods.window, "Podany login jest już zajęty! Wybierz inny login!", "Błąd", JOptionPane.ERROR_MESSAGE);
                         }
                         else{
                             stmt = conn.createStatement();
                             String tmp = String.copyValueOf(pass2.getPassword());
-                            int changes = stmt.executeUpdate(
-                                    "UPDATE Uzytkownik SET Login = '" + login2.getText() + "', Haslo = '"
-                                            + tmp + "', Imie = '" + name2.getText() + "', Nazwisko = '" + surname2.getText() + "'," +
-                                            "Nr_kontaktowy = '" + phone2.getText() + "' WHERE Login = '" + user + "'"
-                            );
-                            System.out.println("Edytowano " + changes + " rekord");
-                            changes = stmt.executeUpdate(
-                                    "UPDATE Klient SET k_adres_e_mail = '" + email2.getText() + "', k_adres = '"
-                                            + address2.getText() + "' WHERE Login = '" + user + "'"
-                            );
-                            System.out.println("Edytowano " + changes + " rekord");
+                            int changes;
+                            if(type == 1){
+                                changes = stmt.executeUpdate(
+                                        "UPDATE Uzytkownik SET Login = '" + login2.getText() + "', Haslo = '"
+                                                + tmp + "', Imie = '" + name2.getText() + "', Nazwisko = '" + surname2.getText() + "'," +
+                                                "Nr_kontaktowy = '" + phone2.getText() + "' WHERE Login = '" + user + "'"
+                                );
+                                System.out.println("Edytowano " + changes + " rekord");
+                                changes = stmt.executeUpdate(
+                                        "UPDATE Klient SET k_adres_e_mail = '" + email2.getText() + "', k_adres = '"
+                                                + address2.getText() + "' WHERE Login = '" + user + "'"
+                                );
+                                System.out.println("Edytowano " + changes + " rekord");
+                            }
+                            else if(type == 2){//to miała być obsługa edycji profilu z zmianą loginu ala nie działa :(
+                                conn.setAutoCommit(false);
+                                changes = stmt.executeUpdate(
+                                        "UPDATE Uzytkownik SET Login = '" + login2.getText() + "', Haslo = '"
+                                                + tmp + "', Imie = '" + name2.getText() + "', Nazwisko = '" + surname2.getText() + "'," +
+                                                "Nr_kontaktowy = '" + phone2.getText() + "' WHERE Login = '" + user + "'"
+                                );
+                                System.out.println("Edytowano " + changes + " rekord");
+                                changes = stmt.executeUpdate(
+                                        "UPDATE Klient SET Login = '" + login2.getText() + "', k_adres_e_mail = '" + email2.getText() + "', k_adres = '"
+                                                + address2.getText() + "' WHERE Login = '" + user + "'"
+                                );
+                                System.out.println("Edytowano " + changes + " rekord");
+
+                                changes = stmt.executeUpdate(
+                                        "UPDATE koszyk_zakupowy SET Klient_Login = '" + login2.getText() + "' WHERE Klient_Login = '" + user + "'"
+                                );
+                                System.out.println("Edytowano " + changes + " rekordów");
+                                conn.commit();
+                                conn.setAutoCommit(true);
+
+
+                                user = login2.getText();
+                            }
+
+
                             stmt.close();
                             JOptionPane.showMessageDialog(windowMethods.window, "Klient " + name2.getText() + " " +
                                     surname2.getText() + " edytowany pomyślnie!");
                             Customer_panel cp = new Customer_panel();
                             windowMethods.exit();
-                            cp.create(user);
+                            cp.createFromBack(user,tempDataBase,cartInfo);
                         }
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
@@ -223,7 +253,7 @@ public class Edit_customer_profile {
         else return false;
     }
 
-    private boolean findLoggedUser(String login , String user) throws SQLException {
+    private int findLoggedUser(String login , String user) throws SQLException {
         stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT Login FROM Uzytkownik WHERE Login = " + "'" + login + "'");
         if(rs.next()) {
@@ -232,19 +262,19 @@ public class Edit_customer_profile {
                 //System.out.println("taki sam login");
                 rs.close();
                 stmt.close();
-                return false;
+                return 1;
             }
             else{
                 rs.close();
                 stmt.close();
-                return true;
+                return 0;
             }
         }
         else {
             System.out.println("nie znaleziono");
             rs.close();
             stmt.close();
-            return false;
+            return 2;
         }
     }
 }

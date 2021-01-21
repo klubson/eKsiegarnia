@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CurrentCartPanel extends CartInfoPanel {
@@ -70,10 +71,18 @@ public class CurrentCartPanel extends CartInfoPanel {
                     if(table.getModel().getRowCount() > 0){
                         int id = Integer.parseInt((String) table.getModel().getValueAt(table.getSelectedRow(), 6 ));
                         int sztuk = Integer.parseInt((String) table.getModel().getValueAt(table.getSelectedRow(), 3 ));
+                        double cena = Double.parseDouble((String) table.getModel().getValueAt(table.getSelectedRow(), 4 ));
                         int lp = Integer.parseInt((String) table.getModel().getValueAt(table.getSelectedRow(), 0 ));
                         dataBase.setStmt();
                         int changes = dataBase.getStmt().executeUpdate(
                                 "Update produkt SET stan_magazyn = stan_magazyn + " + sztuk  + " WHERE id_produktu = "+ id
+
+                        );
+                        System.out.println("Zmodyfikowano " + changes + " krotkę");
+                        changes = dataBase.getStmt().executeUpdate(
+                                "Update koszyk_zakupowy SET wartosc_zakupow = wartosc_zakupow - " + cena  +
+                                        " , calkowita_wartosc_zamowienia = calkowita_wartosc_zamowienia - "+cena
+                                        +" WHERE nr_koszyka = "+ cart.getCartId()
 
                         );
                         System.out.println("Zmodyfikowano " + changes + " krotkę");
@@ -83,6 +92,20 @@ public class CurrentCartPanel extends CartInfoPanel {
                         dataBase.getStmt().close();
                         System.out.println("Usunięto "+deleted + " rekodów");
                         tableModel.removeRow(table.getSelectedRow());
+
+                        dataBase.setStmt();
+
+                        ResultSet rs ;
+
+                        rs = dataBase.getStmt().executeQuery(
+                                "Select  calkowita_wartosc_zamowienia  FROM koszyk_zakupowy WHERE nr_koszyka = " + cart.getCartId()
+                        );
+                        rs.next();
+
+                        totalCost.setText("Łącznie do zapłaty " + rs.getString(1));
+
+                        rs.close();
+                        dataBase.getStmt().close();
                     }
 
 
