@@ -48,12 +48,12 @@ public class Authors_customer {
         if(sort_asc == "" && sort_desc == "") mode = 1;
         if(mode == 1) {
             rs = dataBase.getStmt().executeQuery(
-                    "SELECT Imie, Nazwisko, Kraj_pochodzenia" +
+                    "SELECT Imie, Nazwisko, Kraj_pochodzenia, ID_autora" +
                             " FROM Autor ORDER BY ID_autora"
             );
         }
         if(mode == 2){
-            String query = "SELECT Imie, Nazwisko, Kraj_pochodzenia " +
+            String query = "SELECT Imie, Nazwisko, Kraj_pochodzenia, ID_autora " +
                     "FROM Autor ORDER BY ";
             if(sort_asc != "" && sort_desc != ""){
                 query += sort_asc + " ASC, ";
@@ -69,6 +69,7 @@ public class Authors_customer {
             vString.add(rs.getString(1));
             vString.add(rs.getString(2));
             vString.add(rs.getString(3));
+            vString.add(rs.getString(4));
             data.add(vString);
         }
         rs.close();
@@ -143,6 +144,7 @@ public class Authors_customer {
         products.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String autor_id =data.get(table.getSelectedRow()).get(3);
                 String autor = data.get(table.getSelectedRow()).get(0) + " " + data.get(table.getSelectedRow()).get(1);
                 Products_customer pc = new Products_customer();
 
@@ -151,7 +153,7 @@ public class Authors_customer {
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
-                pc.showAuthorsProducts(autor);
+                pc.showAuthorsProducts(autor,autor_id);
                 windowMethods.exit();
 
             }
@@ -159,6 +161,7 @@ public class Authors_customer {
         columnNames.add("Imię");
         columnNames.add("Nazwisko");
         columnNames.add("Kraj pochodzenia");
+        columnNames.add("ID");
         createTable(1);
 
     }

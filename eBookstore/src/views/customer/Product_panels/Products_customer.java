@@ -44,13 +44,15 @@ public class Products_customer {
 
     }
 
-    public void showAuthorsProducts(String autor){
+    public void showAuthorsProducts(String autor, String autor_id){
         prepSorting();
         filterText.setText(autor);
         filtersNames.setSelectedIndex(1);
         try {
-            getProductList(2 ,3, filterText.getText());
+            //getProductList(2 ,3, filterText.getText());
+            getProductList(2 ,4, autor_id);
             tableModel.setDataVector(data,columnNames);
+            table.removeColumn(table.getColumnModel().getColumn(5));
         } catch (SQLException e) {
             System.out.println("Błąd przy wyświetlaniu produktów danego autora");
             e.printStackTrace();
@@ -67,6 +69,7 @@ public class Products_customer {
         try {
             getProductList(2 ,2, filterText.getText());
             tableModel.setDataVector(data,columnNames);
+            table.removeColumn(table.getColumnModel().getColumn(5));
         } catch (SQLException e) {
             System.out.println("Błąd przy wyświetlaniu produktów danej serii");
             e.printStackTrace();
@@ -100,6 +103,12 @@ public class Products_customer {
                 query = "SELECT Nazwa, Cena, Rok_wydania, Stan_magazyn, co ,id_produktu,imie,nazwisko  FROM Produkt"+
                 " JOIN autor_produktu ON id_produktu=produkt_id_produktu JOIN autor ON autor_id_autora = id_autora"+
                 " WHERE CONCAT(CONCAT(imie,' '),nazwisko) LIKE '%"+filterText+"%'";
+            }
+            else if(filterType==4)
+            {
+                query = "SELECT Nazwa, Cena, Rok_wydania, Stan_magazyn, co ,id_produktu,imie,nazwisko  FROM Produkt"+
+                        " JOIN autor_produktu ON id_produktu=produkt_id_produktu JOIN autor ON autor_id_autora = id_autora"+
+                        " WHERE ID_autora = "+filterText;
             }
 
         }

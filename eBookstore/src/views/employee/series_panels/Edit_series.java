@@ -56,11 +56,11 @@ public class Edit_series {
                     try {
                         dataBase.getConn().setAutoCommit(true);
                         dataBase.setStmt();
-                        int tom;
-                        if(tomes2.getText().equals("")) tom = 0;
-                        else tom = Integer.parseInt(tomes2.getText());
+                        String tom;
+                        if(tomes2.getText().equals("")) tom = "NULL";
+                        else tom = tomes2.getText();
                         int changes = dataBase.getStmt().executeUpdate(
-                                "UPDATE Seria SET Liczba_tomow = " + tom + "WHERE Tytul = '"
+                                "UPDATE Seria SET Liczba_tomow = " + tom + " WHERE Tytul = '"
                                 + toEdit + "'"
                         );
                         JOptionPane.showMessageDialog(windowMethods.window, "Seria edytowana pomyślnie");

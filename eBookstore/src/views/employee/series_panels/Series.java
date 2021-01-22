@@ -64,7 +64,7 @@ public class Series {
         while(rs.next()){
             Vector<String> vString = new Vector<String>();
             vString.add(rs.getString(1));
-            vString.add(Integer.toString(rs.getInt(2)));
+            vString.add(rs.getString(2));
             data.add(vString);
         }
         rs.close();
