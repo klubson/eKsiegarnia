@@ -58,11 +58,11 @@ public class Edit_game {
         rs.close();
         ArrayList<Integer> tmpArray = new ArrayList<Integer>();
         rs = dataBase.getStmt().executeQuery(
-                "SELECT a.Imie, a.Nazwisko FROM Autor a JOIN Autor_produktu b ON a.ID_autora = b.Autor_ID_autora WHERE b.Produkt_ID_produktu = " + id
+                "SELECT a.Imie, a.Nazwisko, a.ID_autora FROM Autor a JOIN Autor_produktu b ON a.ID_autora = b.Autor_ID_autora WHERE b.Produkt_ID_produktu = " + id
         );
         while (rs.next()){
             for(int i = 0; i < authorList.getModel().getSize(); i++){
-                if(authorList.getModel().getElementAt(i).equals(rs.getString(1) + " " + rs.getString(2))){
+                if(authorList.getModel().getElementAt(i).equals(rs.getString(1) + " " + rs.getString(2) + ", " + Integer.toString(rs.getInt(3)))){
                     tmpArray.add(i);
                 }
             }
@@ -357,12 +357,12 @@ public class Edit_game {
         verify.sumCheck(price2);
         verify.dateCheck(year2, 0, 4);
         verify.numberCheck(storage2, 1, 3);
-        verify.numberCheck(min_players2, 1, 2);
-        verify.numberCheck(max_players2, 1, 2);
+        //verify.numberCheck(min_players2, 1, 2);
+        //verify.numberCheck(max_players2, 1, 2);
         verify.checkTwoNumbers(min_players2, max_players2);
         verify.numberCheck(min_age2, 0, 2);
         verify.numberCheck(est_time2, 0, 3);
-        verify.errorTwoNumbers();
+        //verify.errorTwoNumbers();
         verify.errorMessage();
         if (verify.error_counter == 0) return true;
         else return false;

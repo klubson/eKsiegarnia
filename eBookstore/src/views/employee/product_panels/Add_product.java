@@ -418,12 +418,12 @@ public class Add_product {
     }
     private boolean gameCheck(){
         DataVerification verify = new DataVerification();
-        verify.numberCheck(min_players2, 1, 2);
-        verify.numberCheck(max_players2, 1, 2);
+        //verify.numberCheck(min_players2, 1, 2);
+        //verify.numberCheck(max_players2, 1, 2);
         verify.checkTwoNumbers(min_players2, max_players2);
         verify.numberCheck(min_age2, 0, 2);
         verify.numberCheck(est_time2, 0, 3);
-        verify.errorTwoNumbers();
+        //verify.errorTwoNumbers();
         verify.errorMessage();
         if(verify.error_counter == 0) return true;
         else return false;

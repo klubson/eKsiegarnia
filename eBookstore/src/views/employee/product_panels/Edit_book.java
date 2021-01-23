@@ -58,11 +58,11 @@ public class Edit_book {
         rs.close();
         ArrayList<Integer> tmpArray = new ArrayList<Integer>();
         rs = dataBase.getStmt().executeQuery(
-                "SELECT a.Imie, a.Nazwisko FROM Autor a JOIN Autor_produktu b ON a.ID_autora = b.Autor_ID_autora WHERE b.Produkt_ID_produktu = " + id
+                "SELECT a.Imie, a.Nazwisko, a.ID_autora FROM Autor a JOIN Autor_produktu b ON a.ID_autora = b.Autor_ID_autora WHERE b.Produkt_ID_produktu = " + id
         );
         while (rs.next()){
             for(int i = 0; i < authorList.getModel().getSize(); i++){
-                if(authorList.getModel().getElementAt(i).equals(rs.getString(1) + " " + rs.getString(2))){
+                if(authorList.getModel().getElementAt(i).equals(rs.getString(1) + " " + rs.getString(2) + ", " + Integer.toString(rs.getInt(3)))){
                     tmpArray.add(i);
                 }
             }

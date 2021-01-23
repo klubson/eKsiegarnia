@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Edit_series {
@@ -20,7 +21,7 @@ public class Edit_series {
     private String user, beginTitle = "Tytuł serii: ", toEdit;
     private boolean isManager;
 
-    public void create(String data, String titleToEdit, boolean mode){
+    public void create(String data, String titleToEdit, boolean mode) throws SQLException {
         windowMethods.window = new JFrame("Edytuj serię książek");
         windowMethods.settings();
         windowMethods.window.setSize(600, 300);
@@ -28,8 +29,19 @@ public class Edit_series {
         toEdit = titleToEdit;
         isManager = mode;
         add_components();
-        title.setText(beginTitle + titleToEdit);
+        setSeriesData(titleToEdit);
         windowMethods.window.setVisible(true);
+    }
+    private void setSeriesData(String titleEdit) throws SQLException {
+        dataBase.setStmt();
+        ResultSet rs = dataBase.getStmt().executeQuery(
+                "SELECT Liczba_tomow FROM Seria WHERE Tytul = '" + titleEdit + "'"
+        );
+        rs.next();
+        tomes2.setText(Integer.toString(rs.getInt(1)));
+        title.setText(beginTitle + titleEdit);
+        rs.close();
+        dataBase.getStmt().close();
     }
     private void components(){
         title = new JLabel();

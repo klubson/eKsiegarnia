@@ -44,11 +44,11 @@ public class Products {
         if(sort_asc == "" && sort_desc == "") mode = 1;
         if(mode == 1) {
             rs = dataBase.getStmt().executeQuery(
-                    "SELECT ID_Produktu, Nazwa, Cena, Rok_wydania, Stan_magazyn, co, Wydawnictwo_ID_wydawnictwa FROM Produkt ORDER BY ID_Produktu"
+                    "SELECT p.ID_Produktu, p.Nazwa, p.Cena, p.Rok_wydania, p.Stan_magazyn, p.co, w.Nazwa FROM Produkt p JOIN Wydawnictwo w ON p.Wydawnictwo_ID_wydawnictwa = w.ID_wydawnictwa ORDER BY p.ID_Produktu"
             );
         }
         if(mode == 2){
-            String query = "SELECT ID_Produktu, Nazwa, Cena, Rok_wydania, Stan_magazyn, co, Wydawnictwo_ID_wydawnictwa FROM Produkt ORDER BY ";
+            String query = "SELECT p.ID_Produktu, p.Nazwa, p.Cena, p.Rok_wydania, p.Stan_magazyn, p.co, w.Nazwa FROM Produkt p JOIN Wydawnictwo w ON p.Wydawnictwo_ID_wydawnictwa = w.ID_wydawnictwa ORDER BY ";
             if(sort_asc != "" && sort_desc != ""){
                 query += sort_asc + " ASC, ";
                 query += sort_desc + " DESC";
@@ -72,7 +72,7 @@ public class Products {
             else if(tmp.equals("k")){
                 vString.add("książka");
             }
-            vString.add(Integer.toString(rs.getInt(7)));
+            vString.add(rs.getString(7));
             data.add(vString);
         }
         rs.close();
@@ -240,16 +240,16 @@ public class Products {
                 //sortowanie
                 sort_asc = "";
                 sort_desc = "";
-                if(id_asc.isSelected()) sort_asc += "ID_produktu, ";
-                if(name_asc.isSelected()) sort_asc += "Nazwa, ";
-                if(price_asc.isSelected()) sort_asc += "Cena, ";
-                if(year_asc.isSelected()) sort_asc += "Rok_wydania, ";
+                if(id_asc.isSelected()) sort_asc += "p.ID_produktu, ";
+                if(name_asc.isSelected()) sort_asc += "p.Nazwa, ";
+                if(price_asc.isSelected()) sort_asc += "p.Cena, ";
+                if(year_asc.isSelected()) sort_asc += "p.Rok_wydania, ";
                 if(sort_asc.length() != 0) sort_asc = sort_asc.substring(0, sort_asc.length()-2);
                 //System.out.println(sort_asc);
-                if(id_desc.isSelected()) sort_desc += "ID_produktu, ";
-                if(name_desc.isSelected()) sort_desc += "Nazwa, ";
-                if(price_desc.isSelected()) sort_desc += "Cena, ";
-                if(year_desc.isSelected()) sort_desc += "Rok_wydania, ";
+                if(id_desc.isSelected()) sort_desc += "p.ID_produktu, ";
+                if(name_desc.isSelected()) sort_desc += "p.Nazwa, ";
+                if(price_desc.isSelected()) sort_desc += "p.Cena, ";
+                if(year_desc.isSelected()) sort_desc += "p.Rok_wydania, ";
                 if(sort_desc.length() != 0) sort_desc = sort_desc.substring(0, sort_desc.length()-2);
                 //System.out.println(sort_desc);
                 try {
@@ -272,7 +272,7 @@ public class Products {
         columnNames.add("Rok wydania");
         columnNames.add("Stan magazynu");
         columnNames.add("Typ produktu");
-        columnNames.add("ID wydawnictwa");
+        columnNames.add("Wydawnictwo");
         createTable(1);
     }
     private void panels() throws SQLException {

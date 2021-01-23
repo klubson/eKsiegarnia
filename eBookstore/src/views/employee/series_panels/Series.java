@@ -130,7 +130,11 @@ public class Series {
             public void actionPerformed(ActionEvent e) {
                 Edit_series es = new Edit_series();
                 exit();
-                es.create(user, data.get(table.getSelectedRow()).get(0), isManager);
+                try {
+                    es.create(user, data.get(table.getSelectedRow()).get(0), isManager);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
             }
         });
         delete = new JButton("Usuń");
