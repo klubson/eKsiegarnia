@@ -115,9 +115,9 @@ public class Add_product {
                                         else tmp = seriesList.getSelectedValue().toString();
                                         if(size2.getText().equals("")) pages_tmp = -1;
                                         else pages_tmp = Integer.parseInt(size2.getText());
-                                        if(publisherList.isSelectionEmpty())
+                                        if(publisherList.isSelectionEmpty() || authorList.isSelectionEmpty())
                                         {
-                                            JOptionPane.showMessageDialog(windowMethods.window, "Nie wybrano wydawnictwa!", "Błąd", JOptionPane.ERROR_MESSAGE);
+                                            JOptionPane.showMessageDialog(windowMethods.window, "Nie wybrano wydawnictwa i/lub autora!", "Błąd", JOptionPane.ERROR_MESSAGE);
                                         }
                                         else
                                         {
