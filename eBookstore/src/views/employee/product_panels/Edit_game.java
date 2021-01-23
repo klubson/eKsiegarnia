@@ -127,8 +127,8 @@ public class Edit_game {
                 if(check()){
                     try {
                         dataBase.setStmt();
-                        if(publisherList.isSelectionEmpty()){
-                            JOptionPane.showMessageDialog(windowMethods.window, "Nie wybrano wydawnictwa!", "Błąd", JOptionPane.ERROR_MESSAGE);
+                        if(publisherList.isSelectionEmpty() || authorList.isSelectionEmpty()){
+                            JOptionPane.showMessageDialog(windowMethods.window, "Nie wybrano wydawnictwa i/lub autora!", "Błąd", JOptionPane.ERROR_MESSAGE);
                         }
                         else
                         {

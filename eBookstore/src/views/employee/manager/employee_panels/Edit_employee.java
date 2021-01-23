@@ -23,7 +23,7 @@ public class Edit_employee {
     private JButton back, edit;
     private JLabel name, hired, salary, job_type, contract_type;
     private JTextField salary2;
-    private JPanel center, down, hired_pane, salary_pane, job_type_pane, contract_type_pane;
+    private JPanel center, down, name_pane, hired_pane, salary_pane, job_type_pane, contract_type_pane;
     private String user, user_name, toEdit;
     private JComboBox job_type2, contract_type2;
     private dataBaseConnection dataBase = new dataBaseConnection();
@@ -65,8 +65,8 @@ public class Edit_employee {
     private void labels(){
         hired = new JLabel("Data zatrudnienia: ");
         salary = new JLabel("Pensja brutto: ");
-        job_type = new JLabel("Stanowisko (max 20 znaków): ");
-        contract_type = new JLabel("Typ umowy (max 30 znaków):");
+        job_type = new JLabel("Stanowisko: ");
+        contract_type = new JLabel("Typ umowy:");
         name = new JLabel();
     }
     private void components(){
@@ -172,7 +172,8 @@ public class Edit_employee {
     private void panels(){
         labels();
         components();
-
+        name_pane = new JPanel();
+        name_pane.add(name);
         hired_pane = new JPanel();
         hired_pane.add(hired);
         hired_pane.add(datePicker);
@@ -188,7 +189,7 @@ public class Edit_employee {
 
         center = new JPanel();
         center.setLayout(new BoxLayout(center, BoxLayout.PAGE_AXIS));
-        center.add(name);
+        center.add(name_pane);
         center.add(hired_pane);
         center.add(salary_pane);
         center.add(job_type_pane);

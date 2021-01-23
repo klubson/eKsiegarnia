@@ -12,7 +12,7 @@ public class DataVerification {
 
     public void fieldCheck(JTextField field, int min_size, int max_size, boolean digitsEnabled, boolean spaceEnabled){
         if(field.getText().length() < min_size || field.getText().length() > max_size){
-            message += "\n W pole " + field.getName() + " wprowadzono zbyt małą lub zbyt dużą liczbę znaków";
+            message += "\nW pole " + field.getName() + " wprowadzono zbyt małą lub zbyt dużą liczbę znaków";
             error_counter++;
         }
         else{
@@ -67,7 +67,7 @@ public class DataVerification {
         else{
             for(int i = 0; i < tmp.length(); i++){
                 if(!Character.isLetterOrDigit(tmp.charAt(i))){
-                    message += "\nPole " + field.getName() + " może składać się wyłącznie z liter lub cyfr";
+                    message += "\nPole " + field.getName() + " musi składać się wyłącznie z liter lub cyfr";
                     error_counter++;
                     break;
                 }
@@ -136,7 +136,7 @@ public class DataVerification {
     }
     public void sumCheck(JTextField field){
         if (!field.getText().matches("[0-9]+[.]?[0-9]{1,2}")){
-            message += "\n" + field.getName();
+            message += "\nPole " + field.getName() + " musi składać się wyłącznie z cyfr oraz kropki w przypadku liczby zmiennoprzecinkowej";
             error_counter++;
         }
     }
@@ -155,6 +155,10 @@ public class DataVerification {
                     break;
                 }
             }
+        }
+        if(Integer.parseInt(field.getText()) > 2021){
+            message += "\nPole " + field.getName() + " zawiera rok nowszy niż obecny!";
+            error_counter++;
         }
     }
     public void emailCheck(JTextField field, int max_size){
@@ -175,7 +179,7 @@ public class DataVerification {
             address_correctness = false;
         }
         else{
-            if(!field.getText().matches("[A-Za-zĆŚŁŹŻąęćłóśźż]{2,}[,][ ][A-Za-zĆŚŁŹŻąęćłóśźż0-9]{2,}[ ][0-9]{1,3}[/]?[0-9]{0,2}")){
+            if(!field.getText().matches("[A-Za-zĆŚŁŹŻąęćłńóśźż]{2,}[,][ ][A-Za-zĆŚŁŹŻąęćłńóśźż0-9]{2,}[ ][0-9]{1,3}[/]?[0-9]{0,2}")){
                 address_correctness = false;
             }
         }
@@ -221,7 +225,7 @@ public class DataVerification {
     }
     public void errorAddress(){
         if(!address_correctness){
-            JOptionPane.showMessageDialog(null, "Błąd w polu Adres! Liczba znaków musi być większa od 0 i nie większa od 50!\nPoprawny wzór to: <Nazwa miejscowości>, <ulica> <numer domu>(max. 3 cyfry)/<numer mieszkania>(max. 2 cyfry).\nNiedozwolone są znaki takie jak '.', '-'.", "Błąd", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Błąd w polu Adres! Liczba znaków musi być większa od 0 i nie większa od 50!\nPoprawny wzór to: <Nazwa miejscowości><przecinek><spacja><ulica><spacja><numer domu>(max. 3 cyfry)<ukośnik><numer mieszkania>(max. 2 cyfry).\nNiedozwolone są znaki takie jak '.', '-'.", "Błąd", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

@@ -47,10 +47,10 @@ public class Add_product {
         storage = new JLabel("Stan magazynu (max 999): ");
         publisher = new JLabel("Wydawnictwo: ");
         author = new JLabel("Autor, ID Autora: ");
-        cover_type = new JLabel("Typ okładki: ");
-        pages_amount = new JLabel("Liczba stron: ");
-        size = new JLabel("Format książki: ");
-        series_title = new JLabel("Tytuł serii książek: ");
+        cover_type = new JLabel("Typ okładki (opcjonalnie, max 10 znaków): ");
+        pages_amount = new JLabel("Liczba stron (opcjonalnie): ");
+        size = new JLabel("Format książki (opcjonalnie, max 4 znaki): ");
+        series_title = new JLabel("Tytuł serii książek (opcjonalnie): ");
         min_players = new JLabel("Minimalna liczba graczy: ");
         max_players = new JLabel("Maksymalna liczba graczy: ");
         min_age = new JLabel("Zalecany minimalny wiek (opcjonalnie): ");
@@ -113,11 +113,11 @@ public class Add_product {
                                         int pages_tmp;
                                         if(seriesList.isSelectionEmpty()) tmp = "";
                                         else tmp = seriesList.getSelectedValue().toString();
-                                        if(size2.getText().equals("")) pages_tmp = -1;
-                                        else pages_tmp = Integer.parseInt(size2.getText());
-                                        if(publisherList.isSelectionEmpty())
+                                        if(pages_amount2.getText().equals("")) pages_tmp = -1;
+                                        else pages_tmp = Integer.parseInt(pages_amount2.getText());
+                                        if(publisherList.isSelectionEmpty() || authorList.isSelectionEmpty())
                                         {
-                                            JOptionPane.showMessageDialog(windowMethods.window, "Nie wybrano wydawnictwa!", "Błąd", JOptionPane.ERROR_MESSAGE);
+                                            JOptionPane.showMessageDialog(windowMethods.window, "Nie wybrano wydawnictwa i/lub autora!", "Błąd", JOptionPane.ERROR_MESSAGE);
                                         }
                                         else
                                         {
@@ -409,7 +409,7 @@ public class Add_product {
         DataVerification verify = new DataVerification();
         cover_type2.setText(cover_type2.getText().trim().replaceAll("\\s{2,}", " "));
         size2.setText(size2.getText().trim().replaceAll("\\s{2,}", " "));
-        verify.fieldCheck(cover_type2, 0, 10, false, false);
+        verify.fieldCheck(cover_type2, 0, 20, false, false);
         verify.numberCheck(pages_amount2, 0, 4);
         verify.fieldCheck(size2, 0, 4, true, false);
         verify.errorMessage();

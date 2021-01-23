@@ -32,7 +32,7 @@ public class Reg_panel extends JFrame {
         pass_again = new JLabel("Powtórz hasło: ");
         name = new JLabel("Imię (max 20 znaków): ");
         surname = new JLabel("Nazwisko (max 30 znaków): ");
-        phone = new JLabel("Numer telefonu: ");
+        phone = new JLabel("Numer telefonu (opcjonalnie): ");
         e_mail = new JLabel("Adres e-mail (max 30 znaków): ");
         address = new JLabel("Adres zamieszkania (max 50 znaków): ");
     }

@@ -96,10 +96,10 @@ public class Edit_book {
         storage = new JLabel("Stan magazynu (max 999): ");
         publisher = new JLabel("Wydawnictwo: ");
         author = new JLabel("Autorzy: ");
-        cover_type = new JLabel("Typ okładki: ");
-        pages_amount = new JLabel("Liczba stron: ");
-        size = new JLabel("Format książki: ");
-        series_title = new JLabel("Tytuł serii książek: ");
+        cover_type = new JLabel("Typ okładki (opcjonalnie, max 10 znaków): ");
+        pages_amount = new JLabel("Liczba stron (opcjonalnie): ");
+        size = new JLabel("Format książki (opcjonalnie, max 4 znaki): ");
+        series_title = new JLabel("Tytuł serii książek (opcjonalnie): ");
     }
     private void components() throws SQLException {
         name2 = windowMethods.setJTextField(name2, "NAZWA");
@@ -133,8 +133,8 @@ public class Edit_book {
                 if(check()){
                     try {
                         dataBase.setStmt();
-                        if(publisherList.isSelectionEmpty()){
-                            JOptionPane.showMessageDialog(windowMethods.window, "Nie wybrano wydawnictwa!", "Błąd", JOptionPane.ERROR_MESSAGE);
+                        if(publisherList.isSelectionEmpty() || authorList.isSelectionEmpty()){
+                            JOptionPane.showMessageDialog(windowMethods.window, "Nie wybrano wydawnictwa i/lub autora!", "Błąd", JOptionPane.ERROR_MESSAGE);
                         }
                         else{
                             ResultSet rs2 = dataBase.getStmt().executeQuery(

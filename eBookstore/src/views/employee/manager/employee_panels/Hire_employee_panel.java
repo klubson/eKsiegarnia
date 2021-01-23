@@ -47,11 +47,11 @@ public class Hire_employee_panel {
         pass = new JLabel("Wybierz hasło (max 20 znaków): ");
         name = new JLabel("Imię (max 20 znaków): ");
         surname = new JLabel("Nazwisko (max 30 znaków): ");
-        phone = new JLabel("Numer telefonu: ");
+        phone = new JLabel("Numer telefonu (opcjonalnie): ");
         hired = new JLabel("Data zatrudnienia: ");
         salary = new JLabel("Pensja brutto: ");
         job_type = new JLabel("Stanowisko: ");
-        contract_type = new JLabel("Typ umowy (max 30 znaków):");
+        contract_type = new JLabel("Typ umowy:");
     }
     private void panels(){
         labels();
