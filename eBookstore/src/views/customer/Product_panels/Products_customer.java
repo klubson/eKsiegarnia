@@ -330,6 +330,7 @@ public class Products_customer {
                     try {
                         getProductList(2,0,"" );
                         tableModel.setDataVector(data,columnNames);
+                        table.removeColumn(table.getColumnModel().getColumn(5));
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }
