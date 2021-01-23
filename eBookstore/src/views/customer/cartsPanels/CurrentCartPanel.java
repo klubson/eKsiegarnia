@@ -68,7 +68,7 @@ public class CurrentCartPanel extends CartInfoPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if(table.getModel().getRowCount() > 0){
+                    if(table.getModel().getRowCount() > 0 && table.getSelectedRow() != -1){
                         int id = Integer.parseInt((String) table.getModel().getValueAt(table.getSelectedRow(), 6 ));
                         int sztuk = Integer.parseInt((String) table.getModel().getValueAt(table.getSelectedRow(), 3 ));
                         double cena = Double.parseDouble((String) table.getModel().getValueAt(table.getSelectedRow(), 4 ));
@@ -120,7 +120,7 @@ public class CurrentCartPanel extends CartInfoPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if(table.getModel().getRowCount() > 0){
+                    if(table.getModel().getRowCount() > 0 && table.getSelectedRow() != -1){
                         int id = Integer.parseInt((String) table.getModel().getValueAt(table.getSelectedRow(), 6 ));
                         String type = data.get(table.getSelectedRow()).get(5);
                         if(type.equals("książka")){
