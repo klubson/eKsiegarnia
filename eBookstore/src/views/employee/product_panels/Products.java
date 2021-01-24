@@ -238,6 +238,8 @@ public class Products {
                                     "UPDATE Produkt SET Stan_magazyn = 0 WHERE ID_produktu = " + id
                             );
                             System.out.println("Usunięto 1 rekord");
+                            JOptionPane.showMessageDialog(windowMethods.window, "Usuwany produkt jest w historii zakupów klienta. " +
+                                    "Stan magazynów został wyzerowany, ale produkt pozostał w bazie danych.", "Błąd!", JOptionPane.PLAIN_MESSAGE);
                         }
                         dataBase.getStmt().close();
                         Products ps = new Products();
