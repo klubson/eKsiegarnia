@@ -14,12 +14,15 @@ import java.sql.SQLException;
 public class Add_series {
     private WindowMethods windowMethods = new WindowMethods();
     private JButton back, add;
-    private JLabel title, tomes;
+    private JLabel title, tomes, books;
     private JTextField title2, tomes2;
-    private JPanel title_pane, tomes_pane, center, down;
+    private JPanel title_pane, tomes_pane, center, down,bookPane;
     private dataBaseConnection dataBase = new dataBaseConnection();
     private String user;
     private  boolean isManager;
+    private DefaultListModel listModelBooks = new DefaultListModel();
+    private JList bookList;
+    private JScrollPane bookListScroller;
 
     public Add_series() {
     }
@@ -36,6 +39,7 @@ public class Add_series {
     private void components(){
         title = new JLabel("Tytuł serii (max 50 znaków): ");
         tomes = new JLabel("Liczba tomów: ");
+        books = new JLabel("Książki w serii");
         title2 = windowMethods.setJTextField(title2, "TYTUŁ SERII");
         tomes2 = windowMethods.setJTextField(tomes2, "LICZBA TOMÓW");
         back = new JButton("Powrót");
@@ -67,6 +71,10 @@ public class Add_series {
                             rs.close();
                             dataBase.getStmt().close();
                         }
+                        else if(bookList.isSelectionEmpty())
+                        {
+                            JOptionPane.showMessageDialog(windowMethods.window, "Nie wybrano żadnej książki!", "Błąd", JOptionPane.ERROR_MESSAGE);
+                        }
                         else{
                             int tom;
                             if(tomes2.getText().equals("")) tom = 0;
@@ -77,6 +85,19 @@ public class Add_series {
                             JOptionPane.showMessageDialog(windowMethods.window, "Seria dodana pomyślnie");
                             System.out.println("Dodano " + changes + " rekord");
                             rs.close();
+
+                            for (int i = 0; i <bookList.getSelectedValuesList().size() ; i++) {
+                                String currBook = bookList.getSelectedValuesList().get(i).toString();
+                                ResultSet rsB = dataBase.getStmt().executeQuery(
+                                        "SELECT id_produktu FROM Produkt  WHERE Nazwa = '" + currBook + "'"
+                                );
+                                rsB.next();
+                                dataBase.getStmt().executeUpdate(
+                                  "UPDATE Ksiazka SET Seria_Tytul = '"+title2.getText()+"' WHERE id_Produktu ="+rsB.getString(1)
+                                );
+                                rsB.close();
+                            }
+
                             dataBase.getStmt().close();
                             Series ss = new Series();
                             windowMethods.exit();
@@ -88,6 +109,16 @@ public class Add_series {
                 }
             }
         });
+        try {
+            getBookList();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        bookList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        bookList.setLayoutOrientation(JList.VERTICAL);
+        bookList.setVisibleRowCount(6);
+        bookListScroller = new JScrollPane(bookList);
+        bookListScroller.setViewportView(bookList);
     }
     private void panels(){
         components();
@@ -99,10 +130,15 @@ public class Add_series {
         tomes_pane.add(tomes);
         tomes_pane.add(tomes2);
 
+        bookPane = new JPanel();
+        bookPane.add(books);
+        bookPane.add(bookListScroller);
+
         center = new JPanel();
         center.setLayout(new BoxLayout(center, BoxLayout.PAGE_AXIS));
         center.add(title_pane);
         center.add(tomes_pane);
+        center.add(bookPane);
 
         down = new JPanel();
         down.setLayout(new BorderLayout());
@@ -122,5 +158,24 @@ public class Add_series {
         verify.errorMessage();
         if(verify.error_counter == 0) return true;
         else return false;
+    }
+
+    private void getBookList() throws SQLException {
+        dataBase.setStmt();
+        dataBase.getConn().setAutoCommit(true);
+        ResultSet rs = dataBase.getStmt().executeQuery(
+                "SELECT Nazwa FROM Produkt NATURAL JOIN Ksiazka WHERE Seria_tytul IS NULL"
+        );
+        int counter = 0;
+        while(rs.next()){
+            String book = rs.getString(1);
+            listModelBooks.addElement(book);
+            //if(pub.equals("brak wydawnictwa")) nullPublisherID = counter;
+            //counter++;
+        }
+        rs.close();
+        dataBase.getStmt().close();
+        bookList = new JList(listModelBooks);
+
     }
 }

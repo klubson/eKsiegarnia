@@ -28,6 +28,7 @@ public class Edit_book {
     private JList publisherList, authorList, seriesList;
     private JScrollPane publisherListScroller, authorListScroller, seriesListScroller;
     private boolean isManager, ableToEdit = true;
+    private String seriaTytul;
 
     public void create(String data, boolean mode, int product_ID) throws SQLException {
         windowMethods.window = new JFrame("Edytuj produkt");
@@ -55,6 +56,7 @@ public class Edit_book {
         pages_amount2.setText(rs.getString(7));
         size2.setText(rs.getString(8));
         String title = rs.getString(9);
+        seriaTytul = title;
         rs.close();
         ArrayList<Integer> tmpArray = new ArrayList<Integer>();
         rs = dataBase.getStmt().executeQuery(
@@ -133,6 +135,7 @@ public class Edit_book {
                 if(check()){
                     try {
                         dataBase.setStmt();
+
                         if(publisherList.isSelectionEmpty() || authorList.isSelectionEmpty()){
                             JOptionPane.showMessageDialog(windowMethods.window, "Nie wybrano wydawnictwa i/lub autora!", "Błąd", JOptionPane.ERROR_MESSAGE);
                         }
@@ -149,6 +152,30 @@ public class Edit_book {
                                 else ableToEdit = true;
                             }
                             rs2.close();
+                            boolean chngeOfSeries = false;
+
+                            if(seriaTytul != null && !seriesList.isSelectionEmpty() ) {
+                                if (!seriesList.getSelectedValue().toString().equals(seriaTytul) ) {
+                                    chngeOfSeries = true;
+                                }
+                            }
+                            if(seriaTytul != null && seriesList.isSelectionEmpty())chngeOfSeries = true;
+                            if(chngeOfSeries)
+                            {
+                                ResultSet rsSeries = dataBase.getStmt().executeQuery(
+                                        "SELECT COUNT(*) FROM Ksiazka WHERE Seria_tytul = '"+seriaTytul+"' GROUP BY Seria_tytul"
+                                );
+                                rsSeries.next();
+                                if(rsSeries.getInt(1)<=1)
+                                {
+                                    String msg = "Próbujesz usunąć z serii "+seriaTytul+" ostatnią należącą do niej książkę. Przed edycją książki usuń serię "
+                                            +seriaTytul+" lub pozostaw książkę w serii "+seriaTytul;
+                                    JOptionPane.showMessageDialog(windowMethods.window, msg, "Błąd!", JOptionPane.ERROR_MESSAGE);
+                                    ableToEdit = false;
+                                }
+                                rsSeries.close();
+                            }
+
                             if(ableToEdit){
                                 ResultSet rs = dataBase.getStmt().executeQuery(
                                         "SELECT ID_wydawnictwa FROM Wydawnictwo WHERE Nazwa = '" +
@@ -186,6 +213,7 @@ public class Edit_book {
                                 String tmp;
                                 if(seriesList.isSelectionEmpty()) tmp = "";
                                 else tmp = seriesList.getSelectedValue().toString();
+
                                 dataBase.getStmt().executeUpdate(
                                         "UPDATE Ksiazka SET k_Typ_okladki = '" + cover_type2.getText() +
                                                 "', k_Liczba_stron = '" + pages_amount2.getText() +

@@ -199,6 +199,23 @@ public class Products {
                                     "DELETE FROM Autor_produktu WHERE Produkt_ID_produktu = " + id
                             );
                             if (co.equals("książka")){
+
+                                ResultSet rsSeries = dataBase.getStmt().executeQuery(
+                                        "SELECT COUNT(*) FROM Ksiazka WHERE Seria_tytul = " +
+                                                "(SELECT Seria_tytul FROM Ksiazka WHERE id_produktu = "+id+" )  " +
+                                                "GROUP BY Seria_tytul"
+                                );
+                                if(rsSeries.next())
+                                {
+                                    if(rsSeries.getInt(1) <= 1)
+                                    {
+                                        dataBase.getStmt().executeUpdate(
+                                          "DELETE FROM Seria WHERE Tytul = (SELECT Seria_tytul FROM Ksiazka WHERE id_produktu = "+id+" )"
+                                        );
+                                        JOptionPane.showMessageDialog(windowMethods.window, "Usunięto ostatnią książkę z serii. Wraz z nią usunięto serię do której należała", "Błąd!", JOptionPane.PLAIN_MESSAGE);
+                                    }
+                                }
+                                rsSeries.close();
                                 dataBase.getStmt().executeUpdate(
                                         "DELETE FROM Ksiazka WHERE ID_produktu = " + id
                                 );
@@ -214,9 +231,9 @@ public class Products {
                             System.out.println("Usunięto 1 rekord");
                         }
                         else{
-                            dataBase.getStmt().executeUpdate(
+                            /*dataBase.getStmt().executeUpdate(
                                     "DELETE FROM Autor_produktu WHERE Produkt_ID_produktu = " + id
-                            );
+                            );*/
                             dataBase.getStmt().executeUpdate(
                                     "UPDATE Produkt SET Stan_magazyn = 0 WHERE ID_produktu = " + id
                             );

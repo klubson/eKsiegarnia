@@ -156,10 +156,13 @@ public class DataVerification {
                 }
             }
         }
-        if(Integer.parseInt(field.getText()) > 2021){
-            message += "\nPole " + field.getName() + " zawiera rok nowszy niż obecny!";
-            error_counter++;
+        if(!field.getText().isEmpty() ){
+            if(Integer.parseInt(field.getText()) > 2021){
+                message += "\nPole " + field.getName() + " zawiera rok nowszy niż obecny!";
+                error_counter++;
+            }
         }
+
     }
     public void emailCheck(JTextField field, int max_size){
         if(field.getText().length() == 0 || field.getText().length() > max_size) {
@@ -179,7 +182,7 @@ public class DataVerification {
             address_correctness = false;
         }
         else{
-            if(!field.getText().matches("[A-Za-zĆŚŁŹŻąęćłńóśźż]{2,}[,][ ][A-Za-zĆŚŁŹŻąęćłńóśźż0-9]{2,}[ ][0-9]{1,3}[/]?[0-9]{0,2}")){
+            if(!field.getText().matches("[A-Za-zĆŚŁŹŻąęćłńóśźż ]{2,}[,][ ][A-Za-zĆŚŁŹŻąęćłńóśźż0-9]{2,}[ ][0-9]{1,3}[/]?[0-9]{0,2}")){
                 address_correctness = false;
             }
         }
