@@ -38,7 +38,7 @@ public class Edit_series {
                 "SELECT Liczba_tomow FROM Seria WHERE Tytul = '" + titleEdit + "'"
         );
         rs.next();
-        tomes2.setText(Integer.toString(rs.getInt(1)));
+        tomes2.setText(rs.getString(1));
         title.setText(beginTitle + titleEdit);
         rs.close();
         dataBase.getStmt().close();

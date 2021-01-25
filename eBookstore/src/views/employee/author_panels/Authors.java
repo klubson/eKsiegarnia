@@ -138,51 +138,57 @@ public class Authors {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //edytowanie autora
-                Edit_author ea = new Edit_author();
-                windowMethods.exit();
-                try {
-                    ea.create(user, Integer.parseInt(data.get(table.getSelectedRow()).get(0)), isManager);
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
+                if(table.getSelectedRow() != -1){
+                    Edit_author ea = new Edit_author();
+                    windowMethods.exit();
+                    try {
+                        ea.create(user, Integer.parseInt(data.get(table.getSelectedRow()).get(0)), isManager);
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
                 }
+
             }
         });
         delete = new JButton("Usuń");
         delete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //usuń
-                try {
-                    int dialogButton = JOptionPane.YES_NO_OPTION;
-                    int dialogResult = JOptionPane.showConfirmDialog (null,
-                            "Czy na pewno chcesz usunąć autora " +
-                                    data.get(table.getSelectedRow()).get(1) + " " + data.get(table.getSelectedRow()).get(2) +"?",
-                            "Ostrzeżenie!",dialogButton);
-                    if(dialogResult == JOptionPane.YES_OPTION){
-                        dataBase.setStmt();
-                        ResultSet rs = dataBase.getStmt().executeQuery(
-                                "SELECT Autor_ID_Autora FROM Autor_produktu WHERE Autor_ID_Autora = " + data.get(table.getSelectedRow()).get(0)
-                        );
-                        if(rs.next()){
-                            JOptionPane.showMessageDialog(windowMethods.window, "Nie można usunąć autora kiedy jest powiązany z produktami! Najpierw" +
-                                    " usuń odpowiednie produkty!", "Błąd", JOptionPane.ERROR_MESSAGE);
-                        }
-                        else{
-                            dataBase.getConn().setAutoCommit(true);
-                            int changes = dataBase.getStmt().executeUpdate(
-                                    "DELETE FROM Autor WHERE ID_Autora = " +
-                                            data.get(table.getSelectedRow()).get(0)
+                if(table.getSelectedRow() != -1){
+                    //usuń
+                    try {
+                        int dialogButton = JOptionPane.YES_NO_OPTION;
+                        int dialogResult = JOptionPane.showConfirmDialog (null,
+                                "Czy na pewno chcesz usunąć autora " +
+                                        data.get(table.getSelectedRow()).get(1) + " " + data.get(table.getSelectedRow()).get(2) +"?",
+                                "Ostrzeżenie!",dialogButton);
+                        if(dialogResult == JOptionPane.YES_OPTION){
+                            dataBase.setStmt();
+                            ResultSet rs = dataBase.getStmt().executeQuery(
+                                    "SELECT Autor_ID_Autora FROM Autor_produktu WHERE Autor_ID_Autora = " + data.get(table.getSelectedRow()).get(0)
                             );
-                            System.out.println("Usunięto "+ changes + " rekord");
-                            JOptionPane.showMessageDialog(windowMethods.window, "Autor usunięty pomyślnie!");
-                            Authors as = new Authors();
-                            windowMethods.exit();
-                            as.create(user, isManager);
+                            if(rs.next()){
+                                JOptionPane.showMessageDialog(windowMethods.window, "Nie można usunąć autora kiedy jest powiązany z produktami! Najpierw" +
+                                        " usuń odpowiednie produkty!", "Błąd", JOptionPane.ERROR_MESSAGE);
+                            }
+                            else{
+                                dataBase.getConn().setAutoCommit(true);
+                                int changes = dataBase.getStmt().executeUpdate(
+                                        "DELETE FROM Autor WHERE ID_Autora = " +
+                                                data.get(table.getSelectedRow()).get(0)
+                                );
+                                System.out.println("Usunięto "+ changes + " rekord");
+                                JOptionPane.showMessageDialog(windowMethods.window, "Autor usunięty pomyślnie!");
+                                Authors as = new Authors();
+                                windowMethods.exit();
+                                as.create(user, isManager);
+                            }
                         }
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
                     }
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
                 }
+
             }
         });
         filter = new JButton("Sortuj");

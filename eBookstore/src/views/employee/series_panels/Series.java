@@ -128,43 +128,49 @@ public class Series {
         edit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Edit_series es = new Edit_series();
-                exit();
-                try {
-                    es.create(user, data.get(table.getSelectedRow()).get(0), isManager);
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
+                if(table.getSelectedRow() != -1){
+                    Edit_series es = new Edit_series();
+                    exit();
+                    try {
+                        es.create(user, data.get(table.getSelectedRow()).get(0), isManager);
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
                 }
+
             }
         });
         delete = new JButton("Usuń");
         delete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int dialogButton = JOptionPane.YES_NO_OPTION;
-                int dialogResult = JOptionPane.showConfirmDialog (null,
-                        "Czy na pewno chcesz usunąć serię " +
-                                data.get(table.getSelectedRow()).get(0) + "?",
-                        "Ostrzeżenie!",dialogButton);
-                if(dialogResult == JOptionPane.YES_OPTION){
-                    try {
-                        dataBase.setStmt();
-                        dataBase.getConn().setAutoCommit(false);
-                        int changes = dataBase.getStmt().executeUpdate(
-                                "DELETE FROM Seria WHERE Tytul = '" +
-                                        data.get(table.getSelectedRow()).get(0) + "'"
-                        );
-                        System.out.println("Usunięto "+ changes + " rekord");
-                        JOptionPane.showMessageDialog(windowMethods.window, "Seria usunięta pomyślnie!");
-                        dataBase.getStmt().close();
-                        dataBase.getConn().setAutoCommit(true);
-                        Series ss = new Series();
-                        exit();
-                        ss.create(user, isManager);
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
+                if(table.getSelectedRow()!=-1){
+                    int dialogButton = JOptionPane.YES_NO_OPTION;
+                    int dialogResult = JOptionPane.showConfirmDialog (null,
+                            "Czy na pewno chcesz usunąć serię " +
+                                    data.get(table.getSelectedRow()).get(0) + "?",
+                            "Ostrzeżenie!",dialogButton);
+                    if(dialogResult == JOptionPane.YES_OPTION){
+                        try {
+                            dataBase.setStmt();
+                            dataBase.getConn().setAutoCommit(false);
+                            int changes = dataBase.getStmt().executeUpdate(
+                                    "DELETE FROM Seria WHERE Tytul = '" +
+                                            data.get(table.getSelectedRow()).get(0) + "'"
+                            );
+                            System.out.println("Usunięto "+ changes + " rekord");
+                            JOptionPane.showMessageDialog(windowMethods.window, "Seria usunięta pomyślnie!");
+                            dataBase.getStmt().close();
+                            dataBase.getConn().setAutoCommit(true);
+                            Series ss = new Series();
+                            exit();
+                            ss.create(user, isManager);
+                        } catch (SQLException throwables) {
+                            throwables.printStackTrace();
+                        }
                     }
                 }
+
             }
         });
         filter = new JButton("Sortuj");

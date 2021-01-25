@@ -150,106 +150,112 @@ public class Products {
         edit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                productType = data.get(table.getSelectedRow()).get(5);
-                if(productType.equals("książka")){
-                    Edit_book eb = new Edit_book();
-                    windowMethods.exit();
-                    try {
-                        eb.create(user, isManager, Integer.parseInt(data.get(table.getSelectedRow()).get(0)));
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
+                if(table.getSelectedRow() != -1){
+                    productType = data.get(table.getSelectedRow()).get(5);
+                    if(productType.equals("książka")){
+                        Edit_book eb = new Edit_book();
+                        windowMethods.exit();
+                        try {
+                            eb.create(user, isManager, Integer.parseInt(data.get(table.getSelectedRow()).get(0)));
+                        } catch (SQLException throwables) {
+                            throwables.printStackTrace();
+                        }
+                    }
+                    else if(productType.equals("gra planszowa")){
+                        Edit_game eg = new Edit_game();
+                        windowMethods.exit();
+                        try {
+                            eg.create(user, isManager, Integer.parseInt(data.get(table.getSelectedRow()).get(0)));
+                        } catch (SQLException throwables) {
+                            throwables.printStackTrace();
+                        }
                     }
                 }
-                else if(productType.equals("gra planszowa")){
-                    Edit_game eg = new Edit_game();
-                    windowMethods.exit();
-                    try {
-                        eg.create(user, isManager, Integer.parseInt(data.get(table.getSelectedRow()).get(0)));
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
-                    }
-                }
+
             }
         });
         delete = new JButton("Usuń");
         delete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //usuwanie produktu
-                boolean ReadyToDelete = true;
-                int id = Integer.parseInt(data.get(table.getSelectedRow()).get(0));
-                String co = data.get(table.getSelectedRow()).get(5);
-                int dialogButton = JOptionPane.YES_NO_OPTION;
-                int dialogResult = JOptionPane.showConfirmDialog (null,
-                        "Czy na pewno chcesz usunąć produkt " +
-                                data.get(table.getSelectedRow()).get(1) +"?",
-                        "Ostrzeżenie!",dialogButton);
-                if(dialogResult == JOptionPane.YES_OPTION){
-                    try {
-                        dataBase.setStmt();
-                        ResultSet rs = dataBase.getStmt().executeQuery(
-                                "SELECT DISTINCT PRODUKT_ID_PRODUKTU FROM Element_koszyka ORDER BY produkt_id_produktu"
-                        );
-                        while (rs.next()){
-                            if(rs.getInt(1) == id) ReadyToDelete = false;
-                        }
-                        rs.close();
-                        if(ReadyToDelete){
-                            dataBase.getStmt().executeUpdate(
-                                    "DELETE FROM Autor_produktu WHERE Produkt_ID_produktu = " + id
+                if(table.getSelectedRow() != -1){
+                    //usuwanie produktu
+                    boolean ReadyToDelete = true;
+                    int id = Integer.parseInt(data.get(table.getSelectedRow()).get(0));
+                    String co = data.get(table.getSelectedRow()).get(5);
+                    int dialogButton = JOptionPane.YES_NO_OPTION;
+                    int dialogResult = JOptionPane.showConfirmDialog (null,
+                            "Czy na pewno chcesz usunąć produkt " +
+                                    data.get(table.getSelectedRow()).get(1) +"?",
+                            "Ostrzeżenie!",dialogButton);
+                    if(dialogResult == JOptionPane.YES_OPTION){
+                        try {
+                            dataBase.setStmt();
+                            ResultSet rs = dataBase.getStmt().executeQuery(
+                                    "SELECT DISTINCT PRODUKT_ID_PRODUKTU FROM Element_koszyka ORDER BY produkt_id_produktu"
                             );
-                            if (co.equals("książka")){
+                            while (rs.next()){
+                                if(rs.getInt(1) == id) ReadyToDelete = false;
+                            }
+                            rs.close();
+                            if(ReadyToDelete){
+                                dataBase.getStmt().executeUpdate(
+                                        "DELETE FROM Autor_produktu WHERE Produkt_ID_produktu = " + id
+                                );
+                                if (co.equals("książka")){
 
-                                ResultSet rsSeries = dataBase.getStmt().executeQuery(
-                                        "SELECT COUNT(*) FROM Ksiazka WHERE Seria_tytul = " +
-                                                "(SELECT Seria_tytul FROM Ksiazka WHERE id_produktu = "+id+" )  " +
-                                                "GROUP BY Seria_tytul"
-                                );
-                                if(rsSeries.next())
-                                {
-                                    if(rsSeries.getInt(1) <= 1)
+                                    ResultSet rsSeries = dataBase.getStmt().executeQuery(
+                                            "SELECT COUNT(*) FROM Ksiazka WHERE Seria_tytul = " +
+                                                    "(SELECT Seria_tytul FROM Ksiazka WHERE id_produktu = "+id+" )  " +
+                                                    "GROUP BY Seria_tytul"
+                                    );
+                                    if(rsSeries.next())
                                     {
-                                        dataBase.getStmt().executeUpdate(
-                                          "DELETE FROM Seria WHERE Tytul = (SELECT Seria_tytul FROM Ksiazka WHERE id_produktu = "+id+" )"
-                                        );
-                                        JOptionPane.showMessageDialog(windowMethods.window, "Usunięto ostatnią książkę z serii. Wraz z nią usunięto serię do której należała", "Błąd!", JOptionPane.PLAIN_MESSAGE);
+                                        if(rsSeries.getInt(1) <= 1)
+                                        {
+                                            dataBase.getStmt().executeUpdate(
+                                                    "DELETE FROM Seria WHERE Tytul = (SELECT Seria_tytul FROM Ksiazka WHERE id_produktu = "+id+" )"
+                                            );
+                                            JOptionPane.showMessageDialog(windowMethods.window, "Usunięto ostatnią książkę z serii. Wraz z nią usunięto serię do której należała", "Błąd!", JOptionPane.PLAIN_MESSAGE);
+                                        }
                                     }
+                                    rsSeries.close();
+                                    dataBase.getStmt().executeUpdate(
+                                            "DELETE FROM Ksiazka WHERE ID_produktu = " + id
+                                    );
                                 }
-                                rsSeries.close();
+                                else if(co.equals("gra planszowa")){
+                                    dataBase.getStmt().executeUpdate(
+                                            "DELETE FROM Gra_planszowa WHERE ID_produktu = " + id
+                                    );
+                                }
                                 dataBase.getStmt().executeUpdate(
-                                        "DELETE FROM Ksiazka WHERE ID_produktu = " + id
+                                        "DELETE FROM Produkt WHERE ID_produktu = " + id
                                 );
+                                System.out.println("Usunięto 1 rekord");
                             }
-                            else if(co.equals("gra planszowa")){
-                                dataBase.getStmt().executeUpdate(
-                                        "DELETE FROM Gra_planszowa WHERE ID_produktu = " + id
-                                );
-                            }
-                            dataBase.getStmt().executeUpdate(
-                                    "DELETE FROM Produkt WHERE ID_produktu = " + id
-                            );
-                            System.out.println("Usunięto 1 rekord");
-                        }
-                        else{
+                            else{
                             /*dataBase.getStmt().executeUpdate(
                                     "DELETE FROM Autor_produktu WHERE Produkt_ID_produktu = " + id
                             );*/
-                            dataBase.getStmt().executeUpdate(
-                                    "UPDATE Produkt SET Stan_magazyn = 0 WHERE ID_produktu = " + id
-                            );
-                            System.out.println("Usunięto 1 rekord");
-                            JOptionPane.showMessageDialog(windowMethods.window, "Usuwany produkt jest w historii zakupów klienta. " +
-                                    "Stan magazynów został wyzerowany, ale produkt pozostał w bazie danych.", "Błąd!", JOptionPane.PLAIN_MESSAGE);
-                        }
-                        dataBase.getStmt().close();
-                        Products ps = new Products();
-                        windowMethods.exit();
-                        ps.create(user, isManager);
+                                dataBase.getStmt().executeUpdate(
+                                        "UPDATE Produkt SET Stan_magazyn = 0 WHERE ID_produktu = " + id
+                                );
+                                System.out.println("Usunięto 1 rekord");
+                                JOptionPane.showMessageDialog(windowMethods.window, "Usuwany produkt jest w historii zakupów klienta. " +
+                                        "Stan magazynów został wyzerowany, ale produkt pozostał w bazie danych.", "Błąd!", JOptionPane.PLAIN_MESSAGE);
+                            }
+                            dataBase.getStmt().close();
+                            Products ps = new Products();
+                            windowMethods.exit();
+                            ps.create(user, isManager);
 
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
+                        } catch (SQLException throwables) {
+                            throwables.printStackTrace();
+                        }
                     }
                 }
+
             }
         });
         filter = new JButton("Sortuj");

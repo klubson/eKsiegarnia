@@ -132,50 +132,56 @@ public class Publishers {
         edit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Edit_publisher ep = new Edit_publisher();
-                windowMethods.exit();
-                try {
-                    ep.create(user, Integer.parseInt(data.get(table.getSelectedRow()).get(0)), isManager);
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
+                if(table.getSelectedRow() != -1){
+                    Edit_publisher ep = new Edit_publisher();
+                    windowMethods.exit();
+                    try {
+                        ep.create(user, Integer.parseInt(data.get(table.getSelectedRow()).get(0)), isManager);
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
                 }
+
             }
         });
         delete = new JButton("Usuń wydawnictwo");
         delete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    int dialogButton = JOptionPane.YES_NO_OPTION;
-                    int dialogResult = JOptionPane.showConfirmDialog (null,
-                            "Czy na pewno chcesz usunąć wydawnictwo " +
-                                    data.get(table.getSelectedRow()).get(1) + "?",
-                            "Ostrzeżenie!",dialogButton);
-                    if(dialogResult == JOptionPane.YES_OPTION){
-                        dataBase.setStmt();
-                        ResultSet rs = dataBase.getStmt().executeQuery(
-                                "SELECT Wydawnictwo_ID_wydawnictwa FROM Produkt WHERE Wydawnictwo_ID_wydawnictwa = " + data.get(table.getSelectedRow()).get(0)
-                        );
-                        if(rs.next()){
-                            JOptionPane.showMessageDialog(windowMethods.window, "Nie można usunąć wydawnictwa kiedy jest powiązane z produktami! Najpierw" +
-                                    " usuń odpowiednie produkty!", "Błąd", JOptionPane.ERROR_MESSAGE);
-                        }
-                        else{
-                            dataBase.getConn().setAutoCommit(true);
-                            int changes = dataBase.getStmt().executeUpdate(
-                                    "DELETE FROM Wydawnictwo WHERE ID_Wydawnictwa = " +
-                                            data.get(table.getSelectedRow()).get(0)
+                if(table.getSelectedRow() != -1){
+                    try {
+                        int dialogButton = JOptionPane.YES_NO_OPTION;
+                        int dialogResult = JOptionPane.showConfirmDialog (null,
+                                "Czy na pewno chcesz usunąć wydawnictwo " +
+                                        data.get(table.getSelectedRow()).get(1) + "?",
+                                "Ostrzeżenie!",dialogButton);
+                        if(dialogResult == JOptionPane.YES_OPTION){
+                            dataBase.setStmt();
+                            ResultSet rs = dataBase.getStmt().executeQuery(
+                                    "SELECT Wydawnictwo_ID_wydawnictwa FROM Produkt WHERE Wydawnictwo_ID_wydawnictwa = " + data.get(table.getSelectedRow()).get(0)
                             );
-                            System.out.println("Usunięto "+ changes + " rekord");
-                            JOptionPane.showMessageDialog(windowMethods.window, "Wydawnictwo usunięte pomyślnie!");
-                            Publishers ps = new Publishers();
-                            windowMethods.exit();
-                            ps.create(user, isManager);
+                            if(rs.next()){
+                                JOptionPane.showMessageDialog(windowMethods.window, "Nie można usunąć wydawnictwa kiedy jest powiązane z produktami! Najpierw" +
+                                        " usuń odpowiednie produkty!", "Błąd", JOptionPane.ERROR_MESSAGE);
+                            }
+                            else{
+                                dataBase.getConn().setAutoCommit(true);
+                                int changes = dataBase.getStmt().executeUpdate(
+                                        "DELETE FROM Wydawnictwo WHERE ID_Wydawnictwa = " +
+                                                data.get(table.getSelectedRow()).get(0)
+                                );
+                                System.out.println("Usunięto "+ changes + " rekord");
+                                JOptionPane.showMessageDialog(windowMethods.window, "Wydawnictwo usunięte pomyślnie!");
+                                Publishers ps = new Publishers();
+                                windowMethods.exit();
+                                ps.create(user, isManager);
+                            }
                         }
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
                     }
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
                 }
+
             }
         });
         filter = new JButton("Sortuj");

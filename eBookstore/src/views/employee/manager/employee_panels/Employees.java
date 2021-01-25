@@ -157,64 +157,71 @@ public class Employees {
         edit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Edit_employee ee = new Edit_employee();
-                windowMethods.exit();
-                try {
-                    ee.create(user, data.get(table.getSelectedRow()).get(0));
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
+                if(table.getSelectedRow() != -1){
+                    Edit_employee ee = new Edit_employee();
+                    windowMethods.exit();
+                    try {
+                        ee.create(user, data.get(table.getSelectedRow()).get(0));
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
                 }
+
             }
         });
         fire = new JButton("Zwolnij");
         fire.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String selectedUser = data.get(table.getSelectedRow()).get(2) + " " + data.get(table.getSelectedRow()).get(1);
-                int question = JOptionPane.YES_NO_OPTION;
-                int questionResult = JOptionPane.showConfirmDialog(null, "Czy na pewno chcesz zwolnić "+ selectedUser + " ?", "UWAGA!", question);
-                if (questionResult == 0){
-                    try {
-                        dataBase.setStmt();
-                        ResultSet rs = dataBase.getStmt().executeQuery(
-                                "SELECT Imie, Nazwisko FROM Uzytkownik " +
-                                        "WHERE Login = '" + user + "'"
-                        );
-                        rs.next();
-                        String loggedUser = rs.getString(1) + " " + rs.getString(2);
-                        rs.close();
-                        dataBase.getStmt().close();
-                        if(selectedUser.equals(loggedUser)){
-                            JOptionPane.showMessageDialog(windowMethods.window, "Nie możesz zwolnić samego siebie!", "Błąd!", JOptionPane.ERROR_MESSAGE);
-                        }
-                        else{
-                            System.out.println("zaraz usuwanie pracownika");
+                if(table.getSelectedRow() != -1){
+                    String selectedUser = data.get(table.getSelectedRow()).get(2) + " " + data.get(table.getSelectedRow()).get(1);
+                    int question = JOptionPane.YES_NO_OPTION;
+                    int questionResult = JOptionPane.showConfirmDialog(null, "Czy na pewno chcesz zwolnić "+ selectedUser + " ?", "UWAGA!", question);
+                    if (questionResult == 0){
+                        try {
                             dataBase.setStmt();
-                            dataBase.getConn().setAutoCommit(true);
-                            int changes = dataBase.getStmt().executeUpdate(
-                                    "DELETE FROM Pracownik WHERE Login = '" + data.get(table.getSelectedRow()).get(0) + "'"
+                            ResultSet rs = dataBase.getStmt().executeQuery(
+                                    "SELECT Imie, Nazwisko FROM Uzytkownik " +
+                                            "WHERE Login = '" + user + "'"
                             );
+                            rs.next();
+                            String loggedUser = rs.getString(1) + " " + rs.getString(2);
+                            rs.close();
                             dataBase.getStmt().close();
-                            System.out.println("pracownik usunięty, zaraz usuwanie użytkownika");
-                            dataBase.setStmt();
-                            int changes2 = dataBase.getStmt().executeUpdate(
-                                    "DELETE FROM Uzytkownik WHERE Login = '" + data.get(table.getSelectedRow()).get(0) + "'"
-                            );
-                            dataBase.getStmt().close();
-                            System.out.println("Zwolniono " + changes + " pracownika");
+                            //if(selectedUser.equals(loggedUser)){
+                            if(user.equals(data.get(table.getSelectedRow()).get(0))){
+                                JOptionPane.showMessageDialog(windowMethods.window, "Nie możesz zwolnić samego siebie!", "Błąd!", JOptionPane.ERROR_MESSAGE);
+                            }
+                            else{
+                                System.out.println("zaraz usuwanie pracownika");
+                                dataBase.setStmt();
+                                dataBase.getConn().setAutoCommit(true);
+                                int changes = dataBase.getStmt().executeUpdate(
+                                        "DELETE FROM Pracownik WHERE Login = '" + data.get(table.getSelectedRow()).get(0) + "'"
+                                );
+                                dataBase.getStmt().close();
+                                System.out.println("pracownik usunięty, zaraz usuwanie użytkownika");
+                                dataBase.setStmt();
+                                int changes2 = dataBase.getStmt().executeUpdate(
+                                        "DELETE FROM Uzytkownik WHERE Login = '" + data.get(table.getSelectedRow()).get(0) + "'"
+                                );
+                                dataBase.getStmt().close();
+                                System.out.println("Zwolniono " + changes + " pracownika");
+                            }
+                        } catch (SQLException throwables) {
+                            throwables.printStackTrace();
                         }
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
-                    }
 
-                    try {
-                        Employees ee = new Employees();
-                        windowMethods.exit();
-                        ee.create(user);
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
+                        try {
+                            Employees ee = new Employees();
+                            windowMethods.exit();
+                            ee.create(user);
+                        } catch (SQLException throwables) {
+                            throwables.printStackTrace();
+                        }
                     }
                 }
+
             }
         });
         columnNames.add("Login");

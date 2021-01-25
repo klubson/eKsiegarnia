@@ -197,25 +197,28 @@ public class Products_customer {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    dataBase.setStmt();
-                    ResultSet rs = dataBase.getStmt().executeQuery(
-                            "SELECT ID_produktu, co FROM Produkt WHERE ID_produktu = " + Integer.parseInt((String) table.getModel().getValueAt(table.getSelectedRow(), 5 ))
+                    if(table.getSelectedRow() != -1){
+                        dataBase.setStmt();
+                        ResultSet rs = dataBase.getStmt().executeQuery(
+                                "SELECT ID_produktu, co FROM Produkt WHERE ID_produktu = " + Integer.parseInt((String) table.getModel().getValueAt(table.getSelectedRow(), 5 ))
 
-                    );
-                    rs.next();
-                    int id = rs.getInt(1);
-                    String type = rs.getString(2);
-                    rs.close();
-                    dataBase.getStmt().close();
-                    if(type.equals("k")){
-                        Book_details bd = new Book_details();
-                        bd.create(id , dataBase , cart , user);
+                        );
+                        rs.next();
+                        int id = rs.getInt(1);
+                        String type = rs.getString(2);
+                        rs.close();
+                        dataBase.getStmt().close();
+                        if(type.equals("k")){
+                            Book_details bd = new Book_details();
+                            bd.create(id , dataBase , cart , user);
+                        }
+                        else if(type.equals("g")){
+                            Game_details gd = new Game_details();
+                            gd.create(id , dataBase , cart,user);
+                        }
+                        windowMethods.exit();
                     }
-                    else if(type.equals("g")){
-                        Game_details gd = new Game_details();
-                        gd.create(id , dataBase , cart,user);
-                    }
-                    windowMethods.exit();
+
 
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
@@ -229,11 +232,14 @@ public class Products_customer {
             public void actionPerformed(ActionEvent e) {
 
                 //int id = Integer.parseInt((String) table.getModel().getValueAt(table.getSelectedRow(), 5 ));
-                System.out.println("Wybrany wiersz " + table.getSelectedRow() );
-                int id = Integer.parseInt(data.get(table.getSelectedRow()).get(5));
-                double price = Double.parseDouble(data.get(table.getSelectedRow()).get(1));
-                //dataBase.newCartItem(cart, id, price);
-                new BuyPanelProductTable(dataBase,id,price,cart , customer);
+                if(table.getSelectedRow() != -1){
+                    System.out.println("Wybrany wiersz " + table.getSelectedRow() );
+                    int id = Integer.parseInt(data.get(table.getSelectedRow()).get(5));
+                    double price = Double.parseDouble(data.get(table.getSelectedRow()).get(1));
+                    //dataBase.newCartItem(cart, id, price);
+                    new BuyPanelProductTable(dataBase,id,price,cart , customer);
+                }
+
             }
         });
         sort = new JButton("Sortuj");

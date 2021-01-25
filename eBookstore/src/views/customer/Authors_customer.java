@@ -144,17 +144,20 @@ public class Authors_customer {
         products.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String autor_id =data.get(table.getSelectedRow()).get(3);
-                String autor = data.get(table.getSelectedRow()).get(0) + " " + data.get(table.getSelectedRow()).get(1);
-                Products_customer pc = new Products_customer();
+                if(table.getSelectedRow() != -1){
+                    String autor_id =data.get(table.getSelectedRow()).get(3);
+                    String autor = data.get(table.getSelectedRow()).get(0) + " " + data.get(table.getSelectedRow()).get(1);
+                    Products_customer pc = new Products_customer();
 
-                try {
-                    pc.create(user , dataBase , cart);
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
+                    try {
+                        pc.create(user , dataBase , cart);
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                    pc.showAuthorsProducts(autor,autor_id);
+                    windowMethods.exit();
                 }
-                pc.showAuthorsProducts(autor,autor_id);
-                windowMethods.exit();
+
 
             }
         });

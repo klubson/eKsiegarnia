@@ -76,9 +76,9 @@ public class Add_series {
                             JOptionPane.showMessageDialog(windowMethods.window, "Nie wybrano żadnej książki!", "Błąd", JOptionPane.ERROR_MESSAGE);
                         }
                         else{
-                            int tom;
-                            if(tomes2.getText().equals("")) tom = 0;
-                            else tom = Integer.parseInt(tomes2.getText());
+                            String tom;
+                            if(tomes2.getText().equals("")) tom = "NULL";
+                            else tom = tomes2.getText();
                             int changes = dataBase.getStmt().executeUpdate(
                                     "INSERT INTO Seria VALUES('" + title2.getText() + "'," + tom + ")"
                             );

@@ -124,16 +124,20 @@ public class Series_customer {
         products.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String seria = data.get(table.getSelectedRow()).get(0);
-                Products_customer pc = new Products_customer();
+                if(table.getSelectedRow() != -1){
+                    String seria = data.get(table.getSelectedRow()).get(0);
+                    Products_customer pc = new Products_customer();
 
-                try {
-                    pc.create(user , dataBase , cart);
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
+                    try {
+                        pc.create(user , dataBase , cart);
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                    pc.showSeriesProducts(seria);
+                    windowMethods.exit();
                 }
-                pc.showSeriesProducts(seria);
-                windowMethods.exit();
+
+
 
             }
         });

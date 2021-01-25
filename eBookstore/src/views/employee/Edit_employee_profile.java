@@ -102,6 +102,7 @@ public class Edit_employee_profile {
 //                            JOptionPane.showMessageDialog(windowMethods.window, "Podany login jest już zajęty! Wybierz inny login!", "Błąd", JOptionPane.ERROR_MESSAGE);
 //                        }
 //                        else{
+
                             dataBase.setStmt();
                             String tmp = String.copyValueOf(pass2.getPassword());
                             int changes = dataBase.getStmt().executeUpdate(
